@@ -3,7 +3,7 @@
 ### Food price inflation and household affordability intelligence in Kenya from 2007 to 2026
 
 > *Mzigo* (Swahili): burden, load, weight. *Chakula*: food.
-> "The weight of food" — what does a loaf of bread, a kilo of maize, or a litre of cooking oil actually cost a Kenyan household, and where is that weight heaviest?
+> "The weight of food" — what does a kilo of maize, a kilo of beans, or a goat actually cost a Kenyan household, and where is that weight heaviest?
 
 DSA 3050A | Business intelligence and data visualization | Group project B
 
@@ -29,7 +29,7 @@ Primary audience: County government planners, NGO food-security programs, and ho
 | Columns | 46 |
 | Geographic coverage | 234 markets across all 47 counties |
 | Time span | January 2007 to October 2026 (19 years, monthly) |
-| Key fields | adm1_name (county), adm2_name (district), mkt_name, price_date, year, month, c_beans, c_maize_fao, c_livestock_goat_s_fao, c_food_price_index, inflation_food_price_index, lat, lon |
+| Key fields | adm1_name (region/province), adm2_name (county), mkt_name, price_date, year, month, c_beans, c_maize_fao, c_livestock_goat_s_fao, c_food_price_index, inflation_food_price_index, lat, lon |
 
 Ethical note: All data is publicly available aggregate market-level prices. No personal or sensitive data is used.
 
@@ -41,8 +41,8 @@ Ethical note: All data is publicly available aggregate market-level prices. No p
 ├─────────────────────┤         ├─────────────────────┤
 │ mkt_id (PK)         │◄──┐     │ date_key (PK)       │
 │ mkt_name            │   │     │ full_date           │
-│ adm1_name (county)  │   │     │ year                │
-│ adm2_name (district)│   │     │ month               │
+│ adm1_name (region)  │   │     │ year                │
+│ adm2_name (county)  │   │     │ month               │
 │ lat                 │   │     │ quarter             │
 │ lon                 │   │     │ season              │
 └─────────────────────┘   │     │ is_recent (12mo)    │
@@ -57,9 +57,8 @@ Ethical note: All data is publicly available aggregate market-level prices. No p
 │ commodity_id (PK)   │   │                │
 │ commodity_name      │   │                │
 │ category (staple/   │   │                │
-│   protein/dairy/    │   │                │
-│   oil)              │   │                │
-│ unit                │   │                │
+│   legume/livestock) │   │                │
+│ unit (KG / unit)    │   │                │
 └─────────────────────┘   │                │
                           │                │
 ┌─────────────────────────┴──────────────┴──────────────┐
@@ -90,9 +89,9 @@ Filter direction: Single direction from dimensions to fact table. No bidirection
 | 3 | MoM Change % | DIVIDE([Current Month], [Prior Month], 0) - 1 | Month-over-month trend |
 | 4 | Price Volatility | STDEV.S(fact_prices[price_value]) | Risk indicator |
 | 5 | Cumulative Index | TOTALYTD(fact_prices[food_price_index], dim_date[full_date]) | Running cost burden |
-| 6 | County Rank | RANKX(ALL(dim_markets[adm1_name]), [YoY Inflation %]) | Worst counties first |
+| 6 | County Rank | RANKX(ALL(dim_markets[adm2_name]), [YoY Inflation %]) | Worst counties first |
 | 7 | Data Completeness % | DIVIDE(COUNTROWS(fact_prices), [Expected Rows], 0) | Quality indicator |
-| 8 | Affordability Gap | [Avg Price] - AVERAGEX(ALL(dim_markets[adm1_name]), [Avg Price]) | Comparison to national mean |
+| 8 | Affordability Gap | [Avg Price] - AVERAGEX(ALL(dim_markets[adm2_name]), [Avg Price]) | Comparison to national mean |
 | 9 | Seasonal Index | DIVIDE([Current Month], AVERAGE([Month Average]), 0) | Seasonality pattern |
 | 10 | 12-Month Rolling Avg | AVERAGEX(DATESINPERIOD(dim_date[full_date], MAX(dim_date[full_date]), -12, MONTH), [Avg Price]) | Smoothed trend |
 
@@ -155,8 +154,8 @@ Interactions: Slicers (county, commodity category, year range, season), cross-fi
 | --- | --- | --- |
 | 1 | Parse price_date to proper Date type | Source stores as text; needed for time intelligence |
 | 2 | Derive year, month, quarter, and season columns | Required for dim_date and DAX time intelligence |
-| 3 | Remove rows where all price columns are null | Removes rows with no usable data |
-| 4 | Standardize county names | Source has inconsistent formatting |
+| 3 | Remove rows where all price columns are null or mkt_name is "Market Average" | Removes empty rows and excludes pre-aggregated national rows from market-level fact records |
+| 4 | Map adm1_name (region) and standardize adm2_name (county) names | Source mixes former provinces and counties across adm1_name and adm2_name (35 unique pairs across 233 markets + Market Average) |
 | 5 | Unpivot commodity price columns to long format | Required for star schema |
 | 6 | Rename commodity columns to human-readable names | c_maize_fao to Maize (FAO) |
 | 7 | Add commodity_category column | Enables category-level analysis |
@@ -212,7 +211,7 @@ git clone https://github.com/princenzmw/mzigo-chakula.git
 2. Download the dataset:
 * Go to microdata.worldbank.org/index.php/catalog/6167
 * Click Get Microdata to download the Kenya CSV
-* Place it in data/raw/kenya_rtfp.csv
+* Place it in data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv
 
 
 3. Open the Power BI file:
@@ -222,7 +221,7 @@ open mzigo-chakula.pbix
 ```
 
 
-* Power BI will prompt to refresh data. Point it to data/raw/kenya_rtfp.csv.
+* Power BI will prompt to refresh data. Point it to data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv.
 * All Power Query transformations will replay automatically.
 
 
