@@ -1,0 +1,234 @@
+mkt_id,mkt_name,adm1_name,adm2_name,subcounty_or_district,raw_adm1_name,raw_adm2_name,county_group,lat,lon,data_coverage,data_coverage_recent
+gid_7700000364100000,Amaya,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.77,36.41,4.46,5.45
+gid_9900000359700000,Chemolingot,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.99,35.97,4.46,5.45
+gid_4700000359000000,Kimalel Center,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.47,35.9,4.46,5.45
+gid_4600000358600000,Koriema,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.46,35.86,4.46,5.45
+gid_3600000360600000,Loboi Center,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.36,36.06,4.46,5.45
+gid_4400000360000000,Lororo Centre,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.44,36.0,4.46,5.45
+gid_4600000359600000,Marigat (Baringo),Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.46,35.96,4.46,5.45
+gid_4700000359800000,Marigat town (Baringo),Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.47,35.98,4.46,5.45
+gid_9500000360200000,Nginyang,Rift Valley,Baringo,Baringo,Rift Valley,Baringo,Arid & Semi-Arid (ASAL),0.95,36.02,4.46,5.45
+gid_-5797000377766000,Embu-Mbeere,Eastern,Embu,Mbeere North,Embu,Mbeere North,Agricultural & Urban,-0.5797,37.7766,4.46,5.45
+gid_-1000000399900000,Alango Arba,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.1,39.99,4.46,5.45
+gid_-300000404600000,Alinjugur,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.03,40.46,4.46,5.45
+gid_6500000395800000,Baraki,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.65,39.58,4.46,5.45
+gid_0600000403100000,Dadaab town,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.06,40.31,4.46,5.45
+gid_1900000402900000,Dagahaley (Daadab),North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.19,40.29,4.46,5.45
+gid_1000000407800000,Damajale,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.1,40.78,4.46,5.45
+gid_2800000398000000,Dertu,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.28,39.8,4.46,5.45
+gid_-4600000396500000,Garissa,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.46,39.65,4.46,5.45
+gid_-4600000396400000,Garissa town (Garissa),North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.46,39.64,4.46,5.45
+gid_0100000403700000,Hagadera (Daadab),North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.01,40.37,4.46,5.45
+gid_-18500000402300000,Hara (Garissa),North Eastern,Garissa,Ijara,North Eastern,Ijara,Arid & Semi-Arid (ASAL),-1.85,40.23,4.46,5.45
+gid_1100000403200000,IFO (Daadab),North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.11,40.32,4.46,5.45
+gid_-400000390100000,Jarajara,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.04,39.01,4.46,5.45
+gid_-6100000397800000,Korakora,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.61,39.78,4.46,5.45
+gid_-19700000402100000,Kotile,North Eastern,Garissa,Ijara,North Eastern,Ijara,Arid & Semi-Arid (ASAL),-1.97,40.21,4.46,5.45
+gid_3500000408700000,Liboi,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.35,40.87,4.46,5.45
+gid_3800000393500000,Maalamin,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.38,39.35,4.46,5.45
+gid_1600000404300000,Mathaxgesi,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.16,40.43,4.46,5.45
+gid_-8500000398700000,Nanigi,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.85,39.87,4.46,5.45
+gid_-300000401300000,Saretho,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),-0.03,40.13,4.46,5.45
+gid_4600000397400000,Shanta Abak,North Eastern,Garissa,Garissa,North Eastern,Garissa,Arid & Semi-Arid (ASAL),0.46,39.74,4.46,5.45
+gid_5000000386600000,Benane,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.5,38.66,4.46,5.45
+gid_9000000384800000,Biliqo,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.9,38.48,4.46,5.45
+gid_5700000383400000,Boji,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.57,38.34,4.46,5.45
+gid_9600000385400000,Bulesa Bulesa,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.96,38.54,4.46,5.45
+gid_5300000385100000,Garbatulla,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.53,38.51,4.46,5.45
+gid_9900000388800000,Iresaboru Centre,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.99,38.88,4.46,5.45
+gid_3500000375800000,Isiolo town,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.35,37.58,4.46,5.45
+gid_3200000382100000,Kinna,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.32,38.21,4.46,5.45
+gid_6000000372500000,Kipsing CENTER,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.6,37.25,4.46,5.45
+gid_5700000382000000,Kulamawe,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.57,38.2,4.46,5.45
+gid_12700000388000000,Malka GALLA,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),1.27,38.8,4.46,5.45
+gid_8400000385000000,Malkadaka,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.84,38.5,4.46,5.45
+gid_10700000386700000,Merti CENTER,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),1.07,38.67,4.46,5.45
+gid_7300000391700000,Modogashe,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.73,39.17,4.46,5.45
+gid_6200000369900000,Oldonyiro,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),0.62,36.99,4.46,5.45
+gid_11300000391000000,Sericho Center,Eastern,Isiolo,Isiolo,Eastern,Isiolo,Arid & Semi-Arid (ASAL),1.13,39.1,4.46,5.45
+gid_-21000000367900000,Illbissil Food Market (Kajiado),Rift Valley,Kajiado,Kajiado,Rift Valley,Kajiado,Arid & Semi-Arid (ASAL),-2.1,36.79,4.46,5.45
+gid_-18400000367900000,Kajiado,Rift Valley,Kajiado,Kajiado,Rift Valley,Kajiado,Arid & Semi-Arid (ASAL),-1.84,36.79,4.46,5.45
+gid_-12900000368600000,Kitengela (Kajiado),Rift Valley,Kajiado,Kitengela,Nairobi,Nairobi,Arid & Semi-Arid (ASAL),-1.29,36.86,4.46,5.45
+gid_-14100000368300000,Ongata Rongai,Rift Valley,Kajiado,Ongata Rongai,Kajiado,Ongata Rongai,Arid & Semi-Arid (ASAL),-1.41,36.83,4.46,5.45
+gid_-32500000397500000,Dzikunze,Coast,Kilifi,Kilifi,Coast,Kilifi,Arid & Semi-Arid (ASAL),-3.25,39.75,4.46,5.45
+gid_-34800000397500000,Kachororoni,Coast,Kilifi,Kilifi,Coast,Kilifi,Arid & Semi-Arid (ASAL),-3.48,39.75,4.46,5.45
+gid_-33300000397900000,Kaembeni,Coast,Kilifi,Kilifi,Coast,Kilifi,Arid & Semi-Arid (ASAL),-3.33,39.79,4.46,5.45
+gid_-36300000398500000,Kilifi,Coast,Kilifi,Kilifi,Coast,Kilifi,Arid & Semi-Arid (ASAL),-3.63,39.85,4.46,5.45
+gid_-34000000397800000,Matanomanne,Coast,Kilifi,Kilifi,Coast,Kilifi,Arid & Semi-Arid (ASAL),-3.4,39.78,4.46,5.45
+gid_-900000347700000,Kibuye (Kisumu),Nyanza,Kisumu,Kisumu,Nyanza,Kisumu,Agricultural & Urban,-0.09,34.77,4.46,5.45
+gid_-1000000347500000,Kisumu,Nyanza,Kisumu,Kisumu,Nyanza,Kisumu,Agricultural & Urban,-0.1,34.75,4.46,5.45
+gid_-13700000380200000,Kitui,Eastern,Kitui,Kitui,Eastern,Kitui,Arid & Semi-Arid (ASAL),-1.37,38.02,4.46,5.45
+gid_-13600000380100000,Kitui town (Kitui),Eastern,Kitui,Kitui,Eastern,Kitui,Arid & Semi-Arid (ASAL),-1.36,38.01,4.46,5.45
+gid_-41747000394525000,Kwale,Coast,Kwale,Matuga,Kwale,Matuga,Arid & Semi-Arid (ASAL),-4.1747,39.4525,4.46,5.45
+gid_-46600000392200000,Vanga (Kwale),Coast,Kwale,Kwale,Coast,Kwale,Arid & Semi-Arid (ASAL),-4.66,39.22,4.46,5.45
+gid_-22700000409008000,Lamu,Coast,Lamu,Lamu West,Lamu,Lamu West,Agricultural & Urban,-2.27,40.9008,4.46,5.45
+gid_-12700000373200000,Tala Centre Market (Machakos),Eastern,Machakos,Machakos,Eastern,Machakos,Agricultural & Urban,-1.27,37.32,4.46,5.45
+gid_-20800000374700000,Emali,Eastern,Makueni,Makueni,Eastern,Makueni,Arid & Semi-Arid (ASAL),-2.08,37.47,4.46,5.45
+gid_-19100000377300000,Kathonzweni (Makueni),Eastern,Makueni,Makueni,Eastern,Makueni,Arid & Semi-Arid (ASAL),-1.91,37.73,4.46,5.45
+gid_-24100000379700000,Kibwezi,Eastern,Makueni,Makueni,Eastern,Makueni,Arid & Semi-Arid (ASAL),-2.41,37.97,4.46,5.45
+gid_-18100000376200000,Makueni,Eastern,Makueni,Makueni,Eastern,Makueni,Arid & Semi-Arid (ASAL),-1.81,37.62,4.46,5.45
+gid_-17900000376300000,Wote town (Makueni),Eastern,Makueni,Makueni,Eastern,Makueni,Arid & Semi-Arid (ASAL),-1.79,37.63,4.46,5.45
+gid_30500000410600000,Alungu,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.05,41.06,4.46,5.45
+gid_35500000408700000,Ashabito,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.55,40.87,4.46,5.45
+gid_39400000403400000,Banissa,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.94,40.34,4.46,5.45
+gid_28100000409300000,El Wak,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),2.81,40.93,4.46,5.45
+gid_39200000400100000,Kiliwaheri,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.92,40.01,4.46,5.45
+gid_39400000418600000,Mandera,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.94,41.86,4.46,5.45
+gid_39400000418500000,Mandera town,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.94,41.85,4.46,5.45
+gid_39300000412200000,Rhamu,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.93,41.22,4.46,5.45
+gid_31500000411800000,Suq Jini,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.15,41.18,4.46,5.45
+gid_33900000402300000,Takaba (Mandera),North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.39,40.23,4.46,5.45
+gid_34100000410100000,Warankara,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.41,41.01,4.46,5.45
+gid_31800000408700000,Wargadud,North Eastern,Mandera,Mandera,North Eastern,Mandera,Arid & Semi-Arid (ASAL),3.18,40.87,4.46,5.45
+gid_35100000387500000,Dambala Fachana,Eastern,Marsabit,Moyale,Eastern,Moyale,Arid & Semi-Arid (ASAL),3.51,38.75,4.46,5.45
+gid_22900000380600000,Dirib,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.29,38.06,4.46,5.45
+gid_23300000380300000,Dub Goba,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.33,38.03,4.46,5.45
+gid_22100000378900000,Karare,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.21,37.89,4.46,5.45
+gid_24900000375600000,Kargi,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.49,37.56,4.46,5.45
+gid_21000000369200000,Kargi South Horr,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.1,36.92,4.46,5.45
+gid_20100000375000000,Korr,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.01,37.5,4.46,5.45
+gid_15800000378000000,Laisamis Town,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),1.58,37.8,4.46,5.45
+gid_19900000379200000,Loglogo,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),1.99,37.92,4.46,5.45
+gid_27600000367200000,Loyangalani,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.76,36.72,4.46,5.45
+gid_29200000376300000,Maikona,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.92,37.63,4.46,5.45
+gid_23300000379800000,Marsabit,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.33,37.98,4.46,5.45
+gid_23300000379900000,Marsabit town,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.33,37.99,4.46,5.45
+gid_14200000377200000,Merille Town,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),1.42,37.72,4.46,5.45
+gid_35100000390500000,Moyale town,Eastern,Marsabit,Moyale,Eastern,Moyale,Arid & Semi-Arid (ASAL),3.51,39.05,4.46,5.45
+gid_33200000370700000,North Horr,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),3.32,37.07,4.46,5.45
+gid_35600000386500000,Sololo,Eastern,Marsabit,Moyale,Eastern,Moyale,Arid & Semi-Arid (ASAL),3.56,38.65,4.46,5.45
+gid_22500000380000000,Songa,Eastern,Marsabit,Marsabit,Eastern,Marsabit,Arid & Semi-Arid (ASAL),2.25,38.0,4.46,5.45
+gid_34500000385200000,Walda,Eastern,Marsabit,Moyale,Eastern,Moyale,Arid & Semi-Arid (ASAL),3.45,38.52,4.46,5.45
+gid_4400000376000000,Kiwanja,Eastern,Meru,Meru North,Eastern,Meru North,Agricultural & Urban,0.44,37.6,4.46,5.45
+gid_0452000376606000,Meru,Eastern,Meru,North Imenti,Meru,North Imenti,Agricultural & Urban,0.0452,37.6606,4.46,5.45
+gid_5000000376400000,Ngaremara,Eastern,Meru,Meru North,Eastern,Meru North,Agricultural & Urban,0.5,37.64,4.46,5.45
+gid_-40100000396300000,Bangladesh (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.01,39.63,4.46,5.45
+gid_-40100000396800000,Junda (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.01,39.68,4.46,5.45
+gid_-40300000396300000,Kalahari (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.03,39.63,4.46,5.45
+gid_-40400000396900000,Kisumu Ndogo (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.04,39.69,4.46,5.45
+gid_-40600000396600000,Kongowea (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.06,39.66,4.46,5.45
+gid_-40500000396700000,Mombasa,Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.05,39.67,4.46,5.45
+gid_-40300000396600000,Moroto (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.03,39.66,4.46,5.45
+gid_-40400000397000000,Shauri Yako,Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.04,39.7,4.46,5.45
+gid_-41100000396500000,Shonda (Mombasa),Coast,Mombasa,Mombasa,Coast,Mombasa,Agricultural & Urban,-4.11,39.65,4.46,5.45
+gid_-12500000369000000,Dandora (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.25,36.9,4.46,5.45
+gid_-12700000367400000,Kangemi (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.27,36.74,4.46,5.45
+gid_-12800000367400000,Kawangware (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.28,36.74,4.46,5.45
+gid_-13200000367800000,Kibra (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.32,36.78,4.46,5.45
+gid_-12600000368600000,Mathare (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.26,36.86,4.46,5.45
+gid_-13000000368800000,Mukuru (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.3,36.88,4.46,5.45
+gid_-12800000368200000,Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.28,36.82,4.46,5.45
+gid_-12900000368300000,Wakulima (Nairobi),Nairobi,Nairobi,Nairobi,Nairobi,Nairobi,Agricultural & Urban,-1.29,36.83,4.46,5.45
+gid_-2800000360700000,Nakuru,Rift Valley,Nakuru,Nakuru,Rift Valley,Nakuru,Agricultural & Urban,-0.28,36.07,4.46,5.45
+gid_-3000000360800000,Wakulima (Nakuru),Rift Valley,Nakuru,Nakuru,Rift Valley,Nakuru,Agricultural & Urban,-0.3,36.08,4.46,5.45
+gid_-4800000371300000,Karatina (Nyeri),Central,Nyeri,Nyeri,Central,Nyeri,Agricultural & Urban,-0.48,37.13,4.46,5.45
+gid_6400000376700000,Archers Post,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.64,37.67,4.46,5.45
+gid_16500000370300000,Baragoi,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.65,37.03,4.46,5.45
+gid_9500000367700000,Kisima,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.95,36.77,4.46,5.45
+gid_8800000373200000,Lengusaka,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.88,37.32,4.46,5.45
+gid_17800000369700000,Lesirkan,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.78,36.97,4.46,5.45
+gid_8700000370000000,Lodungokwe,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.87,37.0,4.46,5.45
+gid_10600000372300000,Lolkuniyani,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.06,37.23,4.46,5.45
+gid_10800000366000000,Lolkunono,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.08,36.6,4.46,5.45
+gid_10200000365800000,Loosuk,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.02,36.58,4.46,5.45
+gid_8900000370600000,Lpus,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.89,37.06,4.46,5.45
+gid_11000000367000000,Maralal,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.1,36.7,4.46,5.45
+gid_16100000369500000,Masikita,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.61,36.95,4.46,5.45
+gid_18000000367000000,Nachola,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.8,36.7,4.46,5.45
+gid_11500000372600000,Ngilai,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.15,37.26,4.46,5.45
+gid_17400000373100000,Ngurunit,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.74,37.31,4.46,5.45
+gid_12200000366000000,Porro,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),1.22,36.6,4.46,5.45
+gid_21100000367800000,Simale,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),2.11,36.78,4.46,5.45
+gid_8300000366900000,Suguta,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.83,36.69,4.46,5.45
+gid_21500000367700000,Tuum,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),2.15,36.77,4.46,5.45
+gid_9800000373200000,Wamba,Rift Valley,Samburu,Samburu,Rift Valley,Samburu,Arid & Semi-Arid (ASAL),0.98,37.32,4.46,5.45
+gid_-26900000381600000,Mtito Andei,Coast,Taita Taveta,Taita Taveta,Coast,Taita Taveta,Arid & Semi-Arid (ASAL),-2.69,38.16,4.46,5.45
+gid_-33979000385561000,Taita Taveta,Coast,Taita Taveta,Voi,Taita Taveta,Voi,Arid & Semi-Arid (ASAL),-3.3979,38.5561,4.46,5.45
+gid_-4700000396100000,Adele Center,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-0.47,39.61,4.46,5.45
+gid_-7200000390200000,Bangale,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-0.72,39.02,4.46,5.45
+gid_-10100000397900000,Bilbil,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.01,39.79,4.46,5.45
+gid_-3400000387800000,Boka,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-0.34,38.78,4.46,5.45
+gid_-11900000398400000,Bura,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.19,39.84,4.46,5.45
+gid_-7800000396700000,Charidende,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-0.78,39.67,4.46,5.45
+gid_-22700000401100000,Garsen,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-2.27,40.11,4.46,5.45
+gid_10000000380000000,Hola (Tana River),Coast,Tana River,Hola,Hola (Tana River),Hola (Tana River),Arid & Semi-Arid (ASAL),1.0,38.0,4.46,5.45
+gid_-15000000400300000,Hola town,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.5,40.03,4.46,5.45
+gid_-25300000405300000,Kipini,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-2.53,40.53,4.46,5.45
+gid_-13300000400100000,Makere,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.33,40.01,4.46,5.45
+gid_-17000000401700000,Masalani,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.7,40.17,4.46,5.45
+gid_-23200000401100000,Minjila,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-2.32,40.11,4.46,5.45
+gid_-1400000393300000,Saka Town,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-0.14,39.33,4.46,5.45
+gid_-24400000401700000,Tarasaa,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-2.44,40.17,4.46,5.45
+gid_-16100000390300000,Waldena,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.61,39.03,4.46,5.45
+gid_-15300000395800000,Wayu,Coast,Tana River,Tana River,Coast,Tana River,Arid & Semi-Arid (ASAL),-1.53,39.58,4.46,5.45
+gid_-3200000377200000,Kaanwa (Tharaka Nithi),Eastern,Tharaka Nithi,Meru South,Eastern,Meru South,Agricultural & Urban,-0.32,37.72,4.46,5.45
+gid_-3317000378685000,Tharaka Nithi,Eastern,Tharaka Nithi,Chuka/Igambang'Ombe,Tharaka Nithi,Chuka/Igambang'Ombe,Agricultural & Urban,-0.3317,37.8685,4.46,5.45
+gid_35300000348200000,Alemsekon,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.53,34.82,4.46,5.45
+gid_40600000345200000,Aposta,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.06,34.52,4.46,5.45
+gid_21000000361600000,Elelea,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.1,36.16,4.46,5.45
+gid_32400000360200000,Eliye Centre,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.24,36.02,4.46,5.45
+gid_37200000348500000,Ethiopia (Kakuma),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.72,34.85,4.46,5.45
+gid_37500000348400000,HongKong (Kakuma),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.75,34.84,4.46,5.45
+gid_45200000355900000,Kaakelai,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.52,35.59,4.46,5.45
+gid_39800000354800000,Kaeris,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.98,35.48,4.46,5.45
+gid_45200000354200000,Kaikor,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.52,35.42,4.46,5.45
+gid_37500000348200000,Kakuma 2,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.75,34.82,4.46,5.45
+gid_37700000348200000,Kakuma 3,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.77,34.82,4.46,5.45
+gid_37400000348100000,Kakuma 4,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.74,34.81,4.46,5.45
+gid_37100000348600000,Kakuma town,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.71,34.86,4.46,5.45
+gid_21400000355000000,Kalemgorok,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.14,35.5,4.46,5.45
+gid_27400000353700000,Kalemunyang,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.74,35.37,4.46,5.45
+gid_43700000355500000,Kaleng,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.37,35.55,4.46,5.45
+gid_37700000347300000,Kalobeyei (Village 1),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.77,34.73,4.46,5.45
+gid_37600000347500000,Kalobeyei (Village 2),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.76,34.75,4.46,5.45
+gid_37500000347600000,Kalobeyei (Village 3),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.75,34.76,4.46,5.45
+gid_37700000346200000,Kalobeyei town,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.77,34.62,4.46,5.45
+gid_35400000358600000,Kalokol,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.54,35.86,4.46,5.45
+gid_23800000360400000,Kang'akipur,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.38,36.04,4.46,5.45
+gid_24800000356600000,Kasuroi,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.48,35.66,4.46,5.45
+gid_37500000358300000,Kataboi,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.75,35.83,4.46,5.45
+gid_21400000361400000,Katilia,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.14,36.14,4.46,5.45
+gid_45700000353100000,Kibish,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.57,35.31,4.46,5.45
+gid_46200000357100000,Kokuro,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.62,35.71,4.46,5.45
+gid_35200000357500000,Letea,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.52,35.75,4.46,5.45
+gid_31200000356000000,Lodwar (Turkana),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.12,35.6,4.46,5.45
+gid_31200000356100000,Lodwar town,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.12,35.61,4.46,5.45
+gid_41000000349000000,Lokangae,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.1,34.9,4.46,5.45
+gid_23700000354200000,Lokapel,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.37,35.42,4.46,5.45
+gid_23800000356500000,Lokichar (Turkana),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.38,35.65,4.46,5.45
+gid_42000000343600000,Lokichoggio,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.2,34.36,4.46,5.45
+gid_31800000346700000,Lokipoto,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.18,34.67,4.46,5.45
+gid_27600000348800000,Lokiriama,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.76,34.88,4.46,5.45
+gid_42700000357500000,Lokitaung,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.27,35.75,4.46,5.45
+gid_19500000360300000,Lokori,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),1.95,36.03,4.46,5.45
+gid_19800000361000000,Lokwii,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),1.98,36.1,4.46,5.45
+gid_35400000352500000,Lolupe,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.54,35.25,4.46,5.45
+gid_38600000348200000,Lopur,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.86,34.82,4.46,5.45
+gid_25800000349900000,Lorengipi,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.58,34.99,4.46,5.45
+gid_28800000352500000,Lorugum,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.88,35.25,4.46,5.45
+gid_20200000361300000,Lotubae,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.02,36.13,4.46,5.45
+gid_29300000356100000,Loturerei,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.93,35.61,4.46,5.45
+gid_42800000358900000,Lowarengak,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.28,35.89,4.46,5.45
+gid_37200000348600000,Mogadishu (Kakuma),Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.72,34.86,4.46,5.45
+gid_19800000361300000,Morulem,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),1.98,36.13,4.46,5.45
+gid_25400000362200000,Naakalei,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.54,36.22,4.46,5.45
+gid_35100000351900000,Naduat,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),3.51,35.19,4.46,5.45
+gid_45800000354000000,Nakinomet,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.58,35.4,4.46,5.45
+gid_22000000358100000,Nakukulas,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.2,35.81,4.46,5.45
+gid_28400000350400000,Namoruputh,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.84,35.04,4.46,5.45
+gid_45600000353900000,Napak,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.56,35.39,4.46,5.45
+gid_44400000359300000,Todonyang,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),4.44,35.93,4.46,5.45
+gid_29200000354000000,Turkwel Centre,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.92,35.4,4.46,5.45
+gid_29500000347000000,Urum,Rift Valley,Turkana,Turkana,Rift Valley,Turkana,Arid & Semi-Arid (ASAL),2.95,34.7,4.46,5.45
+gid_5200000352800000,Eldoret town (Uasin Gishu),Rift Valley,Uasin Gishu,Uasin Gishu,Rift Valley,Uasin Gishu,Agricultural & Urban,0.52,35.28,4.46,5.45
+gid_27900000395000000,Buna,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),2.79,39.5,4.46,5.45
+gid_33600000394200000,Bute,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),3.36,39.42,4.46,5.45
+gid_24900000395700000,Eldas,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),2.49,39.57,4.46,5.45
+gid_20000000397500000,Griftu,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),2.0,39.75,4.46,5.45
+gid_10200000394900000,Habaswein,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),1.02,39.49,4.46,5.45
+gid_15300000394300000,Hadado,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),1.53,39.43,4.46,5.45
+gid_12900000398400000,Lagbogol,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),1.29,39.84,4.46,5.45
+gid_22100000401200000,Tarbaj,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),2.21,40.12,4.46,5.45
+gid_17500000400600000,Wajir town,North Eastern,Wajir,Wajir,North Eastern,Wajir,Arid & Semi-Arid (ASAL),1.75,40.06,4.46,5.45
+gid_14400000355700000,Lomut (West Pokot),Rift Valley,West Pokot,West Pokot,Rift Valley,West Pokot,Arid & Semi-Arid (ASAL),1.44,35.57,4.46,5.45
+gid_12500000350800000,Makutano (West Pokot),Rift Valley,West Pokot,West Pokot,Rift Valley,West Pokot,Arid & Semi-Arid (ASAL),1.25,35.08,4.46,5.45
