@@ -206,6 +206,9 @@ def write_data_quality_profile(profile: dict[str, Any], output_path: Path) -> Pa
 def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> str:
     """Build the 2-to-3-page Week 1 proposal markdown in plain human prose."""
     screenshot_note = (
+        "Power Query Editor screenshot captured immediately upon importing `data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv` "
+        "(showing 46 columns, 999+ rows in the 1,000-row profiling preview, column quality and distribution bars, "
+        "and Power BI's default CSV import steps `Source`, `Use First Row as Headers`, and `Change Type` under Applied Steps):\n\n"
         "![Initial Power BI Power Query Import](../screenshots/week1-initial-import.png)"
         if has_screenshot
         else "Pending capture: `screenshots/week1-initial-import.png` (open `data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv` in Power BI Desktop via Transform Data and save the raw preview showing 55,692 rows, 46 columns, and only `Source` under Applied Steps)."
@@ -605,11 +608,12 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
     if INITIAL_IMPORT_SCREENSHOT.is_file():
         _body(
             pdf,
-            "Power Query Editor screenshot taken immediately upon importing data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv "
-            "showing 55,692 rows, 46 columns, and only Source under Applied Steps:",
+            "Power Query Editor screenshot captured immediately upon importing data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv "
+            "(46 columns, 999+ rows in the 1,000-row profiling preview, column quality and distribution histograms enabled, "
+            "and default CSV import steps Source, Use First Row as Headers, and Change Type under Applied Steps):",
         )
         y_img = pdf.get_y()
-        pdf.image(str(INITIAL_IMPORT_SCREENSHOT), x=15, y=y_img, w=180)
+        pdf.image(str(INITIAL_IMPORT_SCREENSHOT), x=20, y=y_img, w=170)
     else:
         _body(
             pdf,

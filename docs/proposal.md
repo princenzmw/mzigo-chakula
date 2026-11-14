@@ -62,4 +62,6 @@ The dataset reports market-level aggregate retail prices without household incom
 
 ## 8. Initial Power BI Import Evidence
 
-Pending capture: `screenshots/week1-initial-import.png` (open `data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv` in Power BI Desktop via Transform Data and save the raw preview showing 55,692 rows, 46 columns, and only `Source` under Applied Steps).
+Power Query Editor screenshot captured immediately upon importing `data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv` (showing 46 columns, 999+ rows in the 1,000-row profiling preview, column quality and distribution bars, and Power BI's default CSV import steps `Source`, `Use First Row as Headers`, and `Change Type` under Applied Steps):
+
+![Initial Power BI Power Query Import](../screenshots/week1-initial-import.png)
