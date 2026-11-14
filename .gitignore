@@ -1,0 +1,171 @@
+# =============================================================================
+# AI Coding Assistants, Agent Harnesses, Prompts & Local Hooks (Never Public)
+# =============================================================================
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+COPILOT.md
+CURSOR.md
+.agents/
+.agent/
+_agents/
+_agent/
+.claude/
+.claude.json
+.gemini/
+.cursor/
+.cursorrules
+.cursorignore
+.windsurf/
+.windsurfrules
+.copilot/
+.github/copilot-instructions.md
+.aider*
+.continue/
+.roo/
+.cline/
+.openhands/
+.codex/
+mcp.json
+.mcp.json
+mcp_config.json
+
+# =============================================================================
+# Local Project State, Personal Course Notes, Drafts & Scratch Files
+# =============================================================================
+STATE.md
+CUrrent step.txt
+*step*.txt
+*notes*.txt
+*todo*.txt
+TODO.md
+NOTES.md
+DRAFT*
+scratch/
+drafts/
+private/
+tmp/
+temp/
+
+# =============================================================================
+# Environment Variables, Secrets & Credentials
+# =============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.crt
+*secret*
+*credentials*.json
+service-account*.json
+.pgpass
+.netrc
+
+# =============================================================================
+# Scratch Data & Local Databases
+# (Note: data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv and docs/*.csv are tracked
+# per DSA 3050A Section 9 since CC BY 4.0 permits redistribution)
+# =============================================================================
+/data/scratch/
+/data/tmp/
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# Power BI & Microsoft Office Lock / Temp / Cache / Local Path Files
+# (Deliverable .pbix and .pptx files are tracked per README requirements)
+# =============================================================================
+~$*.pbix
+~$*.pptx
+~$*.xlsx
+~$*.docx
+*.pbix.bak
+*.pbit.bak
+*.pbids
+*.abf
+*.idf
+*.trc
+*.tmp
+*.temp
+*.laccdb
+AutoRecovery*
+
+# =============================================================================
+# Python, uv & Virtual Environments
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# =============================================================================
+# Testing, Linting, Type Checking, Coverage & Experiment Logs
+# =============================================================================
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ty/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+mlruns/
+wandb/
+experiments/
+
+# =============================================================================
+# Jupyter Notebooks & Logs
+# =============================================================================
+.ipynb_checkpoints/
+*.log
+logs/
+
+# =============================================================================
+# IDE, Editor & OS Files
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
