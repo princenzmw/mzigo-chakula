@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v07_card_yoy",
+  "position": {
+    "x": 268,
+    "y": 76,
+    "z": 6,
+    "width": 240,
+    "height": 92,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "YoY Inflation %"
+                }
+              },
+              "queryRef": "fact_prices.YoY Inflation %",
+              "nativeQueryRef": "YoY Inflation %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'YoY Food Inflation %'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v14_table_county_alerts",
+  "position": {
+    "x": 784,
+    "y": 464,
+    "z": 13,
+    "width": 480,
+    "height": 242,
+    "tabOrder": 13
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm2_name"
+                }
+              },
+              "queryRef": "dim_markets.adm2_name",
+              "nativeQueryRef": "adm2_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "county_group"
+                }
+              },
+              "queryRef": "dim_markets.county_group",
+              "nativeQueryRef": "county_group"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "National Food Price Index"
+                }
+              },
+              "queryRef": "fact_prices.National Food Price Index",
+              "nativeQueryRef": "National Food Price Index"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "YoY Inflation %"
+                }
+              },
+              "queryRef": "fact_prices.YoY Inflation %",
+              "nativeQueryRef": "YoY Inflation %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "County Inflation Rank"
+                }
+              },
+              "queryRef": "fact_prices.County Inflation Rank",
+              "nativeQueryRef": "County Inflation Rank"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'County Inflation Watchlist and Ranking'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

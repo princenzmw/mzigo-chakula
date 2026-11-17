@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v34_card_rolling",
+  "position": {
+    "x": 828,
+    "y": 10,
+    "z": 3,
+    "width": 216,
+    "height": 66,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "12-Month Rolling Avg (KES)"
+                }
+              },
+              "queryRef": "fact_prices.12-Month Rolling Avg (KES)",
+              "nativeQueryRef": "12-Month Rolling Avg (KES)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'12m Rolling Avg (KES)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

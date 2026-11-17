@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v33_card_mom",
+  "position": {
+    "x": 600,
+    "y": 10,
+    "z": 2,
+    "width": 216,
+    "height": 66,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "MoM Change %"
+                }
+              },
+              "queryRef": "fact_prices.MoM Change %",
+              "nativeQueryRef": "MoM Change %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'MoM Price Change %'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

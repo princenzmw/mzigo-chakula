@@ -1,0 +1,128 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v48_bar_coverage_gap",
+  "position": {
+    "x": 16,
+    "y": 408,
+    "z": 7,
+    "width": 580,
+    "height": 298,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm2_name"
+                }
+              },
+              "queryRef": "dim_markets.adm2_name",
+              "nativeQueryRef": "adm2_name",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Survey Coverage Rate %"
+                }
+              },
+              "queryRef": "fact_prices.Survey Coverage Rate %",
+              "nativeQueryRef": "Survey Coverage Rate %"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Data Completeness %"
+                }
+              },
+              "queryRef": "fact_prices.Data Completeness %",
+              "nativeQueryRef": "Data Completeness %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility CV %"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility CV %",
+              "nativeQueryRef": "Price Volatility CV %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_prices"
+                  }
+                },
+                "Property": "Survey Coverage Rate %"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Counties with Lowest Direct Field Survey Coverage % (Sentinel Expansion Targets)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

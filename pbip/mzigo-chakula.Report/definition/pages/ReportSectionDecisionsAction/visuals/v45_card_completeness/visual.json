@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "v45_card_completeness",
+  "position": {
+    "x": 1056,
+    "y": 10,
+    "z": 4,
+    "width": 208,
+    "height": 66,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Data Completeness %"
+                }
+              },
+              "queryRef": "fact_prices.Data Completeness %",
+              "nativeQueryRef": "Data Completeness %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Data Completeness %'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
