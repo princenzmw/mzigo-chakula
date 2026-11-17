@@ -1,0 +1,360 @@
+/// Unpivoted market-month-commodity fact table containing 166,362 price observations across 233 physical markets and 238 months.
+table fact_prices
+	lineageTag: cf522af6-a3c7-4355-bebb-ba60bf9b7202
+
+	/// Mean closing commodity price in KES within the active filter context.
+	measure 'Avg Price (KES)' = AVERAGE(fact_prices[price_value])
+		formatString: #,0.00
+		displayFolder: 01. Core Price & Index
+		lineageTag: 1c4a85c9-40d2-4e8b-825f-4cf5f0f800b5
+
+	/// Grain-safe mean closing composite food price index averaged at the distinct (mkt_id, date_key) grain so unpivoting three commodities does not triple-count index weight.
+	measure 'National Food Price Index' =
+			AVERAGEX(
+			    SUMMARIZE(fact_prices, fact_prices[mkt_id], fact_prices[date_key]),
+			    CALCULATE(AVERAGE(fact_prices[food_price_index]))
+			)
+		formatString: 0.00
+		displayFolder: 01. Core Price & Index
+		lineageTag: d281bfff-7bfd-4d70-aabe-f1c142214dce
+
+	/// Mean closing commodity price shifted back exactly 12 months via SAMEPERIODLASTYEAR.
+	measure 'Prior Year Price (KES)' = CALCULATE([Avg Price (KES)], SAMEPERIODLASTYEAR(dim_date[full_date]))
+		formatString: #,0.00
+		displayFolder: 02. Time Intelligence & Growth
+		lineageTag: a8f13670-0d7b-42d2-b777-67ca22376140
+
+	/// Year-over-year percentage change in the grain-safe composite food price index.
+	measure 'YoY Inflation %' =
+			VAR CurrentIdx = [National Food Price Index]
+			VAR PriorYearIdx = CALCULATE([National Food Price Index], SAMEPERIODLASTYEAR(dim_date[full_date]))
+			RETURN
+			    DIVIDE(CurrentIdx - PriorYearIdx, PriorYearIdx)
+		formatString: 0.00%
+		displayFolder: 02. Time Intelligence & Growth
+		lineageTag: 4cfd368b-0ee0-4bc5-a425-5333888498a9
+
+	/// Year-over-year percentage change in average commodity price (KES).
+	measure 'Commodity YoY Inflation %' =
+			VAR CurrentPrice = [Avg Price (KES)]
+			VAR PriorYearPrice = [Prior Year Price (KES)]
+			RETURN
+			    DIVIDE(CurrentPrice - PriorYearPrice, PriorYearPrice)
+		formatString: 0.00%
+		displayFolder: 02. Time Intelligence & Growth
+		lineageTag: 99d8bfdf-557f-4a8a-91c0-7f478b14f7e7
+
+	/// Month-over-month percentage change in average commodity price relative to the prior month.
+	measure 'MoM Change %' =
+			VAR CurrentPrice = [Avg Price (KES)]
+			VAR PriorMonthPrice = CALCULATE([Avg Price (KES)], DATEADD(dim_date[full_date], -1, MONTH))
+			RETURN
+			    DIVIDE(CurrentPrice - PriorMonthPrice, PriorMonthPrice)
+		formatString: 0.00%
+		displayFolder: 02. Time Intelligence & Growth
+		lineageTag: e8ba61f2-ce49-4516-8c35-bb140243be69
+
+	/// Sample standard deviation of monthly closing prices in KES.
+	measure 'Price Volatility (KES)' = STDEV.S(fact_prices[price_value])
+		formatString: #,0.00
+		displayFolder: 03. Risk & Seasonality
+		lineageTag: c01f3b5c-e807-4060-b8ba-7bbe5a8e8022
+
+	/// Coefficient of variation allowing unit-free volatility comparisons across commodities and counties.
+	measure 'Price Volatility CV %' = DIVIDE([Price Volatility (KES)], [Avg Price (KES)])
+		formatString: 0.00%
+		displayFolder: 03. Risk & Seasonality
+		lineageTag: 1897347c-8bab-4bfa-a329-c70da640093b
+
+	/// Year-to-date running mean composite food price index within the calendar year.
+	measure 'Cumulative Index YTD' = TOTALYTD([National Food Price Index], dim_date[full_date])
+		formatString: 0.00
+		displayFolder: 02. Time Intelligence & Growth
+		lineageTag: 73122316-1383-480c-bf94-ff22fcad54eb
+
+	/// Dense descending rank of Kenyan counties by YoY food index inflation (1 = highest inflation).
+	measure 'County Inflation Rank' =
+			IF(
+			    ISINSCOPE(dim_markets[adm2_name]),
+			    RANKX(ALL(dim_markets[adm2_name]), [YoY Inflation %], , DESC, Dense)
+			)
+		formatString: 0
+		displayFolder: 04. Coverage & Disparities
+		lineageTag: 9af973b1-b2a3-477d-bf5a-8cd866b4037c
+
+	/// Share of expected market-month-commodity cells populated with non-null modelled closing prices.
+	measure 'Data Completeness %' =
+			VAR ObservedRows = COUNTROWS(fact_prices)
+			VAR ExpectedRows = COUNTROWS(dim_markets) * COUNTROWS(dim_date) * COUNTROWS(dim_commodity)
+			RETURN
+			    DIVIDE(ObservedRows, ExpectedRows)
+		formatString: 0.00%
+		displayFolder: 04. Coverage & Disparities
+		lineageTag: ad0fe60c-dbf8-4a50-905e-1bfde4e708c7
+
+	/// Share of market-month-commodity records backed by a direct raw field survey observation.
+	measure 'Survey Coverage Rate %' = DIVIDE(COUNT(fact_prices[raw_spot_price]), COUNTROWS(fact_prices))
+		formatString: 0.00%
+		displayFolder: 04. Coverage & Disparities
+		lineageTag: f5134d80-65bc-4c01-b235-78fec74a35a0
+
+	/// Local price premium or discount in KES compared to the national all-market mean.
+	measure 'Affordability Gap (KES)' =
+			VAR LocalAvg = [Avg Price (KES)]
+			VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))
+			RETURN
+			    LocalAvg - NationalAvg
+		formatString: #,0.00
+		displayFolder: 04. Coverage & Disparities
+		lineageTag: ed0576fa-32d3-4b14-89da-65a3d1c723a5
+
+	/// Ratio of a calendar month or season average price to the all-month average (>1.000 = seasonal peak).
+	measure 'Seasonal Index' =
+			VAR CurrentMonthAvg = [Avg Price (KES)]
+			VAR AllMonthsAvg = CALCULATE([Avg Price (KES)], ALL(dim_date[month], dim_date[month_name], dim_date[season], dim_date[quarter]))
+			RETURN
+			    DIVIDE(CurrentMonthAvg, AllMonthsAvg)
+		formatString: 0.000
+		displayFolder: 03. Risk & Seasonality
+		lineageTag: a1df5330-c83d-41f0-8e8e-4bf660ce225e
+
+	/// Trailing 12-month smoothed commodity price average ending at the selected period.
+	measure '12-Month Rolling Avg (KES)' =
+			AVERAGEX(
+			    DATESINPERIOD(dim_date[full_date], MAX(dim_date[full_date]), -12, MONTH),
+			    [Avg Price (KES)]
+			)
+		formatString: #,0.00
+		displayFolder: 02. Time Intelligence & Growth
+		lineageTag: 380d8d02-cf07-4883-8519-821226119642
+
+	column price_id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: 4d60bade-c802-4aaf-92d7-3af25e5c96fc
+		summarizeBy: none
+		sourceColumn: price_id
+
+	column mkt_id
+		dataType: string
+		isHidden
+		lineageTag: 46173da9-32ce-47fb-9087-2c1f3902d3a2
+		summarizeBy: none
+		sourceColumn: mkt_id
+
+	column date_key
+		dataType: int64
+		isHidden
+		lineageTag: ff7b1260-51df-46e4-bbb6-6fa08f8f61ee
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column commodity_id
+		dataType: string
+		isHidden
+		lineageTag: 68f861a3-bf5c-4e6c-ba50-c0e0f272a9dc
+		summarizeBy: none
+		sourceColumn: commodity_id
+
+	column price_value
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 323b7905-be67-4491-bfe3-6231d5b09807
+		summarizeBy: none
+		sourceColumn: price_value
+
+	column open_price
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 6f0fc9e2-fa95-459f-a47e-195b2bf01d39
+		summarizeBy: none
+		sourceColumn: open_price
+
+	column high_price
+		dataType: double
+		formatString: #,0.00
+		lineageTag: db3e8554-87b9-4dfb-b40e-7ec1528d826d
+		summarizeBy: none
+		sourceColumn: high_price
+
+	column low_price
+		dataType: double
+		formatString: #,0.00
+		lineageTag: c98bbfbe-fa16-4a0d-9bdc-d24a5d927d08
+		summarizeBy: none
+		sourceColumn: low_price
+
+	column raw_spot_price
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 4c6a94f6-a962-429d-b607-cb8d8d043d0d
+		summarizeBy: none
+		sourceColumn: raw_spot_price
+
+	column commodity_inflation_yoy
+		dataType: double
+		formatString: 0.00
+		lineageTag: 11d80250-e4d1-4401-94cf-fd69756fddb1
+		summarizeBy: none
+		sourceColumn: commodity_inflation_yoy
+
+	column food_price_index
+		dataType: double
+		formatString: 0.00
+		lineageTag: ef0c57b1-b986-493e-83e5-c5a3f312d87f
+		summarizeBy: none
+		sourceColumn: food_price_index
+
+	column inflation_food_price_index
+		dataType: double
+		formatString: 0.00
+		lineageTag: f5f8e7ac-236f-4773-922d-cb037a7c0319
+		summarizeBy: none
+		sourceColumn: inflation_food_price_index
+
+	column trust_score
+		dataType: double
+		formatString: 0.00
+		lineageTag: 1a2203a1-2508-402e-84da-faddf8d4d3d6
+		summarizeBy: average
+		sourceColumn: trust_score
+
+	column price_change_mom
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 5a062852-ef66-4259-ad86-5559725f3621
+		summarizeBy: none
+		sourceColumn: price_change_mom
+
+	column price_change_mom_pct
+		dataType: double
+		formatString: 0.00
+		lineageTag: ffee9bba-3723-45f5-a46b-707ffac0cbfb
+		summarizeBy: none
+		sourceColumn: price_change_mom_pct
+
+	column z_score
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 193e21c5-16c1-4b0f-878c-f84aa9d0304a
+		summarizeBy: none
+		sourceColumn: z_score
+
+	column is_outlier
+		dataType: boolean
+		lineageTag: 4643dc46-de1e-436f-888d-f2a0c2050bd2
+		sourceColumn: is_outlier
+
+	partition fact_prices = m
+		mode: import
+		source =
+				// Mzigo Chakula: fact_prices (166,362 market-month-commodity records from 55,454 physical market observations)
+				// Update CsvPath if moving the repository to a different folder.
+				let
+				    CsvPath = "D:\COURSES\FS2026\DSA3050A TT17 BusIntDViz\Projects\mzigo-chakula\data\raw\KEN_RTFP_mkt_2007_2026-10-05.csv",
+				    Source = Csv.Document(File.Contents(CsvPath), [Delimiter=",", Columns=46, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    SelectedCols = Table.SelectColumns(PromotedHeaders, {"geo_id", "mkt_name", "price_date", "year", "month", "c_food_price_index", "inflation_food_price_index", "c_beans", "o_beans", "h_beans", "l_beans", "beans", "inflation_beans", "trust_beans", "c_maize_fao", "o_maize_fao", "h_maize_fao", "l_maize_fao", "maize_fao", "inflation_maize_fao", "trust_maize_fao", "c_livestock_goat_s_fao", "o_livestock_goat_s_fao", "h_livestock_goat_s_fao", "l_livestock_goat_s_fao", "livestock_goat_s_fao", "inflation_livestock_goat_s_fao", "trust_livestock_goat_s_fao"}),
+				    TypedBase = Table.TransformColumnTypes(
+				        SelectedCols,
+				        {
+				            {"geo_id", type text},
+				            {"mkt_name", type text},
+				            {"price_date", type date},
+				            {"year", Int64.Type},
+				            {"month", Int64.Type},
+				            {"c_food_price_index", type number},
+				            {"inflation_food_price_index", type number},
+				            {"c_beans", type number},
+				            {"o_beans", type number},
+				            {"h_beans", type number},
+				            {"l_beans", type number},
+				            {"beans", type number},
+				            {"inflation_beans", type number},
+				            {"trust_beans", type number},
+				            {"c_maize_fao", type number},
+				            {"o_maize_fao", type number},
+				            {"h_maize_fao", type number},
+				            {"l_maize_fao", type number},
+				            {"maize_fao", type number},
+				            {"inflation_maize_fao", type number},
+				            {"trust_maize_fao", type number},
+				            {"c_livestock_goat_s_fao", type number},
+				            {"o_livestock_goat_s_fao", type number},
+				            {"h_livestock_goat_s_fao", type number},
+				            {"l_livestock_goat_s_fao", type number},
+				            {"livestock_goat_s_fao", type number},
+				            {"inflation_livestock_goat_s_fao", type number},
+				            {"trust_livestock_goat_s_fao", type number}
+				        },
+				        "en-US"
+				    ),
+				    FilteredPhysical = Table.SelectRows(TypedBase, each [geo_id] <> "gid_ken_national_average" and [mkt_name] <> "Market Average" and ([c_beans] <> null or [c_maize_fao] <> null or [c_livestock_goat_s_fao] <> null)),
+				    AddedDateKey = Table.AddColumn(FilteredPhysical, "date_key", each [year] * 10000 + [month] * 100 + Date.Day([price_date]), Int64.Type),
+				    RenamedBase = Table.RenameColumns(AddedDateKey, {{"geo_id", "mkt_id"}, {"c_food_price_index", "food_price_index"}}),
+				    ProjectCommodity = (base as table, cid as text, closeCol as text, openCol as text, highCol as text, lowCol as text, rawCol as text, inflCol as text, trustCol as text) as table =>
+				        let
+				            Subset = Table.SelectColumns(base, {"mkt_id", "date_key", "food_price_index", "inflation_food_price_index", closeCol, openCol, highCol, lowCol, rawCol, inflCol, trustCol}),
+				            Renamed = Table.RenameColumns(Subset, {
+				                {closeCol, "price_value"},
+				                {openCol, "open_price"},
+				                {highCol, "high_price"},
+				                {lowCol, "low_price"},
+				                {rawCol, "raw_spot_price"},
+				                {inflCol, "commodity_inflation_yoy"},
+				                {trustCol, "trust_score"}
+				            }),
+				            NonNullClose = Table.SelectRows(Renamed, each [price_value] <> null),
+				            WithCid = Table.AddColumn(NonNullClose, "commodity_id", each cid, type text)
+				        in
+				            WithCid,
+				    Unpivoted = Table.Combine({
+				        ProjectCommodity(RenamedBase, "beans", "c_beans", "o_beans", "h_beans", "l_beans", "beans", "inflation_beans", "trust_beans"),
+				        ProjectCommodity(RenamedBase, "maize_fao", "c_maize_fao", "o_maize_fao", "h_maize_fao", "l_maize_fao", "maize_fao", "inflation_maize_fao", "trust_maize_fao"),
+				        ProjectCommodity(RenamedBase, "livestock_goat_s_fao", "c_livestock_goat_s_fao", "o_livestock_goat_s_fao", "h_livestock_goat_s_fao", "l_livestock_goat_s_fao", "livestock_goat_s_fao", "inflation_livestock_goat_s_fao", "trust_livestock_goat_s_fao")
+				    }),
+				    AddedPriceId = Table.AddColumn(Unpivoted, "price_id", each [mkt_id] & "_" & Text.From([date_key]) & "_" & [commodity_id], type text),
+				    EnrichSeries = (grp as table) as table =>
+				        let
+				            Sorted = Table.Sort(grp, {{"date_key", Order.Ascending}}),
+				            PriceList = List.Buffer(Sorted[price_value]),
+				            MeanPrice = List.Average(PriceList),
+				            StdPrice = List.StandardDeviation(PriceList),
+				            Indexed = Table.AddIndexColumn(Sorted, "_idx", 0, 1, Int64.Type),
+				            WithMom = Table.AddColumn(Indexed, "price_change_mom", each if [_idx] = 0 then null else Number.Round([price_value] - PriceList{[_idx] - 1}, 4), type number),
+				            WithMomPct = Table.AddColumn(WithMom, "price_change_mom_pct", each if [_idx] = 0 or PriceList{[_idx] - 1} = 0 then null else Number.Round(([price_value] - PriceList{[_idx] - 1}) / PriceList{[_idx] - 1} * 100, 4), type number),
+				            WithZ = Table.AddColumn(WithMomPct, "z_score", each if StdPrice = null or StdPrice = 0 then 0 else Number.Round(([price_value] - MeanPrice) / StdPrice, 4), type number),
+				            WithOutlier = Table.AddColumn(WithZ, "is_outlier", each (if [price_change_mom_pct] <> null and Number.Abs([price_change_mom_pct]) > 50 then true else false) or Number.Abs([z_score]) > 3, type logical),
+				            Cleaned = Table.RemoveColumns(WithOutlier, {"_idx"})
+				        in
+				            Cleaned,
+				    Grouped = Table.Group(AddedPriceId, {"mkt_id", "commodity_id"}, {{"Series", each EnrichSeries(_), type table}}),
+				    CombinedSeries = Table.Combine(Grouped[Series]),
+				    FinalTyped = Table.TransformColumnTypes(
+				        CombinedSeries,
+				        {
+				            {"price_id", type text},
+				            {"mkt_id", type text},
+				            {"date_key", Int64.Type},
+				            {"commodity_id", type text},
+				            {"price_value", type number},
+				            {"open_price", type number},
+				            {"high_price", type number},
+				            {"low_price", type number},
+				            {"raw_spot_price", type number},
+				            {"commodity_inflation_yoy", type number},
+				            {"food_price_index", type number},
+				            {"inflation_food_price_index", type number},
+				            {"trust_score", type number},
+				            {"price_change_mom", type number},
+				            {"price_change_mom_pct", type number},
+				            {"z_score", type number},
+				            {"is_outlier", type logical}
+				        },
+				        "en-US"
+				    ),
+				    ReorderedCols = Table.ReorderColumns(FinalTyped, {"price_id", "mkt_id", "date_key", "commodity_id", "price_value", "open_price", "high_price", "low_price", "raw_spot_price", "commodity_inflation_yoy", "food_price_index", "inflation_food_price_index", "trust_score", "price_change_mom", "price_change_mom_pct", "z_score", "is_outlier"})
+				in
+				    ReorderedCols
+

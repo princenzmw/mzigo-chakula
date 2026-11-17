@@ -1,0 +1,12 @@
+relationship fact_prices_to_dim_markets
+	fromColumn: fact_prices.mkt_id
+	toColumn: dim_markets.mkt_id
+
+relationship fact_prices_to_dim_date
+	fromColumn: fact_prices.date_key
+	toColumn: dim_date.date_key
+
+relationship fact_prices_to_dim_commodity
+	fromColumn: fact_prices.commodity_id
+	toColumn: dim_commodity.commodity_id
+
