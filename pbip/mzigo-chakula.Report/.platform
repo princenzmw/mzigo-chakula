@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "mzigo-chakula"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bbcceea3-31cd-440c-8050-80588a1256ae"
+  }
+}

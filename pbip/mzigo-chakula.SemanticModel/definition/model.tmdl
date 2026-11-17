@@ -6,7 +6,11 @@ model MzigoChakula
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation PBI_ProTooling = ["MCP-PBIModeling"]
+annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
+
+annotation PBI_QueryOrder = ["dim_markets","dim_date","dim_commodity","fact_prices"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
 
 ref table dim_markets
 ref table dim_date

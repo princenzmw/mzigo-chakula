@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "mzigo-chakula"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a40ab5e2-6087-4874-8398-129f7d41c812"
+  }
+}

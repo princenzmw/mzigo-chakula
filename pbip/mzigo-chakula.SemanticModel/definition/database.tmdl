@@ -1,4 +1,4 @@
 /// Mzigo Chakula Kenya Food Price Inflation and Household Affordability Semantic Model (2007-2026)
-database MzigoChakula
-	compatibilityLevel: 1600
+database
+	compatibilityLevel: 1606
 

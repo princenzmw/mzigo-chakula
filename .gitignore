@@ -97,6 +97,7 @@ service-account*.json
 *.temp
 *.laccdb
 AutoRecovery*
+**/.pbi/
 
 # =============================================================================
 # Python, uv & Virtual Environments

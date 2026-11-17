@@ -59,7 +59,8 @@ def test_pbip_and_tmdl_files_exist() -> None:
         "https://developer.microsoft.com/json-schemas/fabric/pbip/pbipProperties/1.0.0/schema.json"
     )
     assert (pbip_root / "mzigo-chakula.Report" / "definition.pbir").is_file()
-    assert (pbip_root / "mzigo-chakula.Report" / "report.json").is_file()
+    assert (pbip_root / "mzigo-chakula.Report" / "definition" / "report.json").is_file()
+    assert (pbip_root / "mzigo-chakula.Report" / "definition" / "pages" / "pages.json").is_file()
 
     model_root = pbip_root / "mzigo-chakula.SemanticModel"
     assert (model_root / "definition.pbism").is_file()

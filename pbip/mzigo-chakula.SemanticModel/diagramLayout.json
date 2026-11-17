@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 500.54631794188629,
+            "y": 659.69298343335959
+          },
+          "nodeIndex": "dim_commodity",
+          "nodeLineageTag": "c2708a70-59f2-4fd2-9384-d211a7eb194f",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 599.45492017592915
+          },
+          "nodeIndex": "dim_date",
+          "nodeLineageTag": "54ef9fac-e6d1-4cfd-9459-2be57d77e86b",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 553.14021766322423,
+            "y": -50
+          },
+          "nodeIndex": "dim_markets",
+          "nodeLineageTag": "facc58eb-ccd8-4e2f-bf5c-763fcb09cd18",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 338.10329606083621,
+            "y": 303.47178328787891
+          },
+          "nodeIndex": "fact_prices",
+          "nodeLineageTag": "cf522af6-a3c7-4355-bebb-ba60bf9b7202",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
