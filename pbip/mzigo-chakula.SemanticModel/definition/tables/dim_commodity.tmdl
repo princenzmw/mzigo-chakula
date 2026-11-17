@@ -1,0 +1,53 @@
+/// Dimension table of 3 tracked Kenyan staple commodities (beans, maize, goats).
+table dim_commodity
+	lineageTag: c2708a70-59f2-4fd2-9384-d211a7eb194f
+
+	column commodity_id
+		dataType: string
+		isKey
+		lineageTag: 74b7168a-fa30-4cf2-8e83-4d53894891e4
+		summarizeBy: none
+		sourceColumn: commodity_id
+
+	column commodity_name
+		dataType: string
+		lineageTag: f16f4b33-3d04-421f-a059-d09abdf03959
+		sourceColumn: commodity_name
+
+	column category
+		dataType: string
+		lineageTag: fbe3f973-9659-4a1c-b50e-2a9db01e33cc
+		sourceColumn: category
+
+	column unit
+		dataType: string
+		lineageTag: 82d13756-decb-4f66-8fc8-7695ed2b5423
+		sourceColumn: unit
+
+	column index_weight_note
+		dataType: string
+		lineageTag: d8c27ad8-82be-4529-b7e6-9c6a79a7af55
+		sourceColumn: index_weight_note
+
+	partition dim_commodity = m
+		mode: import
+		source =
+				// Mzigo Chakula: dim_commodity (3 tracked Kenyan staple commodities)
+				let
+				    CommodityTable = #table(
+				        type table [
+				            commodity_id = text,
+				            commodity_name = text,
+				            category = text,
+				            unit = text,
+				            index_weight_note = text
+				        ],
+				        {
+				        {"beans", "Beans (1 kg)", "Legume Staple", "KG", "RTFP basket item: beans (1 KG, Index Weight = 1)"},
+				        {"maize_fao", "Maize (1 kg)", "Cereal Staple", "KG", "RTFP basket item: maize_fao (1 Kg, Index Weight = 1)"},
+				        {"livestock_goat_s_fao", "Goat (1 head)", "Livestock / Protein", "Head", "RTFP basket item: livestock_goat_s_fao (1 unit, Index Weight = 0)"}
+				        }
+				    )
+				in
+				    CommodityTable
+

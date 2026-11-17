@@ -1,0 +1,17 @@
+{
+  "config": "{\"version\":\"5.55\",\"themeCollection\":{}}",
+  "layoutOptimization": 0,
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "Page 1",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.0,
+      "name": "ReportSection1",
+      "ordinal": 0,
+      "visualContainers": [],
+      "width": 1280.0
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+model MzigoChakula
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_ProTooling = ["MCP-PBIModeling"]
+
+ref table dim_markets
+ref table dim_date
+ref table dim_commodity
+ref table fact_prices
+

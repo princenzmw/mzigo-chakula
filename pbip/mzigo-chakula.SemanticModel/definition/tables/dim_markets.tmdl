@@ -1,0 +1,174 @@
+/// Dimension table of 233 physical Kenyan food markets across 27 counties.
+table dim_markets
+	lineageTag: facc58eb-ccd8-4e2f-bf5c-763fcb09cd18
+
+	/// Unique physical market key from World Bank RTFP geo_id.
+	column mkt_id
+		dataType: string
+		isKey
+		lineageTag: 6273939d-5916-407d-a38d-d2448c4f8683
+		summarizeBy: none
+		sourceColumn: mkt_id
+
+	/// Market name.
+	column mkt_name
+		dataType: string
+		lineageTag: d2b108c1-d570-4523-ad16-718b211affbd
+		sourceColumn: mkt_name
+
+	/// Normalized Kenyan region / former province (7 regions).
+	column adm1_name
+		dataType: string
+		lineageTag: 46cd4089-233a-4c82-a476-5519f501a401
+		dataCategory: StateOrProvince
+		sourceColumn: adm1_name
+
+	/// Normalized Kenyan county name (27 covered counties).
+	column adm2_name
+		dataType: string
+		lineageTag: 4c0ac208-5e4d-4f05-b134-85a7c7a1beed
+		dataCategory: County
+		sourceColumn: adm2_name
+
+	/// Sub-county or administrative division label preserved from source.
+	column subcounty_or_district
+		dataType: string
+		lineageTag: 5f0fd424-3314-4498-ab5a-5c77535b9444
+		sourceColumn: subcounty_or_district
+
+	column raw_adm1_name
+		dataType: string
+		isHidden
+		lineageTag: 478cd678-d1cb-4f71-9022-14a408f9de8d
+		sourceColumn: raw_adm1_name
+
+	column raw_adm2_name
+		dataType: string
+		isHidden
+		lineageTag: 5182a398-cf37-4a2a-86fe-62fb62968cf2
+		sourceColumn: raw_adm2_name
+
+	/// ASAL vs. Agricultural & Urban market classification.
+	column county_group
+		dataType: string
+		lineageTag: 77384d4b-fde3-472b-88a2-63fcf5af8ae6
+		sourceColumn: county_group
+
+	column lat
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 5c7ba56a-a75c-4667-affd-050617766bc4
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: lat
+
+	column lon
+		dataType: double
+		formatString: 0.0000
+		lineageTag: b7023763-abbc-41b1-a157-b245105731be
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: lon
+
+	column data_coverage
+		dataType: double
+		formatString: 0.00
+		lineageTag: 3fc8a173-ee01-4889-9c63-837b624a8519
+		summarizeBy: average
+		sourceColumn: data_coverage
+
+	column data_coverage_recent
+		dataType: double
+		formatString: 0.00
+		lineageTag: 21fb9a53-c67d-45bc-9014-0ba30a15c6b7
+		summarizeBy: average
+		sourceColumn: data_coverage_recent
+
+	partition dim_markets = m
+		mode: import
+		source =
+				// Mzigo Chakula: dim_markets (233 physical Kenyan markets across 27 counties and 7 regions)
+				// Update CsvPath if moving the repository to a different folder.
+				let
+				    CsvPath = "D:\COURSES\FS2026\DSA3050A TT17 BusIntDViz\Projects\mzigo-chakula\data\raw\KEN_RTFP_mkt_2007_2026-10-05.csv",
+				    Source = Csv.Document(File.Contents(CsvPath), [Delimiter=",", Columns=46, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    FilteredPhysical = Table.SelectRows(PromotedHeaders, each [geo_id] <> "gid_ken_national_average" and [mkt_name] <> "Market Average"),
+				    SelectedCols = Table.SelectColumns(FilteredPhysical, {"geo_id", "mkt_name", "adm1_name", "adm2_name", "lat", "lon", "data_coverage", "data_coverage_recent"}),
+				    DistinctMarkets = Table.Distinct(SelectedCols, {"geo_id"}),
+				    RenamedRawCols = Table.RenameColumns(DistinctMarkets, {{"geo_id", "mkt_id"}, {"adm1_name", "raw_adm1_name"}, {"adm2_name", "raw_adm2_name"}}),
+				    TypedCols = Table.TransformColumnTypes(
+				        RenamedRawCols,
+				        {
+				            {"mkt_id", type text},
+				            {"mkt_name", type text},
+				            {"raw_adm1_name", type text},
+				            {"raw_adm2_name", type text},
+				            {"lat", type number},
+				            {"lon", type number},
+				            {"data_coverage", type number},
+				            {"data_coverage_recent", type number}
+				        },
+				        "en-US"
+				    ),
+				    CountyLookup = #table(
+				        {"raw_adm1_name", "raw_adm2_name", "adm1_name", "adm2_name", "subcounty_or_district"},
+				        {
+				        {"Central", "Nyeri", "Central", "Nyeri", "Nyeri"},
+				        {"Coast", "Kilifi", "Coast", "Kilifi", "Kilifi"},
+				        {"Coast", "Kwale", "Coast", "Kwale", "Kwale"},
+				        {"Coast", "Mombasa", "Coast", "Mombasa", "Mombasa"},
+				        {"Coast", "Taita Taveta", "Coast", "Taita Taveta", "Taita Taveta"},
+				        {"Coast", "Tana River", "Coast", "Tana River", "Tana River"},
+				        {"Eastern", "Isiolo", "Eastern", "Isiolo", "Isiolo"},
+				        {"Eastern", "Kitui", "Eastern", "Kitui", "Kitui"},
+				        {"Eastern", "Machakos", "Eastern", "Machakos", "Machakos"},
+				        {"Eastern", "Makueni", "Eastern", "Makueni", "Makueni"},
+				        {"Eastern", "Marsabit", "Eastern", "Marsabit", "Marsabit"},
+				        {"Eastern", "Meru North", "Eastern", "Meru", "Meru North"},
+				        {"Eastern", "Meru South", "Eastern", "Tharaka Nithi", "Meru South"},
+				        {"Eastern", "Moyale", "Eastern", "Marsabit", "Moyale"},
+				        {"Embu", "Mbeere North", "Eastern", "Embu", "Mbeere North"},
+				        {"Hola (Tana River)", "Hola (Tana River)", "Coast", "Tana River", "Hola"},
+				        {"Kajiado", "Ongata Rongai", "Rift Valley", "Kajiado", "Ongata Rongai"},
+				        {"Kwale", "Matuga", "Coast", "Kwale", "Matuga"},
+				        {"Lamu", "Lamu West", "Coast", "Lamu", "Lamu West"},
+				        {"Meru", "North Imenti", "Eastern", "Meru", "North Imenti"},
+				        {"Nairobi", "Nairobi", "Nairobi", "Nairobi", "Nairobi"},
+				        {"North Eastern", "Garissa", "North Eastern", "Garissa", "Garissa"},
+				        {"North Eastern", "Ijara", "North Eastern", "Garissa", "Ijara"},
+				        {"North Eastern", "Mandera", "North Eastern", "Mandera", "Mandera"},
+				        {"North Eastern", "Wajir", "North Eastern", "Wajir", "Wajir"},
+				        {"Nyanza", "Kisumu", "Nyanza", "Kisumu", "Kisumu"},
+				        {"Rift Valley", "Baringo", "Rift Valley", "Baringo", "Baringo"},
+				        {"Rift Valley", "Kajiado", "Rift Valley", "Kajiado", "Kajiado"},
+				        {"Rift Valley", "Nakuru", "Rift Valley", "Nakuru", "Nakuru"},
+				        {"Rift Valley", "Samburu", "Rift Valley", "Samburu", "Samburu"},
+				        {"Rift Valley", "Turkana", "Rift Valley", "Turkana", "Turkana"},
+				        {"Rift Valley", "Uasin Gishu", "Rift Valley", "Uasin Gishu", "Uasin Gishu"},
+				        {"Rift Valley", "West Pokot", "Rift Valley", "West Pokot", "West Pokot"},
+				        {"Taita Taveta", "Voi", "Coast", "Taita Taveta", "Voi"},
+				        {"Tharaka Nithi", "Chuka/Igambang'Ombe", "Eastern", "Tharaka Nithi", "Chuka/Igambang'Ombe"}
+				        }
+				    ),
+				    MarketOverrideLookup = #table(
+				        {"mkt_name", "ov_region", "ov_county", "ov_subcounty"},
+				        {
+				        {"Kitengela (Kajiado)", "Rift Valley", "Kajiado", "Kitengela"}
+				        }
+				    ),
+				    JoinedAdmin = Table.NestedJoin(TypedCols, {"raw_adm1_name", "raw_adm2_name"}, CountyLookup, {"raw_adm1_name", "raw_adm2_name"}, "AdminMatch", JoinKind.Inner),
+				    ExpandedAdmin = Table.ExpandTableColumn(JoinedAdmin, "AdminMatch", {"adm1_name", "adm2_name", "subcounty_or_district"}, {"map_region", "map_county", "map_subcounty"}),
+				    JoinedOverride = Table.NestedJoin(ExpandedAdmin, {"mkt_name"}, MarketOverrideLookup, {"mkt_name"}, "OverrideMatch", JoinKind.LeftOuter),
+				    ExpandedOverride = Table.ExpandTableColumn(JoinedOverride, "OverrideMatch", {"ov_region", "ov_county", "ov_subcounty"}),
+				    ResolvedRegion = Table.AddColumn(ExpandedOverride, "adm1_name", each if [ov_region] <> null then [ov_region] else [map_region], type text),
+				    ResolvedCounty = Table.AddColumn(ResolvedRegion, "adm2_name", each if [ov_county] <> null then [ov_county] else [map_county], type text),
+				    ResolvedSubcounty = Table.AddColumn(ResolvedCounty, "subcounty_or_district", each if [ov_subcounty] <> null then [ov_subcounty] else [map_subcounty], type text),
+				    RemovedTempCols = Table.RemoveColumns(ResolvedSubcounty, {"map_region", "map_county", "map_subcounty", "ov_region", "ov_county", "ov_subcounty"}),
+				    AsalCounties = {"Baringo", "Garissa", "Isiolo", "Kajiado", "Kilifi", "Kitui", "Kwale", "Laikipia", "Makueni", "Mandera", "Marsabit", "Samburu", "Taita Taveta", "Tana River", "Turkana", "Wajir", "West Pokot"},
+				    AddedCountyGroup = Table.AddColumn(RemovedTempCols, "county_group", each if List.Contains(AsalCounties, [adm2_name]) then "Arid & Semi-Arid (ASAL)" else "Agricultural & Urban", type text),
+				    ReorderedCols = Table.ReorderColumns(AddedCountyGroup, {"mkt_id", "mkt_name", "adm1_name", "adm2_name", "subcounty_or_district", "raw_adm1_name", "raw_adm2_name", "county_group", "lat", "lon", "data_coverage", "data_coverage_recent"}),
+				    SortedMarkets = Table.Sort(ReorderedCols, {{"adm2_name", Order.Ascending}, {"mkt_name", Order.Ascending}})
+				in
+				    SortedMarkets
+

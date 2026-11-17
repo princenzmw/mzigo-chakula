@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/project/1.0.0/definition.json",
+  "version": "1.0",
+  "artifacts": [
+    {
+      "report": {
+        "path": "mzigo-chakula.Report"
+      }
+    }
+  ],
+  "settings": {
+    "enableAutoRecovery": true
+  }
+}
