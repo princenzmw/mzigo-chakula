@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -49,15 +50,20 @@ def test_dax_validation_summary_invariants(etl_result: ETLResult) -> None:
 
 
 def test_pbip_and_tmdl_files_exist() -> None:
-    """Verify Power BI Project manifests, BIM, and all 7 TMDL files exist."""
+    """Verify Power BI Project manifests, valid schema URL, and all 7 TMDL files exist."""
     pbip_root = PROJECT_ROOT / "pbip"
-    assert (pbip_root / "mzigo-chakula.pbip").is_file()
+    pbip_path = pbip_root / "mzigo-chakula.pbip"
+    assert pbip_path.is_file()
+    pbip_payload = json.loads(pbip_path.read_text(encoding="utf-8"))
+    assert pbip_payload["$schema"] == (
+        "https://developer.microsoft.com/json-schemas/fabric/pbip/pbipProperties/1.0.0/schema.json"
+    )
     assert (pbip_root / "mzigo-chakula.Report" / "definition.pbir").is_file()
     assert (pbip_root / "mzigo-chakula.Report" / "report.json").is_file()
 
     model_root = pbip_root / "mzigo-chakula.SemanticModel"
     assert (model_root / "definition.pbism").is_file()
-    assert (model_root / "model.bim").is_file()
+    assert not (model_root / "model.bim").exists()
 
     def_dir = model_root / "definition"
     expected_tmdl = [
