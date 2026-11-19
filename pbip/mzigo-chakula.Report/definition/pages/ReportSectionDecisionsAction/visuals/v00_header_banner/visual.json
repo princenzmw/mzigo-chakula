@@ -3,36 +3,14 @@
   "name": "v00_header_banner",
   "position": {
     "x": 16,
-    "y": 6,
+    "y": 8,
     "z": 0,
-    "width": 1248,
-    "height": 38,
+    "width": 624,
+    "height": 52,
     "tabOrder": 0
   },
   "visual": {
     "visualType": "card",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Data Completeness %"
-                }
-              },
-              "queryRef": "fact_prices.Data Completeness %",
-              "nativeQueryRef": "Data Completeness %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -89,7 +67,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "0D"
                 }
               }
             },
@@ -129,7 +107,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'MZIGO CHAKULA | KENYA FOOD PRICE & AFFORDABILITY INTELLIGENCE (2007-2026)'"
+                  "Value": "'MZIGO CHAKULA | Kenya Food Price & Affordability'"
                 }
               }
             },
@@ -199,7 +177,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Page 4: Decisions & Action | Survey Blind-Spot Triage & Intervention Priorities'"
+                  "Value": "'Page 4: Decisions & Action | Survey Blind Spots & Priorities'"
                 }
               }
             },
@@ -208,7 +186,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#93C5FD'"
+                      "Value": "'#BAE6FD'"
                     }
                   }
                 }
@@ -217,7 +195,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "8.5D"
                 }
               }
             },
@@ -270,34 +248,56 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "4D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "4D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "12D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "6D"
                 }
               }
             }
           }
         }
       ]
+    },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Data Completeness %"
+                }
+              },
+              "queryRef": "fact_prices.Data Completeness %",
+              "nativeQueryRef": "Data Completeness %"
+            }
+          ]
+        }
+      }
     },
     "objects": {
       "labels": [

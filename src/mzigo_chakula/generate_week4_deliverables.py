@@ -388,12 +388,19 @@ def _compute_monthly_series(etl_result: ETLResult) -> list[dict[str, Any]]:
     return series
 
 
-def _save_both(img: Image.Image, filename: str) -> tuple[Path, Path]:
+def _save_both(
+    img: Image.Image,
+    filename: str,
+    screenshots_dir: Path | None = None,
+    output_dir: Path | None = None,
+) -> tuple[Path, Path]:
     """Save 300 DPI PNG to both screenshots/ and output/ directories."""
-    SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    shot_path = SCREENSHOTS_DIR / filename
-    out_path = OUTPUT_DIR / filename
+    s_dir = screenshots_dir or SCREENSHOTS_DIR
+    o_dir = output_dir or OUTPUT_DIR
+    s_dir.mkdir(parents=True, exist_ok=True)
+    o_dir.mkdir(parents=True, exist_ok=True)
+    shot_path = s_dir / filename
+    out_path = o_dir / filename
     img.save(shot_path, format="PNG", dpi=(300, 300))
     shutil.copy2(shot_path, out_path)
     return shot_path, out_path
@@ -403,6 +410,8 @@ def _render_page1(
     monthly: list[dict[str, Any]],
     summary: dict[str, Any],
     fonts: dict[str, ImageFont.ImageFont],
+    screenshots_dir: Path | None = None,
+    output_dir: Path | None = None,
 ) -> tuple[Path, Path]:
     """Render Page 1: Executive Pulse."""
     img = Image.new("RGB", (CANVAS_W, CANVAS_H), BG_CANVAS)
@@ -524,13 +533,15 @@ def _render_page1(
         draw.text((p_alert[0] + 22, ay + 24), body, font=fonts["sub"], fill=TEXT_MUTED)
         ay += 62
 
-    return _save_both(img, "page1-executive-pulse.png")
+    return _save_both(img, "page1-executive-pulse.png", screenshots_dir, output_dir)
 
 
 def _render_page2(
     etl_result: ETLResult,
     summary: dict[str, Any],
     fonts: dict[str, ImageFont.ImageFont],
+    screenshots_dir: Path | None = None,
+    output_dir: Path | None = None,
 ) -> tuple[Path, Path]:
     """Render Page 2: County and Commodity."""
     img = Image.new("RGB", (CANVAS_W, CANVAS_H), BG_CANVAS)
@@ -665,7 +676,7 @@ def _render_page2(
     ]
     _draw_table(draw, p_mat, m_headers, m_rows, fonts)
 
-    return _save_both(img, "page2-county-commodity.png")
+    return _save_both(img, "page2-county-commodity.png", screenshots_dir, output_dir)
 
 
 def _render_page3(
@@ -673,6 +684,8 @@ def _render_page3(
     summary: dict[str, Any],
     etl_result: ETLResult,
     fonts: dict[str, ImageFont.ImageFont],
+    screenshots_dir: Path | None = None,
+    output_dir: Path | None = None,
 ) -> tuple[Path, Path]:
     """Render Page 3: Trends and Diagnostics."""
     img = Image.new("RGB", (CANVAS_W, CANVAS_H), BG_CANVAS)
@@ -785,12 +798,14 @@ def _render_page3(
     ]
     _draw_hbar_chart(draw, p_out, out_items, 0.0, 2100.0, fonts)
 
-    return _save_both(img, "page3-trends-diagnostics.png")
+    return _save_both(img, "page3-trends-diagnostics.png", screenshots_dir, output_dir)
 
 
 def _render_page4(
     summary: dict[str, Any],
     fonts: dict[str, ImageFont.ImageFont],
+    screenshots_dir: Path | None = None,
+    output_dir: Path | None = None,
 ) -> tuple[Path, Path]:
     """Render Page 4: Decisions and Action."""
     img = Image.new("RGB", (CANVAS_W, CANVAS_H), BG_CANVAS)
@@ -938,7 +953,7 @@ def _render_page4(
         fill=TEXT_MUTED,
     )
 
-    return _save_both(img, "page4-decisions-action.png")
+    return _save_both(img, "page4-decisions-action.png", screenshots_dir, output_dir)
 
 
 def build_usability_and_insights_markdown(
@@ -964,26 +979,25 @@ def build_usability_and_insights_markdown(
         "",
         "---",
         "",
-        "## 1. Four-Page Report Architecture (18 Visuals Across 4 Pages)",
+        "## 1. Four-Page Report Architecture (46 PBIR Visuals Across 4 Pages)",
         "",
-        "All four report pages are defined in `pbip/mzigo-chakula.Report/report.json` (`1280 x 720`, 16:9) and rendered at 300 DPI under `screenshots/` and `output/`:",
+        "All four report pages are defined in `pbip/mzigo-chakula.Report/definition/pages/` (`1280 x 720`, 16:9, custom theme `MzigoChakulaTheme.json`) and captured directly from Power BI Desktop at `2400 x 1350` (`300 DPI`) under `screenshots/` and `output/`:",
         "",
-        "| Page | Purpose | Key Visuals Included | Analytical Question(s) |",
+        "| Page | Purpose | Key Visuals Included (Live PBIR) | Analytical Question(s) |",
         "| --- | --- | --- | --- |",
-        "| `1. Executive Pulse` (`screenshots/page1-executive-pulse.png`) | Rapid situational overview | 5 KPI cards, 238-month National Food Price Index line chart, Top 10 Counties by 12m YoY Inflation bar chart, Commodity summary matrix, Exception alerts | Q1, Q2 |",
-        "| `2. County & Commodity` (`screenshots/page2-county-commodity.png`) | Geographic and commodity comparison | Diverging Maize Affordability Gap bar chart, 233-market Lon/Lat scatter map, ASAL vs. Agri/Urban CV grouped bars, Top 8 county cost matrix with drill-through | Q1, Q3, Q5 |",
-        "| `3. Trends & Diagnostics` (`screenshots/page3-trends-diagnostics.png`) | Seasonality, smoothing, and anomaly audit | Beans/Maize 238-month prices + 12m rolling avg + custom tooltip card, Jan to Dec Seasonal Index curves, Top 10 county Maize CV bars, Outlier diagnostic breakdown | Q2, Q4 |",
-        "| `4. Decisions & Action` (`screenshots/page4-decisions-action.png`) | Stakeholder response matrix | Survey Coverage % vs. Maize CV quadrant scatter, Top 10 Priority Action county table, 3 Decision playbook cards, Limitations footer | All (Q1 to Q5) |",
+        "| `1. Executive Pulse` (`screenshots/page1-executive-pulse.png`) | Rapid situational overview (`16` visuals) | Top banner + native `pageNavigator`, 5 dropdown slicers, 5 KPI cards (`1.88`, `+7.56%`, `1.92 YTD`, `100.00%`, `4.49%`), 238-month National Food Price Index line chart, Top 10 Counties by Recent 12m YoY Inflation bar chart, Recent 12m Commodity Matrix, Top 10 County Watchlist table | Q1, Q2 |",
+        "| `2. County & Commodity` (`screenshots/page2-county-commodity.png`) | Geographic and commodity comparison (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Top 5 Deficit vs. Bottom 5 Surplus Maize Affordability Gap diverging bar chart, 233-market Lon/Lat scatter plot, ASAL vs. Agri/Urban CV% grouped columns, County Maize Affordability & Survey table | Q1, Q3, Q5 |",
+        "| `3. Trends & Diagnostics` (`screenshots/page3-trends-diagnostics.png`) | Seasonality, smoothing, and volatility audit (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Beans & Maize 238-month prices (with `12m Rolling Avg`, `MoM %`, and `StdDev` hover tooltips), Jan-to-Dec Seasonal Index curves, Top 10 Counties by Maize CV% bars, Seasonal Index by Cropping Window columns | Q2, Q4 |",
+        "| `4. Decisions & Action` (`screenshots/page4-decisions-action.png`) | Stakeholder triage and monitoring matrix (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Survey % vs. Maize CV% Monitoring Priority scatter (plotting zero-survey counties at `0.00%`), County Priority Action Matrix, 10 Low-Survey Counties Under 5% bar chart, Regional Maize Price (KES/kg) grouped columns | All (Q1 to Q5) |",
         "",
         "---",
         "",
-        "## 2. Interactive Controls Designed in Report Architecture",
+        "## 2. Interactive Controls Built in Power BI Desktop",
         "",
-        "- **Global Slicer Ribbon:** Filters all visuals across `dim_date[year]`, `dim_markets[adm1_name]`, `dim_markets[county_group]`, `dim_commodity[commodity_name]`, and `dim_date[season]` using single-direction `1:*` relationships.",
-        "- **Cross-Filtering:** Clicking any county bar or map marker filters time trends, KPI cards, and commodity tables synchronously without bidirectional ambiguity.",
-        "- **County-to-Market Drill-Through:** `Page 2` supports drilling from any `adm2_name` county row directly to individual `mkt_name` physical markets.",
-        "- **Custom Tooltips:** Hovering time-series or county visuals displays closing KES price, `MoM Change %`, and `12-Month Rolling Avg (KES)`.",
-        "- **Top Header Navigation:** Persistent 4-tab bar across the top of all four pages (`Executive Pulse`, `County & Commodity`, `Trends & Diagnostics`, `Decisions & Action`).",
+        "- **Global Slicer Dropdowns:** Every page provides dropdown slicers across `dim_date[year]`, `dim_markets[adm1_name]`, `dim_markets[county_group]`, `dim_commodity[commodity_name]`, and `dim_date[season]` over single-direction `1:*` joins.",
+        "- **Cross-Filtering:** Clicking any county bar, scatter marker, or table row filters time trajectories and comparison metrics without bidirectional ambiguity.",
+        "- **Hover Tooltips:** Line, bar, scatter, and column charts include rich hover tooltips for `12-Month Rolling Avg (KES)`, gap-safe `MoM Change %`, `Price Volatility (KES)`, and `County Inflation Rank`.",
+        "- **Top Header Page Navigator:** Native PBIR `pageNavigator` button strip (`v00_page_nav`) integrated inside the `#0F2942` top banner on all four pages with `#0284C7` active page highlighting.",
         "",
         "---",
         "",
@@ -991,12 +1005,12 @@ def build_usability_and_insights_markdown(
         "",
         "| Category | Check Item | Verification Status |",
         "| --- | --- | --- |",
-        "| **Color Palette** | Colorblind-safe Orange (`#EA580C`) vs. Teal (`#0F766E`) used for ASAL vs. Agricultural/Urban groups instead of Red/Green pairs | Verified |",
-        "| **Honest Axes** | Price and index time-series start cleanly at zero (`0.0`); seasonal parity chart explicitly labels dashed `1.000` reference baseline | Verified |",
-        "| **Typography** | Clear hierarchy (32pt page header, 21pt chart titles, 38pt KPI values, 16pt table labels) with zero overlapping annotations | Verified |",
-        "| **Grain Integrity** | Composite `National Food Price Index` evaluated once per `(mkt_id, date_key)` via `SUMMARIZE` so multi-commodity pages never triple-count | Verified |",
-        "| **Direct Labeling** | Horizontal bar charts and KPI cards include exact formatted units (`KES`, `%`, index points) directly on marks | Verified |",
-        "| **Decision Framing** | Page 4 separates monitoring deployment, seasonal timing, and commodity targeting into concrete actions with limitations stated | Verified |",
+        "| **Color Palette** | Colorblind-safe Orange (`#EA580C`) vs. Teal (`#0F766E`) distinguishes ASAL vs. Agricultural/Urban groups instead of Red/Green pairs | Verified live |",
+        "| **Honest Axes** | Price and index charts start cleanly at zero (`0.0`) except the focused Seasonal Index parity plot (`0.90` to `1.10` around `1.000`) | Verified live |",
+        "| **Non-Overlap & Bounds** | Automated unit tests verify all 46 PBIR visual containers fit inside `1280 x 720` with zero overlapping bounding boxes | Verified |",
+        "| **Grain Integrity** | Composite `National Food Price Index` evaluates once per `(mkt_id, date_key)` via `SUMMARIZE` and mixed-unit table totals are suppressed (`totals = false`) | Verified live |",
+        "| **Zero-Survey Visibility** | `Survey Coverage Rate %` adds `+ 0` to `COUNT(raw_spot_price)` so un-surveyed counties plot at `0.00%` instead of vanishing as blanks | Verified live |",
+        "| **Decision Framing** | Page 4 isolates blind-spot priority quadrants, regional maize disparities, and sub-5% survey targets for direct enumerator deployment | Verified live |",
         "",
         "---",
         "",
@@ -1043,20 +1057,31 @@ def build_usability_and_insights_markdown(
 def generate_week4_outputs(
     csv_path: Path | None = None,
     docs_dir: Path | None = None,
+    screenshots_dir: Path | None = None,
+    output_dir: Path | None = None,
+    render_mockups: bool = False,
 ) -> dict[str, Path]:
-    """Generate all four 300 DPI dashboard screenshots and Week 4 usability/insights doc."""
+    """Generate Week 4 usability/insights doc and optionally render synthetic mockup PNGs."""
     source_csv = csv_path or DEFAULT_RAW_CSV
     out_docs = docs_dir or DOCS_DIR
+    s_dir = screenshots_dir or SCREENSHOTS_DIR
+    o_dir = output_dir or OUTPUT_DIR
 
     etl_result = run_etl(csv_path=source_csv)
     summary = compute_dax_validation_summary(etl_result)
-    monthly = _compute_monthly_series(etl_result)
-    fonts = _fonts_bundle()
 
-    p1_shot, _ = _render_page1(monthly, summary, fonts)
-    p2_shot, _ = _render_page2(etl_result, summary, fonts)
-    p3_shot, _ = _render_page3(monthly, summary, etl_result, fonts)
-    p4_shot, _ = _render_page4(summary, fonts)
+    if render_mockups:
+        monthly = _compute_monthly_series(etl_result)
+        fonts = _fonts_bundle()
+        p1_shot, _ = _render_page1(monthly, summary, fonts, s_dir, o_dir)
+        p2_shot, _ = _render_page2(etl_result, summary, fonts, s_dir, o_dir)
+        p3_shot, _ = _render_page3(monthly, summary, etl_result, fonts, s_dir, o_dir)
+        p4_shot, _ = _render_page4(summary, fonts, s_dir, o_dir)
+    else:
+        p1_shot = s_dir / "page1-executive-pulse.png"
+        p2_shot = s_dir / "page2-county-commodity.png"
+        p3_shot = s_dir / "page3-trends-diagnostics.png"
+        p4_shot = s_dir / "page4-decisions-action.png"
 
     out_docs.mkdir(parents=True, exist_ok=True)
     doc_path = out_docs / "usability-and-insights.md"

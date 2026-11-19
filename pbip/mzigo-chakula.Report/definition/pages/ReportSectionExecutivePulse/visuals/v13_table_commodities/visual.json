@@ -3,106 +3,14 @@
   "name": "v13_table_commodities",
   "position": {
     "x": 16,
-    "y": 464,
-    "z": 13,
-    "width": 756,
-    "height": 246,
-    "tabOrder": 13
+    "y": 486,
+    "z": 14,
+    "width": 744,
+    "height": 224,
+    "tabOrder": 14
   },
   "visual": {
     "visualType": "tableEx",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_commodity"
-                    }
-                  },
-                  "Property": "commodity_name"
-                }
-              },
-              "queryRef": "dim_commodity.commodity_name",
-              "nativeQueryRef": "commodity_name"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_commodity"
-                    }
-                  },
-                  "Property": "unit"
-                }
-              },
-              "queryRef": "dim_commodity.unit",
-              "nativeQueryRef": "unit"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Prior Year Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Prior Year Price (KES)",
-              "nativeQueryRef": "Prior Year Price (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Commodity YoY Inflation %"
-                }
-              },
-              "queryRef": "fact_prices.Commodity YoY Inflation %",
-              "nativeQueryRef": "Commodity YoY Inflation %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Price Volatility CV %"
-                }
-              },
-              "queryRef": "fact_prices.Price Volatility CV %",
-              "nativeQueryRef": "Price Volatility CV %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -231,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Commodity Price, YoY Growth & Volatility Matrix'"
+                  "Value": "'Commodity Price, Recent 12m YoY & Volatility Matrix'"
                 }
               }
             },
@@ -301,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Unit-safe statistics across 55,454 physical market-months'"
+                  "Value": "'Latest 12m (Nov 2025 to Oct 2026): Maize eased -10.51% while Goats rose +7.77%'"
                 }
               }
             },
@@ -377,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -405,6 +313,191 @@
           }
         }
       ]
+    },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_commodity"
+                    }
+                  },
+                  "Property": "commodity_name"
+                }
+              },
+              "queryRef": "dim_commodity.commodity_name",
+              "nativeQueryRef": "commodity_name",
+              "displayName": "Commodity"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_commodity"
+                    }
+                  },
+                  "Property": "unit"
+                }
+              },
+              "queryRef": "dim_commodity.unit",
+              "nativeQueryRef": "unit",
+              "displayName": "Unit"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Avg Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Avg Price (KES)",
+              "nativeQueryRef": "Avg Price (KES)",
+              "displayName": "12m Avg (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Prior Year Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Prior Year Price (KES)",
+              "nativeQueryRef": "Prior Year Price (KES)",
+              "displayName": "Prior 12m (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Commodity YoY Inflation %"
+                }
+              },
+              "queryRef": "fact_prices.Commodity YoY Inflation %",
+              "nativeQueryRef": "Commodity YoY Inflation %",
+              "displayName": "12m YoY %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility CV %"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility CV %",
+              "nativeQueryRef": "Price Volatility CV %",
+              "displayName": "12m CV %"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f_v13_recent",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "is_recent"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "f",
+              "Entity": "dim_date",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "f"
+                          }
+                        },
+                        "Property": "is_recent"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "true"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User",
+        "isHiddenInViewMode": false
+      }
+    ]
   }
 }

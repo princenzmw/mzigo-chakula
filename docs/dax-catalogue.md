@@ -210,7 +210,7 @@ RETURN
 - **Purpose:** Share of market-month-commodity records backed by a direct raw field survey observation.
 
 ```dax
-DIVIDE(COUNT(fact_prices[raw_spot_price]), COUNTROWS(fact_prices))
+DIVIDE(COUNT(fact_prices[raw_spot_price]) + 0, COUNTROWS(fact_prices))
 ```
 
 ### 13. `Affordability Gap (KES)`

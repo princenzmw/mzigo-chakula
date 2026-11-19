@@ -216,7 +216,7 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         table_name="fact_prices",
         display_folder="04. Coverage & Disparities",
         format_string="0.00%",
-        dax_expression="DIVIDE(COUNT(fact_prices[raw_spot_price]), COUNTROWS(fact_prices))",
+        dax_expression="DIVIDE(COUNT(fact_prices[raw_spot_price]) + 0, COUNTROWS(fact_prices))",
         description="Share of market-month-commodity records backed by a direct raw field survey observation.",
     ),
     DAXMeasureSpec(

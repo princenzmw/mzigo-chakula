@@ -3,37 +3,14 @@
   "name": "v23_slicer_region",
   "position": {
     "x": 640,
-    "y": 50,
-    "z": 3,
+    "y": 64,
+    "z": 4,
     "width": 300,
-    "height": 52,
-    "tabOrder": 3
+    "height": 54,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "slicer",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "adm1_name"
-                }
-              },
-              "queryRef": "dim_markets.adm1_name",
-              "nativeQueryRef": "adm1_name",
-              "active": true
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -191,7 +168,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "8.5D"
                 }
               }
             },
@@ -212,7 +189,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -264,7 +241,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -308,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "3D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "3D"
+                  "Value": "2D"
                 }
               }
             },
@@ -336,6 +313,29 @@
           }
         }
       ]
+    },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm1_name"
+                }
+              },
+              "queryRef": "dim_markets.adm1_name",
+              "nativeQueryRef": "adm1_name",
+              "active": true
+            }
+          ]
+        }
+      }
     },
     "objects": {
       "data": [

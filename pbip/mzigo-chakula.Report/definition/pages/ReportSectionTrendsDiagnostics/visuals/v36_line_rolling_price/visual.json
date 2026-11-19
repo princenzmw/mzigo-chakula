@@ -3,106 +3,14 @@
   "name": "v36_line_rolling_price",
   "position": {
     "x": 16,
-    "y": 116,
+    "y": 124,
     "z": 6,
-    "width": 740,
-    "height": 288,
+    "width": 732,
+    "height": 292,
     "tabOrder": 6
   },
   "visual": {
     "visualType": "lineChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_date"
-                    }
-                  },
-                  "Property": "full_date"
-                }
-              },
-              "queryRef": "dim_date.full_date",
-              "nativeQueryRef": "full_date",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_commodity"
-                    }
-                  },
-                  "Property": "commodity_name"
-                }
-              },
-              "queryRef": "dim_commodity.commodity_name",
-              "nativeQueryRef": "commodity_name",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "12-Month Rolling Avg (KES)"
-                }
-              },
-              "queryRef": "fact_prices.12-Month Rolling Avg (KES)",
-              "nativeQueryRef": "12-Month Rolling Avg (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "MoM Change %"
-                }
-              },
-              "queryRef": "fact_prices.MoM Change %",
-              "nativeQueryRef": "MoM Change %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -231,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Beans & Maize Retail Prices (KES/kg, 2007-2026)'"
+                  "Value": "'Beans & Maize Retail Prices (KES/kg, 2007 to 2026)'"
                 }
               }
             },
@@ -301,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filtered to 1 kg staples (Beans & Maize); hover for 12m Rolling Avg & MoM %'"
+                  "Value": "'Filtered to 1 kg staples | Hover for 12m Rolling Avg, MoM % & StdDev'"
                 }
               }
             },
@@ -377,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -399,6 +307,148 @@
               "expr": {
                 "Literal": {
                   "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "full_date"
+                }
+              },
+              "queryRef": "dim_date.full_date",
+              "nativeQueryRef": "full_date",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_commodity"
+                    }
+                  },
+                  "Property": "commodity_name"
+                }
+              },
+              "queryRef": "dim_commodity.commodity_name",
+              "nativeQueryRef": "commodity_name",
+              "active": true,
+              "displayName": "Commodity"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Avg Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Avg Price (KES)",
+              "nativeQueryRef": "Avg Price (KES)"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "12-Month Rolling Avg (KES)"
+                }
+              },
+              "queryRef": "fact_prices.12-Month Rolling Avg (KES)",
+              "nativeQueryRef": "12-Month Rolling Avg (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "MoM Change %"
+                }
+              },
+              "queryRef": "fact_prices.MoM Change %",
+              "nativeQueryRef": "MoM Change %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility (KES)",
+              "nativeQueryRef": "Price Volatility (KES)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -426,7 +476,7 @@
           "Version": 2,
           "From": [
             {
-              "Name": "c",
+              "Name": "f",
               "Entity": "dim_commodity",
               "Type": 0
             }
@@ -440,7 +490,7 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Source": "c"
+                            "Source": "f"
                           }
                         },
                         "Property": "commodity_id"

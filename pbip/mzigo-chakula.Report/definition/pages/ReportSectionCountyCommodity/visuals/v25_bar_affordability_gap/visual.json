@@ -3,124 +3,14 @@
   "name": "v25_bar_affordability_gap",
   "position": {
     "x": 16,
-    "y": 116,
-    "z": 5,
-    "width": 620,
-    "height": 288,
-    "tabOrder": 5
+    "y": 124,
+    "z": 6,
+    "width": 618,
+    "height": 298,
+    "tabOrder": 6
   },
   "visual": {
     "visualType": "barChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "adm2_name"
-                }
-              },
-              "queryRef": "dim_markets.adm2_name",
-              "nativeQueryRef": "adm2_name",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "county_group"
-                }
-              },
-              "queryRef": "dim_markets.county_group",
-              "nativeQueryRef": "county_group",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Affordability Gap (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Affordability Gap (KES)",
-              "nativeQueryRef": "Affordability Gap (KES)"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Prior Year Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Prior Year Price (KES)",
-              "nativeQueryRef": "Prior Year Price (KES)"
-            }
-          ]
-        }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "fact_prices"
-                  }
-                },
-                "Property": "Affordability Gap (KES)"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
-        "isDefaultSort": false
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -249,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Maize Affordability Gap vs National Mean (KES/kg)'"
+                  "Value": "'Maize Affordability Gap: Top 5 Deficit vs Bottom 5 Surplus'"
                 }
               }
             },
@@ -319,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Visual filtered to Maize (1 kg) | Teal: Agri/Urban, Orange: ASAL'"
+                  "Value": "'KES/kg vs national mean (56.02) | Teal: Agri/Urban, Orange: ASAL'"
                 }
               }
             },
@@ -395,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -424,7 +314,166 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm2_name"
+                }
+              },
+              "queryRef": "dim_markets.adm2_name",
+              "nativeQueryRef": "adm2_name",
+              "active": true,
+              "displayName": "County"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "county_group"
+                }
+              },
+              "queryRef": "dim_markets.county_group",
+              "nativeQueryRef": "county_group",
+              "active": true,
+              "displayName": "Group"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Affordability Gap (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Affordability Gap (KES)",
+              "nativeQueryRef": "Affordability Gap (KES)",
+              "displayName": "Gap (KES)"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Avg Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Avg Price (KES)",
+              "nativeQueryRef": "Avg Price (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Prior Year Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Prior Year Price (KES)",
+              "nativeQueryRef": "Prior Year Price (KES)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_prices"
+                  }
+                },
+                "Property": "Affordability Gap (KES)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
     "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "labels": [
         {
           "properties": {
@@ -459,7 +508,7 @@
           "Version": 2,
           "From": [
             {
-              "Name": "c",
+              "Name": "f",
               "Entity": "dim_commodity",
               "Type": 0
             }
@@ -473,7 +522,7 @@
                       "Column": {
                         "Expression": {
                           "SourceRef": {
-                            "Source": "c"
+                            "Source": "f"
                           }
                         },
                         "Property": "commodity_id"
@@ -485,6 +534,124 @@
                       {
                         "Literal": {
                           "Value": "'maize_fao'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User",
+        "isHiddenInViewMode": false
+      },
+      {
+        "name": "f_v25_div",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_markets"
+              }
+            },
+            "Property": "adm2_name"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "f",
+              "Entity": "dim_markets",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "f"
+                          }
+                        },
+                        "Property": "adm2_name"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Turkana'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Mandera'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Kisumu'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Wajir'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'West Pokot'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Meru'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Tharaka Nithi'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Embu'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Kitui'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Lamu'"
                         }
                       }
                     ]

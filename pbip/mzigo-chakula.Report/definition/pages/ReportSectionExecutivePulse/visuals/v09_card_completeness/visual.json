@@ -3,36 +3,14 @@
   "name": "v09_card_completeness",
   "position": {
     "x": 772,
-    "y": 108,
-    "z": 9,
+    "y": 124,
+    "z": 10,
     "width": 240,
-    "height": 84,
-    "tabOrder": 9
+    "height": 74,
+    "tabOrder": 10
   },
   "visual": {
     "visualType": "card",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Data Completeness %"
-                }
-              },
-              "queryRef": "fact_prices.Data Completeness %",
-              "nativeQueryRef": "Data Completeness %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -231,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Populated model grid share'"
+                  "Value": "'166,362 rows across 233 mkts'"
                 }
               }
             },
@@ -307,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -336,6 +314,28 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Data Completeness %"
+                }
+              },
+              "queryRef": "fact_prices.Data Completeness %",
+              "nativeQueryRef": "Data Completeness %"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
       "labels": [
         {
@@ -343,7 +343,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "19D"
+                  "Value": "18D"
                 }
               }
             },

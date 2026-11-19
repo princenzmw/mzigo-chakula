@@ -41,7 +41,7 @@ This report documents an end-to-end Microsoft Power BI and Python analytics solu
 | Week 3: Star Schema Diagram | `docs/model-diagram.png` | 4-table single-direction `1:*` schema and grain-safe architecture |
 | Week 3: Power BI Desktop Model View | `screenshots/week3-powerbi-model-view.png` | Live Power BI Desktop Model View showing all 4 joined tables |
 | Week 3: DAX Verification Audit | `screenshots/week3-dax-validation.png` | 15 DAX measures with gap-safe `EDATE`/`TREATAS` and commodity benchmarks |
-| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | 300 DPI visuals and interactive PBIR layout specifications |
+| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | Live Power BI Desktop captures of all 4 pages (46 PBIR visuals, custom theme, native `pageNavigator`) |
 
 ## AI Assistance Disclosure and Data Authenticity Statement
 

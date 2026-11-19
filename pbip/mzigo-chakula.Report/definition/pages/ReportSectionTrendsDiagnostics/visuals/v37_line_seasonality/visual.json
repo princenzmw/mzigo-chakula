@@ -2,75 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v37_line_seasonality",
   "position": {
-    "x": 768,
-    "y": 116,
+    "x": 760,
+    "y": 124,
     "z": 7,
-    "width": 496,
-    "height": 288,
+    "width": 504,
+    "height": 292,
     "tabOrder": 7
   },
   "visual": {
     "visualType": "lineChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_date"
-                    }
-                  },
-                  "Property": "month_name"
-                }
-              },
-              "queryRef": "dim_date.month_name",
-              "nativeQueryRef": "month_name",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_commodity"
-                    }
-                  },
-                  "Property": "commodity_name"
-                }
-              },
-              "queryRef": "dim_commodity.commodity_name",
-              "nativeQueryRef": "commodity_name",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Seasonal Index"
-                }
-              },
-              "queryRef": "fact_prices.Seasonal Index",
-              "nativeQueryRef": "Seasonal Index"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -199,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Monthly Seasonal Index Cycle (Jan-Dec, Parity = 1.000)'"
+                  "Value": "'Monthly Seasonal Index Cycle (Jan to Dec, Parity = 1.000)'"
                 }
               }
             },
@@ -345,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -367,6 +307,102 @@
               "expr": {
                 "Literal": {
                   "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "month_name"
+                }
+              },
+              "queryRef": "dim_date.month_name",
+              "nativeQueryRef": "month_name",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_commodity"
+                    }
+                  },
+                  "Property": "commodity_name"
+                }
+              },
+              "queryRef": "dim_commodity.commodity_name",
+              "nativeQueryRef": "commodity_name",
+              "active": true,
+              "displayName": "Commodity"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Seasonal Index"
+                }
+              },
+              "queryRef": "fact_prices.Seasonal Index",
+              "nativeQueryRef": "Seasonal Index"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

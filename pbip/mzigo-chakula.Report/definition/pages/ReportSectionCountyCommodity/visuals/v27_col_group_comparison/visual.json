@@ -3,106 +3,14 @@
   "name": "v27_col_group_comparison",
   "position": {
     "x": 16,
-    "y": 412,
-    "z": 7,
-    "width": 520,
-    "height": 298,
-    "tabOrder": 7
+    "y": 430,
+    "z": 8,
+    "width": 516,
+    "height": 280,
+    "tabOrder": 8
   },
   "visual": {
     "visualType": "clusteredColumnChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_commodity"
-                    }
-                  },
-                  "Property": "commodity_name"
-                }
-              },
-              "queryRef": "dim_commodity.commodity_name",
-              "nativeQueryRef": "commodity_name",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "county_group"
-                }
-              },
-              "queryRef": "dim_markets.county_group",
-              "nativeQueryRef": "county_group",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Price Volatility CV %"
-                }
-              },
-              "queryRef": "fact_prices.Price Volatility CV %",
-              "nativeQueryRef": "Price Volatility CV %"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Affordability Gap (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Affordability Gap (KES)",
-              "nativeQueryRef": "Affordability Gap (KES)"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -377,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -406,7 +314,135 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_commodity"
+                    }
+                  },
+                  "Property": "commodity_name"
+                }
+              },
+              "queryRef": "dim_commodity.commodity_name",
+              "nativeQueryRef": "commodity_name",
+              "active": true,
+              "displayName": "Commodity"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "county_group"
+                }
+              },
+              "queryRef": "dim_markets.county_group",
+              "nativeQueryRef": "county_group",
+              "active": true,
+              "displayName": "Group"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility CV %"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility CV %",
+              "nativeQueryRef": "Price Volatility CV %",
+              "displayName": "CV %"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Avg Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Avg Price (KES)",
+              "nativeQueryRef": "Avg Price (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Affordability Gap (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Affordability Gap (KES)",
+              "nativeQueryRef": "Affordability Gap (KES)"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "labels": [
         {
           "properties": {

@@ -30,22 +30,22 @@
   "visitedHyperlink": "#0F766E",
   "textClasses": {
     "callout": {
-      "fontSize": 20,
+      "fontSize": 18,
       "fontFace": "Segoe UI Bold",
       "color": "#0F2942"
     },
     "title": {
-      "fontSize": 11,
-      "fontFace": "Segoe UI Semibold",
-      "color": "#0F2942"
-    },
-    "header": {
       "fontSize": 10,
       "fontFace": "Segoe UI Semibold",
       "color": "#0F2942"
     },
-    "label": {
+    "header": {
       "fontSize": 9,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#0F2942"
+    },
+    "label": {
+      "fontSize": 8,
       "fontFace": "Segoe UI",
       "color": "#334155"
     }
@@ -53,6 +53,11 @@
   "visualStyles": {
     "tableEx": {
       "*": {
+        "grid": [
+          {
+            "rowPadding": 1
+          }
+        ],
         "columnHeaders": [
           {
             "backColor": {
@@ -66,7 +71,7 @@
               }
             },
             "bold": true,
-            "fontSize": 9
+            "fontSize": 8
           }
         ],
         "values": [
@@ -91,7 +96,7 @@
                 "color": "#0F172A"
               }
             },
-            "fontSize": 9
+            "fontSize": 8
           }
         ]
       }

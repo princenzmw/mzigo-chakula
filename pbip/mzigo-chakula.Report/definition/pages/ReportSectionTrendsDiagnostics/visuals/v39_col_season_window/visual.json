@@ -2,107 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v39_col_season_window",
   "position": {
-    "x": 648,
-    "y": 412,
+    "x": 646,
+    "y": 424,
     "z": 9,
-    "width": 616,
-    "height": 298,
+    "width": 618,
+    "height": 286,
     "tabOrder": 9
   },
   "visual": {
     "visualType": "clusteredColumnChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_date"
-                    }
-                  },
-                  "Property": "season"
-                }
-              },
-              "queryRef": "dim_date.season",
-              "nativeQueryRef": "season",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_commodity"
-                    }
-                  },
-                  "Property": "commodity_name"
-                }
-              },
-              "queryRef": "dim_commodity.commodity_name",
-              "nativeQueryRef": "commodity_name",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Seasonal Index"
-                }
-              },
-              "queryRef": "fact_prices.Seasonal Index",
-              "nativeQueryRef": "Seasonal Index"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "MoM Change %"
-                }
-              },
-              "queryRef": "fact_prices.MoM Change %",
-              "nativeQueryRef": "MoM Change %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -301,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Includes gap-safe MoM Change % & Avg Price tooltips'"
+                  "Value": "'Includes gap-safe EDATE MoM % and Avg Price tooltips'"
                 }
               }
             },
@@ -377,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -406,7 +314,147 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "season"
+                }
+              },
+              "queryRef": "dim_date.season",
+              "nativeQueryRef": "season",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_commodity"
+                    }
+                  },
+                  "Property": "commodity_name"
+                }
+              },
+              "queryRef": "dim_commodity.commodity_name",
+              "nativeQueryRef": "commodity_name",
+              "active": true,
+              "displayName": "Commodity"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Seasonal Index"
+                }
+              },
+              "queryRef": "fact_prices.Seasonal Index",
+              "nativeQueryRef": "Seasonal Index"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Avg Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Avg Price (KES)",
+              "nativeQueryRef": "Avg Price (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "MoM Change %"
+                }
+              },
+              "queryRef": "fact_prices.MoM Change %",
+              "nativeQueryRef": "MoM Change %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility (KES)",
+              "nativeQueryRef": "Price Volatility (KES)"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "labels": [
         {
           "properties": {

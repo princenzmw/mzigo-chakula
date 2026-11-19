@@ -2,135 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v47_table_priority_action",
   "position": {
-    "x": 608,
-    "y": 116,
+    "x": 602,
+    "y": 124,
     "z": 7,
-    "width": 656,
-    "height": 288,
+    "width": 662,
+    "height": 292,
     "tabOrder": 7
   },
   "visual": {
     "visualType": "tableEx",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "adm2_name"
-                }
-              },
-              "queryRef": "dim_markets.adm2_name",
-              "nativeQueryRef": "adm2_name"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "county_group"
-                }
-              },
-              "queryRef": "dim_markets.county_group",
-              "nativeQueryRef": "county_group"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Data Completeness %"
-                }
-              },
-              "queryRef": "fact_prices.Data Completeness %",
-              "nativeQueryRef": "Data Completeness %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Survey Coverage Rate %"
-                }
-              },
-              "queryRef": "fact_prices.Survey Coverage Rate %",
-              "nativeQueryRef": "Survey Coverage Rate %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "YoY Inflation %"
-                }
-              },
-              "queryRef": "fact_prices.YoY Inflation %",
-              "nativeQueryRef": "YoY Inflation %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Affordability Gap (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Affordability Gap (KES)",
-              "nativeQueryRef": "Affordability Gap (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "County Inflation Rank"
-                }
-              },
-              "queryRef": "fact_prices.County Inflation Rank",
-              "nativeQueryRef": "County Inflation Rank"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -259,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'County Priority Action Matrix: Inflation, Gap & Survey Rate'"
+                  "Value": "'County Priority Action Matrix: Survey Rate, CV & Maize Gap'"
                 }
               }
             },
@@ -329,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Combines index rank, price gap, and direct field check share'"
+                  "Value": "'Filtered to Maize (1 kg) | Sorted by Affordability Gap descending'"
                 }
               }
             },
@@ -405,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -433,6 +313,209 @@
           }
         }
       ]
+    },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm2_name"
+                }
+              },
+              "queryRef": "dim_markets.adm2_name",
+              "nativeQueryRef": "adm2_name",
+              "displayName": "County"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "county_group"
+                }
+              },
+              "queryRef": "dim_markets.county_group",
+              "nativeQueryRef": "county_group",
+              "displayName": "Group"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Survey Coverage Rate %"
+                }
+              },
+              "queryRef": "fact_prices.Survey Coverage Rate %",
+              "nativeQueryRef": "Survey Coverage Rate %",
+              "displayName": "Survey %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility CV %"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility CV %",
+              "nativeQueryRef": "Price Volatility CV %",
+              "displayName": "Maize CV %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Affordability Gap (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Affordability Gap (KES)",
+              "nativeQueryRef": "Affordability Gap (KES)",
+              "displayName": "Gap (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Avg Price (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Avg Price (KES)",
+              "nativeQueryRef": "Avg Price (KES)",
+              "displayName": "Avg (KES)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_prices"
+                  }
+                },
+                "Property": "Affordability Gap (KES)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f_v47_maize_tbl",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_commodity"
+              }
+            },
+            "Property": "commodity_id"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "f",
+              "Entity": "dim_commodity",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "f"
+                          }
+                        },
+                        "Property": "commodity_id"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'maize_fao'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User",
+        "isHiddenInViewMode": false
+      }
+    ]
   }
 }

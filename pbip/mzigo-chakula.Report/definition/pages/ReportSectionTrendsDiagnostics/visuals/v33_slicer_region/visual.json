@@ -1,38 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
-  "name": "v08_card_avg_price",
+  "name": "v33_slicer_region",
   "position": {
-    "x": 520,
-    "y": 108,
-    "z": 8,
-    "width": 240,
-    "height": 84,
-    "tabOrder": 8
+    "x": 640,
+    "y": 64,
+    "z": 4,
+    "width": 300,
+    "height": 54,
+    "tabOrder": 4
   },
   "visual": {
-    "visualType": "card",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Avg Price (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Avg Price (KES)",
-              "nativeQueryRef": "Avg Price (KES)"
-            }
-          ]
-        }
-      }
-    },
+    "visualType": "slicer",
     "visualContainerObjects": {
       "background": [
         {
@@ -80,7 +58,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0F766E'"
+                      "Value": "'#CBD5E1'"
                     }
                   }
                 }
@@ -161,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Avg Commodity Price (KES)'"
+                  "Value": "'Region'"
                 }
               }
             },
@@ -190,7 +168,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "8.5D"
                 }
               }
             },
@@ -211,7 +189,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -224,14 +202,14 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filter by Commodity above'"
+                  "Value": "'7 Kenya regions'"
                 }
               }
             },
@@ -263,7 +241,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -276,7 +254,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -307,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "2D"
                 }
               }
             },
@@ -336,39 +314,44 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm1_name"
+                }
+              },
+              "queryRef": "dim_markets.adm1_name",
+              "nativeQueryRef": "adm1_name",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
     "objects": {
-      "labels": [
+      "data": [
         {
           "properties": {
-            "fontSize": {
+            "mode": {
               "expr": {
                 "Literal": {
-                  "Value": "19D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0F2942'"
-                    }
-                  }
-                }
-              }
-            },
-            "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
+                  "Value": "'Dropdown'"
                 }
               }
             }
           }
         }
       ],
-      "categoryLabels": [
+      "header": [
         {
           "properties": {
             "show": {

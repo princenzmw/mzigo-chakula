@@ -137,7 +137,7 @@ table fact_prices
 		lineageTag: ad0fe60c-dbf8-4a50-905e-1bfde4e708c7
 
 	/// Share of market-month-commodity records backed by a direct raw field survey observation.
-	measure 'Survey Coverage Rate %' = DIVIDE(COUNT(fact_prices[raw_spot_price]), COUNTROWS(fact_prices))
+	measure 'Survey Coverage Rate %' = DIVIDE(COUNT(fact_prices[raw_spot_price]) + 0, COUNTROWS(fact_prices))
 		formatString: 0.00%
 		displayFolder: 04. Coverage & Disparities
 		lineageTag: f5134d80-65bc-4c01-b235-78fec74a35a0

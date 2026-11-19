@@ -3,36 +3,14 @@
   "name": "v07_card_yoy",
   "position": {
     "x": 268,
-    "y": 108,
-    "z": 7,
+    "y": 124,
+    "z": 8,
     "width": 240,
-    "height": 84,
-    "tabOrder": 7
+    "height": 74,
+    "tabOrder": 8
   },
   "visual": {
     "visualType": "card",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "YoY Inflation %"
-                }
-              },
-              "queryRef": "fact_prices.YoY Inflation %",
-              "nativeQueryRef": "YoY Inflation %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -161,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'YoY Food Inflation %'"
+                  "Value": "'Recent 12m YoY Inflation %'"
                 }
               }
             },
@@ -231,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Gap-safe EDATE -12m change'"
+                  "Value": "'Nov 2025 to Oct 2026 vs prior'"
                 }
               }
             },
@@ -307,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -336,6 +314,28 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "YoY Inflation %"
+                }
+              },
+              "queryRef": "fact_prices.YoY Inflation %",
+              "nativeQueryRef": "YoY Inflation %"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
       "labels": [
         {
@@ -343,7 +343,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "19D"
+                  "Value": "18D"
                 }
               }
             },
@@ -382,5 +382,64 @@
         }
       ]
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f_v07_recent",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "is_recent"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "f",
+              "Entity": "dim_date",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "f"
+                          }
+                        },
+                        "Property": "is_recent"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "true"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User",
+        "isHiddenInViewMode": false
+      }
+    ]
   }
 }

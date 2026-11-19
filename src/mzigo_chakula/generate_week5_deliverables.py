@@ -513,7 +513,7 @@ def build_final_report_markdown(etl_result: ETLResult, summary: dict[str, Any]) 
             "| Week 3: Star Schema Diagram | `docs/model-diagram.png` | 4-table single-direction `1:*` schema and grain-safe architecture |",
             "| Week 3: Power BI Desktop Model View | `screenshots/week3-powerbi-model-view.png` | Live Power BI Desktop Model View showing all 4 joined tables |",
             "| Week 3: DAX Verification Audit | `screenshots/week3-dax-validation.png` | 15 DAX measures with gap-safe `EDATE`/`TREATAS` and commodity benchmarks |",
-            "| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | 300 DPI visuals and interactive PBIR layout specifications |",
+            "| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | Live Power BI Desktop captures of all 4 pages (46 PBIR visuals, custom theme, native `pageNavigator`) |",
             "",
             "## AI Assistance Disclosure and Data Authenticity Statement",
             "",
@@ -599,7 +599,7 @@ def render_final_report_pdf(
             ["Week 1: Framing & Profiling", "55,692 raw rows & 46 columns audited; 3-page proposal + raw Power BI screenshot", "docs/proposal.pdf, docs/dataset-dictionary.csv"],
             ["Week 2: Power Query & QA", "10 M steps (T1 to T10); 166,362 fact rows; 0 duplicate PKs & 0 orphan FKs", "powerquery/*.pq, docs/transformation-log.md"],
             ["Week 3: Star Schema & DAX", "4 tables (233 mkts, 238 dates, 3 items); 3 single-dir 1:* joins; 15 DAX measures", "pbip/mzigo-chakula.pbip, docs/dax-catalogue.md"],
-            ["Week 4: Dashboard & Insights", "4 report pages, 44 styled PBIR visuals, slicers, tooltips, 300 DPI PNGs", "pbip/mzigo-chakula.Report/, screenshots/page1..4.png"],
+            ["Week 4: Dashboard & Insights", "4 report pages, 46 styled PBIR visuals, native pageNavigator, real 300 DPI PNGs", "pbip/mzigo-chakula.Report/, screenshots/page1..4.png"],
             ["Week 5: Final Report & Defence", "12-page PDF report with step screenshots, 12-slide PPTX, README", "docs/report.pdf, slides/presentation.pptx"],
         ],
         [45, 78, 57],
@@ -800,7 +800,7 @@ def render_final_report_pdf(
     _pdf_heading(pdf, "10. Interactive Dashboard Design: Pages 1 and 2")
     _pdf_body(
         pdf,
-        "Page 1 (Executive Pulse) delivers rapid situational awareness with 5 top-line KPI cards, the 238-month National Food Price Index trajectory against its 1.20 long-run baseline, Top 10 counties by recent 12-month YoY inflation, and commodity co-movement alerts.",
+        "Page 1 (Executive Pulse) delivers rapid situational awareness with top header page navigation, 5 dropdown slicers, 5 KPI cards (1.88 recent index, +7.56% YoY, 1.92 YTD, 100.00% completeness, 4.49% survey coverage), the 238-month National Food Price Index trend, Top 10 Counties by Recent 12m YoY Inflation, the Recent 12m Commodity Matrix, and Top 10 County Watchlist.",
         size=8.8,
     )
     p1 = SCREENSHOTS_DIR / "page1-executive-pulse.png"
@@ -809,7 +809,7 @@ def render_final_report_pdf(
         pdf.set_y(pdf.get_y() + 89)
     _pdf_body(
         pdf,
-        "Page 2 (County & Commodity) reveals spatial affordability premiums using a diverging county bar chart (+15.3 KES/kg in Turkana vs. -17.5 KES/kg in Lamu), coordinate scatter map across 233 physical markets, ASAL vs. Agricultural/Urban dispersion comparison, and a drill-through county table.",
+        "Page 2 (County & Commodity) reveals spatial affordability premiums via Top 5 Deficit vs. Bottom 5 Surplus maize gap bars (+15.26 KES/kg in Turkana vs. -15.59 KES/kg in Kitui), 233-market Lon/Lat coordinate scatter map, ASAL vs. Agricultural/Urban CV% comparison, and a unit-safe County Maize Affordability table.",
         size=8.8,
     )
     p2 = SCREENSHOTS_DIR / "page2-county-commodity.png"
@@ -821,7 +821,7 @@ def render_final_report_pdf(
     _pdf_heading(pdf, "11. Interactive Dashboard Design: Pages 3 and 4")
     _pdf_body(
         pdf,
-        "Page 3 (Trends & Diagnostics) contrasts Beans and Maize monthly price trends with a 12-month smoothed rolling average and dark hover tooltip preview, plots the repeating Jan-to-Dec Seasonal Index cycle around the 1.000 parity line, and ranks counties by volatility CV % and outlier frequency.",
+        "Page 3 (Trends & Diagnostics) tracks Beans and Maize monthly prices from 2007 to 2026 (with 12m Rolling Avg, MoM %, and StdDev hover tooltips), plots the repeating Jan-to-Dec Seasonal Index cycle curves, ranks the Top 10 counties by Maize CV %, and summarizes Cropping Window seasonal index bars.",
         size=8.8,
     )
     p3 = SCREENSHOTS_DIR / "page3-trends-diagnostics.png"
@@ -830,7 +830,7 @@ def render_final_report_pdf(
         pdf.set_y(pdf.get_y() + 89)
     _pdf_body(
         pdf,
-        "Page 4 (Decisions & Action) maps all 27 counties onto a Monitoring Priority Matrix (Survey Coverage % vs. Maize CV %), ranks the Top 10 action counties for buffer stock and audit deployment, summarizes the three stakeholder playbooks, and surfaces coverage limitations explicitly.",
+        "Page 4 (Decisions & Action) maps all 27 counties onto a Monitoring Priority Quadrant (Survey % vs. Maize CV %, plotting un-surveyed hubs at 0.00%), orders the County Priority Action Matrix, isolates 10 low-survey counties below 5% for enumerator deployment, and compares Average Maize Price (KES/kg) across 7 regions.",
         size=8.8,
     )
     p4 = SCREENSHOTS_DIR / "page4-decisions-action.png"
@@ -1225,10 +1225,10 @@ def render_presentation_pptx(
 
     # Slides 7-10: Full Visual Showcase of the 4 Report Pages
     page_slides = [
-        (7, "Page 1: Executive Pulse", "KPI cards, 238-month composite index trend, Top 10 12m YoY counties, and alerts", SCREENSHOTS_DIR / "page1-executive-pulse.png", "Highlight the 2023 index spike and recent +7.56% recovery led by Tharaka Nithi (+25.13%), Marsabit, and Kisumu."),
-        (8, "Page 2: County and Commodity Disparities", "Diverging Maize Affordability Gap, 233-market Kenya coordinate scatter, and ASAL CV comparison", SCREENSHOTS_DIR / "page2-county-commodity.png", "Highlight the +9.75 KES/kg chronic maize price gap in ASAL markets like Turkana (+15.3 KES) versus surplus zones like Lamu (-17.5 KES)."),
-        (9, "Page 3: Trends, Seasonality, and Outlier Diagnostics", "2007 to 2026 crop curves with 12m rolling average, Jan-Dec seasonality, and 1,866 flagged spikes", SCREENSHOTS_DIR / "page3-trends-diagnostics.png", "Point out the inverse seasonal timing between Jun-Sep crop highs (1.023 maize) and Jan-Feb goat peaks (1.060)."),
-        (10, "Page 4: Decisions and Action Playbook", "Survey coverage vs. volatility blind-spot matrix, priority risk table, and 3 operational playbooks", SCREENSHOTS_DIR / "page4-decisions-action.png", "Walk assessors through the blind-spot quadrant: Samburu (20 markets, 0% raw survey coverage) and Kisumu (+18.4% YoY, 0% survey)."),
+        (7, "Page 1: Executive Pulse", "Top pageNavigator, recent 12m KPI cards, 238-month index trend, Top 10 YoY counties, and matrices", SCREENSHOTS_DIR / "page1-executive-pulse.png", "Highlight the 2023 index spike and recent +7.56% recovery led by Tharaka Nithi (+25.13%), Marsabit, and Kisumu."),
+        (8, "Page 2: County and Commodity Disparities", "Top 5 Deficit vs. Bottom 5 Surplus maize gap bars, 233-market scatter, ASAL CV%, and county table", SCREENSHOTS_DIR / "page2-county-commodity.png", "Highlight the +9.75 KES/kg chronic maize price gap in ASAL markets like Turkana (+15.26 KES/kg) versus surplus zones like Kitui (-15.59 KES/kg) and Lamu (-17.51 KES/kg)."),
+        (9, "Page 3: Trends, Seasonality, and Diagnostics", "2007 to 2026 Beans/Maize curves, Jan-Dec seasonality, Top 10 Maize CV%, and cropping window columns", SCREENSHOTS_DIR / "page3-trends-diagnostics.png", "Point out the inverse seasonal timing between Jun-Sep crop highs (1.023 maize) and Jan-Feb goat peaks (1.060)."),
+        (10, "Page 4: Decisions and Action Playbook", "Survey % vs. Maize CV% blind-spot quadrant, priority matrix, sub-5% survey bars, and regional maize prices", SCREENSHOTS_DIR / "page4-decisions-action.png", "Walk assessors through the blind-spot quadrant: Samburu (20 markets, 0.00% raw survey coverage) and Kisumu (+18.43% YoY, 0.00% survey)."),
     ]
     for s_num, s_title, s_sub, img_path, notes in page_slides:
         sl = prs.slides.add_slide(blank_layout)
@@ -1330,7 +1330,7 @@ def build_contribution_matrix_markdown() -> str:
         "",
         "| Group Member | Assigned Role | Tasks Completed | Evidence in Repository (Files, Branches & PRs) |",
         "| --- | --- | --- | --- |",
-        "| Prince Nzamuwe | Lead Analyst & BI Architect | Dataset sourcing & audit, 46-column profiling, 10 Power Query M scripts, star schema model & 15 DAX measures, Python QA/DAX validation suite (36+ tests), 4-page PBIR dashboard design, 12-page PDF report, 12-slide presentation, PR workflow management | `src/mzigo_chakula/*.py`, `tests/*.py`, `powerquery/*.pq`, `pbip/`, `docs/proposal.pdf`, `docs/transformation-log.md`, `docs/dax-catalogue.md`, `docs/report.pdf`, `slides/presentation.pptx`, PRs #1 to #8 |",
+        "| Prince Nzamuwe | Lead Analyst & BI Architect | Dataset sourcing & audit, 46-column profiling, 10 Power Query M scripts, star schema model & 15 DAX measures, Python QA/DAX validation suite (38+ tests), 4-page 46-visual PBIR dashboard with native pageNavigator, 12-page PDF report, 12-slide presentation, PR workflow management | `src/mzigo_chakula/*.py`, `tests/*.py`, `powerquery/*.pq`, `pbip/`, `docs/proposal.pdf`, `docs/transformation-log.md`, `docs/dax-catalogue.md`, `docs/report.pdf`, `slides/presentation.pptx`, PRs #1 to #9 |",
         "| Yizere Denis Derick | Group Contributor | Theme 10 problem framing alignment, stakeholder & operational decision specification, analytical question review, academic deliverable checklist verification | `README.md` (Problem framing, Stakeholders, Decisions, Questions, Contributors) |",
         "",
         "## Weekly Submission Traceability",
@@ -1339,9 +1339,9 @@ def build_contribution_matrix_markdown() -> str:
         "| --- | --- | --- |",
         "| Week 1 | Proposal, 46-column dictionary, profile, initial Power BI import screenshot | PR #2, PR #4 (`docs/proposal.pdf`, `docs/dataset-dictionary.csv`, `screenshots/week1-initial-import.png`) |",
         "| Week 2 | 10 Power Query M transforms, dimension CSVs, transformation QA log, cleaning visual | PR #3, PR #4 (`powerquery/*.pq`, `data/processed/*.csv`, `docs/transformation-log.md`, `screenshots/week2-powerquery-cleaning.png`) |",
-        "| Week 3 | 4-table star schema TMDL/PBIP, 15 DAX measures, model view, DAX validation & diagram | PR #5, PR #8 (`pbip/`, `docs/model-diagram.png`, `screenshots/week3-powerbi-model-view.png`, `screenshots/week3-dax-validation.png`, `docs/dax-catalogue.md`) |",
-        "| Week 4 | 4-page PBIR report layout (44 visuals, custom theme), 300 DPI PNGs, usability insights | PR #6, PR #8 (`pbip/mzigo-chakula.Report/`, `screenshots/page1..4.png`, `output/page1..4.png`, `docs/usability-and-insights.md`) |",
-        "| Week 5 | 12-page final PDF report with step screenshots, 12-slide presentation, README, contribution log | PR #7, PR #8 (`docs/report.pdf`, `slides/presentation.pptx`, `README.md`, `contribution/contribution-matrix.md`) |",
+        "| Week 3 | 4-table star schema TMDL/PBIP, 15 DAX measures, model view, DAX validation & diagram | PR #5, PR #8, PR #9 (`pbip/`, `docs/model-diagram.png`, `screenshots/week3-powerbi-model-view.png`, `screenshots/week3-dax-validation.png`, `docs/dax-catalogue.md`) |",
+        "| Week 4 | 4-page PBIR report layout (46 visuals, native pageNavigator, custom theme), real 300 DPI PNGs, usability insights | PR #6, PR #8, PR #9 (`pbip/mzigo-chakula.Report/`, `screenshots/page1..4.png`, `output/page1..4.png`, `docs/usability-and-insights.md`) |",
+        "| Week 5 | 12-page final PDF report with live step/dashboard screenshots, 12-slide presentation, README, contribution log | PR #7, PR #8, PR #9 (`docs/report.pdf`, `slides/presentation.pptx`, `README.md`, `contribution/contribution-matrix.md`) |",
         "",
     ]
     return "\n".join(lines)

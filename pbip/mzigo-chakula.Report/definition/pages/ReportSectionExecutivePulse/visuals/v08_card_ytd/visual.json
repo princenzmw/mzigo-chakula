@@ -1,38 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
-  "name": "v43_card_coverage",
+  "name": "v08_card_ytd",
   "position": {
-    "x": 600,
-    "y": 50,
-    "z": 3,
-    "width": 216,
-    "height": 58,
-    "tabOrder": 3
+    "x": 520,
+    "y": 124,
+    "z": 9,
+    "width": 240,
+    "height": 74,
+    "tabOrder": 9
   },
   "visual": {
     "visualType": "card",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Survey Coverage Rate %"
-                }
-              },
-              "queryRef": "fact_prices.Survey Coverage Rate %",
-              "nativeQueryRef": "Survey Coverage Rate %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -80,7 +58,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#B91C1C'"
+                      "Value": "'#0F766E'"
                     }
                   }
                 }
@@ -161,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Field Survey Coverage %'"
+                  "Value": "'2026 YTD Cumulative Index'"
                 }
               }
             },
@@ -231,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Raw enumerator share'"
+                  "Value": "'Jan to Oct 2026 running mean'"
                 }
               }
             },
@@ -307,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -336,6 +314,28 @@
         }
       ]
     },
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Cumulative Index YTD"
+                }
+              },
+              "queryRef": "fact_prices.Cumulative Index YTD",
+              "nativeQueryRef": "Cumulative Index YTD"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
       "labels": [
         {
@@ -343,7 +343,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "19D"
+                  "Value": "18D"
                 }
               }
             },

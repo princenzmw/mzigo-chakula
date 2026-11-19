@@ -2,153 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v26_scatter_county_risk",
   "position": {
-    "x": 648,
-    "y": 116,
-    "z": 6,
-    "width": 616,
-    "height": 288,
-    "tabOrder": 6
+    "x": 646,
+    "y": 124,
+    "z": 7,
+    "width": 618,
+    "height": 298,
+    "tabOrder": 7
   },
   "visual": {
     "visualType": "scatterChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "mkt_name"
-                }
-              },
-              "queryRef": "dim_markets.mkt_name",
-              "nativeQueryRef": "mkt_name",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "county_group"
-                }
-              },
-              "queryRef": "dim_markets.county_group",
-              "nativeQueryRef": "county_group",
-              "active": true
-            }
-          ]
-        },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Aggregation": {
-                  "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "dim_markets"
-                        }
-                      },
-                      "Property": "lon"
-                    }
-                  },
-                  "Function": 1
-                }
-              },
-              "queryRef": "Avg(dim_markets.lon)",
-              "nativeQueryRef": "Average of lon"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Aggregation": {
-                  "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "dim_markets"
-                        }
-                      },
-                      "Property": "lat"
-                    }
-                  },
-                  "Function": 1
-                }
-              },
-              "queryRef": "Avg(dim_markets.lat)",
-              "nativeQueryRef": "Average of lat"
-            }
-          ]
-        },
-        "Size": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Price Volatility CV %"
-                }
-              },
-              "queryRef": "fact_prices.Price Volatility CV %",
-              "nativeQueryRef": "Price Volatility CV %"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_markets"
-                    }
-                  },
-                  "Property": "adm2_name"
-                }
-              },
-              "queryRef": "dim_markets.adm2_name",
-              "nativeQueryRef": "adm2_name"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Affordability Gap (KES)"
-                }
-              },
-              "queryRef": "fact_prices.Affordability Gap (KES)",
-              "nativeQueryRef": "Affordability Gap (KES)"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -277,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Geographic Distribution of 233 Physical Kenyan Markets (Lon vs Lat)'"
+                  "Value": "'Geographic Distribution of 233 Physical Kenyan Markets'"
                 }
               }
             },
@@ -347,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Plotted from market coordinates | Teal: 31 Agri/Urban, Orange: 202 ASAL'"
+                  "Value": "'Plotted from verified coordinates | Teal: 31 Agri/Urban, Orange: 202 ASAL'"
                 }
               }
             },
@@ -423,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -445,6 +307,182 @@
               "expr": {
                 "Literal": {
                   "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "mkt_name"
+                }
+              },
+              "queryRef": "dim_markets.mkt_name",
+              "nativeQueryRef": "mkt_name",
+              "active": true,
+              "displayName": "Market"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "county_group"
+                }
+              },
+              "queryRef": "dim_markets.county_group",
+              "nativeQueryRef": "county_group",
+              "active": true,
+              "displayName": "Group"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dim_markets"
+                        }
+                      },
+                      "Property": "lon"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Avg(dim_markets.lon)",
+              "nativeQueryRef": "Average of lon",
+              "displayName": "Longitude (E)"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dim_markets"
+                        }
+                      },
+                      "Property": "lat"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Avg(dim_markets.lat)",
+              "nativeQueryRef": "Average of lat",
+              "displayName": "Latitude (N)"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_markets"
+                    }
+                  },
+                  "Property": "adm2_name"
+                }
+              },
+              "queryRef": "dim_markets.adm2_name",
+              "nativeQueryRef": "adm2_name",
+              "displayName": "County"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Affordability Gap (KES)"
+                }
+              },
+              "queryRef": "fact_prices.Affordability Gap (KES)",
+              "nativeQueryRef": "Affordability Gap (KES)",
+              "displayName": "Gap (KES)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Price Volatility CV %"
+                }
+              },
+              "queryRef": "fact_prices.Price Volatility CV %",
+              "nativeQueryRef": "Price Volatility CV %",
+              "displayName": "CV %"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "bubbles": [
+        {
+          "properties": {
+            "bubbleSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "-22D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

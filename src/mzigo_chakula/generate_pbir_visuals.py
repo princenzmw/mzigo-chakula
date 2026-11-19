@@ -1,4 +1,4 @@
-"""Generate themed PBIR report definition, pages, and 44 styled visuals."""
+"""Generate themed PBIR report definition, pages, and 46 non-overlapping visuals."""
 
 from __future__ import annotations
 
@@ -28,6 +28,9 @@ THEME_FILENAME = "MzigoChakulaTheme.json"
 DEFAULT_PAGES_DIR = REPORT_ROOT / "definition" / "pages"
 
 PALETTE_NAVY = "#0F2942"
+PALETTE_NAVY_IDLE = "#1E3A5F"
+PALETTE_NAV_ACTIVE = "#0284C7"
+PALETTE_NAV_HOVER = "#0369A1"
 PALETTE_BLUE = "#1D4ED8"
 PALETTE_TEAL = "#0F766E"
 PALETTE_ORANGE = "#EA580C"
@@ -43,23 +46,75 @@ PAGE_METADATA: tuple[tuple[str, str, str], ...] = (
     (
         "ReportSectionExecutivePulse",
         "Executive Pulse",
-        "Page 1: Executive Pulse | Rapid National Inflation & Staple Burden | Cross-Filtering Active",
+        "Page 1: Executive Pulse | Recent 12m Inflation & Staple Burden",
     ),
     (
         "ReportSectionCountyCommodity",
         "County and Commodity",
-        "Page 2: County & Commodity | ASAL vs. Agri/Urban Disparities & 233 Physical Markets",
+        "Page 2: County & Commodity | ASAL Gaps & 233 Physical Markets",
     ),
     (
         "ReportSectionTrendsDiagnostics",
         "Trends and Diagnostics",
-        "Page 3: Trends & Diagnostics | 2007-2026 Crop Trajectories, Seasonality & County Dispersion",
+        "Page 3: Trends & Diagnostics | 19-Year Curves & Seasonality",
     ),
     (
         "ReportSectionDecisionsAction",
         "Decisions and Action",
-        "Page 4: Decisions & Action | Survey Blind-Spot Triage & Intervention Priorities",
+        "Page 4: Decisions & Action | Survey Blind Spots & Priorities",
     ),
+)
+
+TOP10_RECENT_COUNTIES: tuple[str, ...] = (
+    "Tharaka Nithi",
+    "Marsabit",
+    "Kisumu",
+    "Nakuru",
+    "Samburu",
+    "Mandera",
+    "Wajir",
+    "Turkana",
+    "West Pokot",
+    "Machakos",
+)
+
+DIVERGING_MAIZE_COUNTIES: tuple[str, ...] = (
+    "Turkana",
+    "Mandera",
+    "Kisumu",
+    "Wajir",
+    "West Pokot",
+    "Meru",
+    "Tharaka Nithi",
+    "Embu",
+    "Kitui",
+    "Lamu",
+)
+
+TOP10_MAIZE_CV_COUNTIES: tuple[str, ...] = (
+    "Embu",
+    "Tharaka Nithi",
+    "Meru",
+    "Kitui",
+    "Makueni",
+    "Isiolo",
+    "Garissa",
+    "Lamu",
+    "Uasin Gishu",
+    "Tana River",
+)
+
+LOW_SURVEY_COUNTIES: tuple[str, ...] = (
+    "Mombasa",
+    "Nairobi",
+    "Turkana",
+    "Baringo",
+    "Isiolo",
+    "Marsabit",
+    "Tana River",
+    "Garissa",
+    "Mandera",
+    "Kajiado",
 )
 
 
@@ -86,12 +141,13 @@ class VisualSpec:
     width: int
     height: int
     z: int
-    query_state: dict[str, dict[str, Any]]
+    query_state: dict[str, dict[str, Any]] | None = None
     sort: SortSpec | None = None
     objects: dict[str, Any] | None = None
     filter_config: dict[str, Any] | None = None
     border_color: str = PALETTE_BORDER
     is_banner: bool = False
+    is_page_nav: bool = False
 
 
 def _lit(val: str) -> dict[str, Any]:
@@ -104,7 +160,12 @@ def _solid_color(hex_color: str) -> dict[str, Any]:
     return {"solid": {"color": _lit(f"'{hex_color}'")}}
 
 
-def col_proj(entity: str, prop: str, active: bool | None = None) -> dict[str, Any]:
+def col_proj(
+    entity: str,
+    prop: str,
+    active: bool | None = None,
+    display_name: str | None = None,
+) -> dict[str, Any]:
     """Build a PBIR column RoleProjection entry."""
     proj: dict[str, Any] = {
         "field": {
@@ -118,12 +179,18 @@ def col_proj(entity: str, prop: str, active: bool | None = None) -> dict[str, An
     }
     if active is not None:
         proj["active"] = active
+    if display_name is not None:
+        proj["displayName"] = display_name
     return proj
 
 
-def meas_proj(entity: str, prop: str) -> dict[str, Any]:
+def meas_proj(
+    entity: str,
+    prop: str,
+    display_name: str | None = None,
+) -> dict[str, Any]:
     """Build a PBIR measure RoleProjection entry."""
-    return {
+    proj: dict[str, Any] = {
         "field": {
             "Measure": {
                 "Expression": {"SourceRef": {"Entity": entity}},
@@ -133,11 +200,19 @@ def meas_proj(entity: str, prop: str) -> dict[str, Any]:
         "queryRef": f"{entity}.{prop}",
         "nativeQueryRef": prop,
     }
+    if display_name is not None:
+        proj["displayName"] = display_name
+    return proj
 
 
-def agg_proj(entity: str, prop: str, func: int = 1) -> dict[str, Any]:
+def agg_proj(
+    entity: str,
+    prop: str,
+    func: int = 1,
+    display_name: str | None = None,
+) -> dict[str, Any]:
     """Build a PBIR Aggregation RoleProjection entry (1 = Average)."""
-    return {
+    proj: dict[str, Any] = {
         "field": {
             "Aggregation": {
                 "Expression": {
@@ -152,24 +227,33 @@ def agg_proj(entity: str, prop: str, func: int = 1) -> dict[str, Any]:
         "queryRef": f"Avg({entity}.{prop})",
         "nativeQueryRef": f"Average of {prop}",
     }
+    if display_name is not None:
+        proj["displayName"] = display_name
+    return proj
 
 
-def _commodity_in_filter(filter_name: str, commodity_ids: tuple[str, ...]) -> dict[str, Any]:
-    """Create a PBIR Categorical filter on dim_commodity[commodity_id]."""
+def _in_filter(
+    filter_name: str,
+    entity: str,
+    prop: str,
+    literal_values: Sequence[str],
+) -> dict[str, Any]:
+    """Build a PBIR Categorical In filter for one entity column."""
+    alias = "f"
     return {
         "filters": [
             {
                 "name": filter_name,
                 "field": {
                     "Column": {
-                        "Expression": {"SourceRef": {"Entity": "dim_commodity"}},
-                        "Property": "commodity_id",
+                        "Expression": {"SourceRef": {"Entity": entity}},
+                        "Property": prop,
                     }
                 },
                 "type": "Categorical",
                 "filter": {
                     "Version": 2,
-                    "From": [{"Name": "c", "Entity": "dim_commodity", "Type": 0}],
+                    "From": [{"Name": alias, "Entity": entity, "Type": 0}],
                     "Where": [
                         {
                             "Condition": {
@@ -177,12 +261,12 @@ def _commodity_in_filter(filter_name: str, commodity_ids: tuple[str, ...]) -> di
                                     "Expressions": [
                                         {
                                             "Column": {
-                                                "Expression": {"SourceRef": {"Source": "c"}},
-                                                "Property": "commodity_id",
+                                                "Expression": {"SourceRef": {"Source": alias}},
+                                                "Property": prop,
                                             }
                                         }
                                     ],
-                                    "Values": [[{"Literal": {"Value": f"'{cid}'"}}] for cid in commodity_ids],
+                                    "Values": [[{"Literal": {"Value": val}}] for val in literal_values],
                                 }
                             }
                         }
@@ -195,18 +279,96 @@ def _commodity_in_filter(filter_name: str, commodity_ids: tuple[str, ...]) -> di
     }
 
 
+def _categorical_in_filter(
+    filter_name: str,
+    entity: str,
+    prop: str,
+    values: tuple[str, ...],
+) -> dict[str, Any]:
+    """Create a PBIR Categorical In filter for string values."""
+    return _in_filter(filter_name, entity, prop, [f"'{val}'" for val in values])
+
+
+def _bool_filter(
+    filter_name: str,
+    entity: str,
+    prop: str,
+    value: bool,
+) -> dict[str, Any]:
+    """Create a PBIR Categorical In filter for a Boolean column."""
+    return _in_filter(filter_name, entity, prop, ["true" if value else "false"])
+
+
+def _combine_filters(*filter_dicts: dict[str, Any]) -> dict[str, Any]:
+    """Merge multiple PBIR filter dictionaries into one filterConfig payload."""
+    merged: list[dict[str, Any]] = []
+    for fdict in filter_dicts:
+        merged.extend(fdict.get("filters", []))
+    return {"filters": merged}
+
+
+def _clean_chart_objects(
+    *,
+    data_labels: bool = False,
+    hide_legend: bool = False,
+    hide_legend_title: bool = True,
+    hide_x_title: bool = True,
+    hide_y_title: bool = False,
+    category_font_size: str | None = None,
+) -> dict[str, Any]:
+    """Return consistent axis, legend, and data-label settings for cartesian charts."""
+    objects: dict[str, Any] = {}
+    if hide_legend:
+        objects["legend"] = [{"properties": {"show": _lit("false")}}]
+    elif hide_legend_title:
+        objects["legend"] = [{"properties": {"show": _lit("true"), "showTitle": _lit("false")}}]
+
+    cat_props: dict[str, Any] = {}
+    if hide_x_title:
+        cat_props["showAxisTitle"] = _lit("false")
+    if category_font_size is not None:
+        cat_props["fontSize"] = _lit(f"{category_font_size}D")
+    if cat_props:
+        objects["categoryAxis"] = [{"properties": cat_props}]
+
+    if hide_y_title:
+        objects["valueAxis"] = [{"properties": {"showAxisTitle": _lit("false")}}]
+
+    if data_labels:
+        objects["labels"] = [{"properties": {"show": _lit("true")}}]
+    return objects
+
+
+def _clean_table_objects() -> dict[str, Any]:
+    """Suppress mixed-unit grand totals and tighten row padding so 10 rows fit cleanly."""
+    return {
+        "total": [{"properties": {"totals": _lit("false")}}],
+        "grid": [{"properties": {"rowPadding": _lit("1D")}}],
+    }
+
+
+def _scatter_objects(*, bubble_size: str = "-18D", hide_legend_title: bool = True) -> dict[str, Any]:
+    """Configure crisp, non-blobby circular markers and concise legends on scatter plots."""
+    objects: dict[str, Any] = {
+        "bubbles": [{"properties": {"bubbleSize": _lit(bubble_size)}}],
+    }
+    if hide_legend_title:
+        objects["legend"] = [{"properties": {"show": _lit("true"), "showTitle": _lit("false")}}]
+    return objects
+
+
 def _banner_spec(page_name: str, subtitle: str) -> VisualSpec:
-    """Create the top navy header banner card for a report page."""
+    """Create the left navy title banner sitting flush beside the top pageNavigator."""
     return VisualSpec(
         page_name=page_name,
         visual_id="v00_header_banner",
         visual_type="card",
-        title="MZIGO CHAKULA | KENYA FOOD PRICE & AFFORDABILITY INTELLIGENCE (2007-2026)",
+        title="MZIGO CHAKULA | Kenya Food Price & Affordability",
         subtitle=subtitle,
         x=16,
-        y=6,
-        width=1248,
-        height=38,
+        y=8,
+        width=624,
+        height=52,
         z=0,
         query_state={"Values": {"projections": [meas_proj("fact_prices", "Data Completeness %")]}},
         objects={
@@ -222,6 +384,128 @@ def _banner_spec(page_name: str, subtitle: str) -> VisualSpec:
         },
         border_color=PALETTE_NAVY,
         is_banner=True,
+    )
+
+
+def _page_nav_spec(page_name: str) -> VisualSpec:
+    """Create the native horizontal pageNavigator button strip inside the top navy bar."""
+    return VisualSpec(
+        page_name=page_name,
+        visual_id="v00_page_nav",
+        visual_type="pageNavigator",
+        title="",
+        subtitle="",
+        x=640,
+        y=8,
+        width=624,
+        height=52,
+        z=1,
+        query_state=None,
+        objects={
+            "layout": [
+                {
+                    "properties": {
+                        "orientation": _lit("2D"),
+                        "cellPadding": _lit("6L"),
+                    }
+                }
+            ],
+            "shape": [
+                {
+                    "selector": {"id": "default"},
+                    "properties": {
+                        "tileShape": _lit("'rectangleRounded'"),
+                        "rectangleRoundedCurve": _lit("18L"),
+                    },
+                }
+            ],
+            "pages": [
+                {
+                    "properties": {
+                        "showHiddenPages": _lit("false"),
+                        "showTooltipPages": _lit("false"),
+                    }
+                }
+            ],
+            "fill": [
+                {
+                    "selector": {"id": "default"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "fillColor": _solid_color(PALETTE_NAVY_IDLE),
+                        "transparency": _lit("0D"),
+                    },
+                },
+                {
+                    "selector": {"id": "hover"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "fillColor": _solid_color(PALETTE_NAV_HOVER),
+                        "transparency": _lit("0D"),
+                    },
+                },
+                {
+                    "selector": {"id": "press"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "fillColor": _solid_color(PALETTE_NAV_ACTIVE),
+                        "transparency": _lit("0D"),
+                    },
+                },
+                {
+                    "selector": {"id": "selected"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "fillColor": _solid_color(PALETTE_NAV_ACTIVE),
+                        "transparency": _lit("0D"),
+                    },
+                },
+            ],
+            "text": [
+                {
+                    "selector": {"id": "default"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "fontColor": _solid_color("#E2E8F0"),
+                        "fontSize": _lit("8.5D"),
+                        "bold": _lit("true"),
+                        "fontFamily": _lit("'Segoe UI Semibold'"),
+                    },
+                },
+                {
+                    "selector": {"id": "selected"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "fontColor": _solid_color("#FFFFFF"),
+                        "fontSize": _lit("8.5D"),
+                        "bold": _lit("true"),
+                        "fontFamily": _lit("'Segoe UI Semibold'"),
+                    },
+                },
+            ],
+            "outline": [
+                {
+                    "selector": {"id": "default"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "lineColor": _solid_color("#334155"),
+                        "weight": _lit("1D"),
+                        "transparency": _lit("0D"),
+                    },
+                },
+                {
+                    "selector": {"id": "selected"},
+                    "properties": {
+                        "show": _lit("true"),
+                        "lineColor": _solid_color("#38BDF8"),
+                        "weight": _lit("1D"),
+                        "transparency": _lit("0D"),
+                    },
+                },
+            ],
+        },
+        border_color=PALETTE_NAVY,
+        is_page_nav=True,
     )
 
 
@@ -271,6 +555,7 @@ def _card_spec(
     measure: str,
     accent: str = PALETTE_BLUE,
     entity: str = "fact_prices",
+    filter_config: dict[str, Any] | None = None,
 ) -> VisualSpec:
     """Create an executive KPI card visual specification bound to a single measure."""
     return VisualSpec(
@@ -289,7 +574,7 @@ def _card_spec(
             "labels": [
                 {
                     "properties": {
-                        "fontSize": _lit("19D"),
+                        "fontSize": _lit("18D"),
                         "color": _solid_color(PALETTE_NAVY),
                         "labelDisplayUnits": _lit("1D"),
                     }
@@ -297,13 +582,9 @@ def _card_spec(
             ],
             "categoryLabels": [{"properties": {"show": _lit("false")}}],
         },
+        filter_config=filter_config,
         border_color=accent,
     )
-
-
-def _data_labels_on() -> dict[str, Any]:
-    """Enable clean data labels directly on bar and column marks."""
-    return {"labels": [{"properties": {"show": _lit("true")}}]}
 
 
 def build_theme_payload() -> dict[str, Any]:
@@ -339,20 +620,21 @@ def build_theme_payload() -> dict[str, Any]:
         "hyperlink": PALETTE_BLUE,
         "visitedHyperlink": PALETTE_TEAL,
         "textClasses": {
-            "callout": {"fontSize": 20, "fontFace": "Segoe UI Bold", "color": PALETTE_NAVY},
-            "title": {"fontSize": 11, "fontFace": "Segoe UI Semibold", "color": PALETTE_NAVY},
-            "header": {"fontSize": 10, "fontFace": "Segoe UI Semibold", "color": PALETTE_NAVY},
-            "label": {"fontSize": 9, "fontFace": "Segoe UI", "color": "#334155"},
+            "callout": {"fontSize": 18, "fontFace": "Segoe UI Bold", "color": PALETTE_NAVY},
+            "title": {"fontSize": 10, "fontFace": "Segoe UI Semibold", "color": PALETTE_NAVY},
+            "header": {"fontSize": 9, "fontFace": "Segoe UI Semibold", "color": PALETTE_NAVY},
+            "label": {"fontSize": 8, "fontFace": "Segoe UI", "color": "#334155"},
         },
         "visualStyles": {
             "tableEx": {
                 "*": {
+                    "grid": [{"rowPadding": 1}],
                     "columnHeaders": [
                         {
                             "backColor": {"solid": {"color": PALETTE_NAVY}},
                             "fontColor": {"solid": {"color": "#FFFFFF"}},
                             "bold": True,
-                            "fontSize": 9,
+                            "fontSize": 8,
                         }
                     ],
                     "values": [
@@ -361,7 +643,7 @@ def build_theme_payload() -> dict[str, Any]:
                             "backColorSecondary": {"solid": {"color": "#F8FAFC"}},
                             "fontColorPrimary": {"solid": {"color": "#0F172A"}},
                             "fontColorSecondary": {"solid": {"color": "#0F172A"}},
-                            "fontSize": 9,
+                            "fontSize": 8,
                         }
                     ],
                 }
@@ -423,26 +705,27 @@ def build_report_payload() -> dict[str, Any]:
 
 
 def build_visual_specs() -> tuple[VisualSpec, ...]:
-    """Return all 44 styled PBIR visual specifications across the 4 report pages."""
+    """Return all 46 non-overlapping styled PBIR visual specifications across the 4 pages."""
     p1, _, p1_sub = PAGE_METADATA[0]
     p2, _, p2_sub = PAGE_METADATA[1]
     p3, _, p3_sub = PAGE_METADATA[2]
     p4, _, p4_sub = PAGE_METADATA[3]
 
     return (
-        # Page 1: Executive Pulse (banner + 14 visuals)
+        # Page 1: Executive Pulse (banner + nav + 14 visuals = 16)
         _banner_spec(p1, p1_sub),
-        _slicer_spec(p1, "v01_slicer_year", "Year", "2007 to 2026", 16, 50, 236, 52, 1, "dim_date", "year"),
+        _page_nav_spec(p1),
+        _slicer_spec(p1, "v01_slicer_year", "Year", "2007 to 2026", 16, 64, 236, 54, 2, "dim_date", "year"),
         _slicer_spec(
             p1,
             "v02_slicer_group",
             "County Group",
             "ASAL vs Agri/Urban",
             262,
-            50,
+            64,
             246,
-            52,
-            2,
+            54,
+            3,
             "dim_markets",
             "county_group",
         ),
@@ -452,10 +735,10 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             "Commodity",
             "3 tracked staples",
             518,
-            50,
+            64,
             246,
-            52,
-            3,
+            54,
+            4,
             "dim_commodity",
             "commodity_name",
         ),
@@ -465,10 +748,10 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             "Cropping Season",
             "4 rainfall regimes",
             774,
-            50,
+            64,
             246,
-            52,
-            4,
+            54,
+            5,
             "dim_date",
             "season",
         ),
@@ -478,62 +761,64 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             "Region",
             "7 Kenya regions",
             1030,
-            50,
+            64,
             234,
-            52,
-            5,
+            54,
+            6,
             "dim_markets",
             "adm1_name",
         ),
         _card_spec(
             p1,
             "v06_card_fpi",
-            "National Food Price Index",
-            "Grain-safe (mkt, month) mean",
+            "Recent 12m Food Price Index",
+            "Latest 12m (19y mean: 1.20)",
             16,
-            108,
+            124,
             240,
-            84,
-            6,
+            74,
+            7,
             "National Food Price Index",
             PALETTE_BLUE,
+            filter_config=_bool_filter("f_v06_recent", "dim_date", "is_recent", True),
         ),
         _card_spec(
             p1,
             "v07_card_yoy",
-            "YoY Food Inflation %",
-            "Gap-safe EDATE -12m change",
+            "Recent 12m YoY Inflation %",
+            "Nov 2025 to Oct 2026 vs prior",
             268,
-            108,
+            124,
             240,
-            84,
-            7,
+            74,
+            8,
             "YoY Inflation %",
             PALETTE_ORANGE,
+            filter_config=_bool_filter("f_v07_recent", "dim_date", "is_recent", True),
         ),
         _card_spec(
             p1,
-            "v08_card_avg_price",
-            "Avg Commodity Price (KES)",
-            "Filter by Commodity above",
+            "v08_card_ytd",
+            "2026 YTD Cumulative Index",
+            "Jan to Oct 2026 running mean",
             520,
-            108,
+            124,
             240,
-            84,
-            8,
-            "Avg Price (KES)",
+            74,
+            9,
+            "Cumulative Index YTD",
             PALETTE_TEAL,
         ),
         _card_spec(
             p1,
             "v09_card_completeness",
             "Data Completeness %",
-            "Populated model grid share",
+            "166,362 rows across 233 mkts",
             772,
-            108,
+            124,
             240,
-            84,
-            9,
+            74,
+            10,
             "Data Completeness %",
             PALETTE_RED,
         ),
@@ -543,10 +828,10 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             "Field Survey Coverage %",
             "Direct raw enumerator logs",
             1024,
-            108,
+            124,
             240,
-            84,
-            10,
+            74,
+            11,
             "Survey Coverage Rate %",
             PALETTE_SLATE,
         ),
@@ -554,39 +839,48 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             page_name=p1,
             visual_id="v11_line_fpi_trend",
             visual_type="lineChart",
-            title="National Food Price Index Trend (2007-2026)",
-            subtitle="Grain-safe composite index alongside YTD running mean",
+            title="National Food Price Index Trend (2007 to 2026)",
+            subtitle="Grain-safe composite index across 238 months | 19-year baseline: 1.20",
             x=16,
-            y=200,
-            width=756,
-            height=256,
-            z=11,
+            y=204,
+            width=744,
+            height=274,
+            z=12,
             query_state={
                 "Category": {"projections": [col_proj("dim_date", "full_date", active=True)]},
                 "Y": {
                     "projections": [
                         meas_proj("fact_prices", "National Food Price Index"),
-                        meas_proj("fact_prices", "Cumulative Index YTD"),
                     ]
                 },
-                "Tooltips": {"projections": [meas_proj("fact_prices", "YoY Inflation %")]},
+                "Tooltips": {
+                    "projections": [
+                        meas_proj("fact_prices", "Cumulative Index YTD"),
+                        meas_proj("fact_prices", "YoY Inflation %"),
+                    ]
+                },
             },
+            objects=_clean_chart_objects(hide_legend=True),
         ),
         VisualSpec(
             page_name=p1,
             visual_id="v12_bar_top_counties",
             visual_type="barChart",
-            title="Counties Ranked by YoY Food Inflation %",
-            subtitle="Teal: Agricultural & Urban | Orange: ASAL counties",
-            x=784,
-            y=200,
-            width=480,
-            height=256,
-            z=12,
+            title="Top 10 Counties by Recent 12m YoY Inflation %",
+            subtitle="Nov 2025 to Oct 2026 | Teal: Agri/Urban, Orange: ASAL",
+            x=772,
+            y=204,
+            width=492,
+            height=274,
+            z=13,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "adm2_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "Y": {"projections": [meas_proj("fact_prices", "YoY Inflation %")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "adm2_name", active=True, display_name="County")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "Y": {"projections": [meas_proj("fact_prices", "YoY Inflation %", display_name="12m YoY %")]},
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "National Food Price Index"),
@@ -595,67 +889,84 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
                 },
             },
             sort=SortSpec("fact_prices", "YoY Inflation %", "Descending"),
-            objects=_data_labels_on(),
+            objects=_clean_chart_objects(
+                data_labels=True,
+                hide_legend=True,
+                hide_y_title=True,
+                category_font_size="8",
+            ),
+            filter_config=_combine_filters(
+                _bool_filter("f_v12_recent", "dim_date", "is_recent", True),
+                _categorical_in_filter("f_v12_top10", "dim_markets", "adm2_name", TOP10_RECENT_COUNTIES),
+            ),
         ),
         VisualSpec(
             page_name=p1,
             visual_id="v13_table_commodities",
             visual_type="tableEx",
-            title="Commodity Price, YoY Growth & Volatility Matrix",
-            subtitle="Unit-safe statistics across 55,454 physical market-months",
+            title="Commodity Price, Recent 12m YoY & Volatility Matrix",
+            subtitle="Latest 12m (Nov 2025 to Oct 2026): Maize eased -10.51% while Goats rose +7.77%",
             x=16,
-            y=464,
-            width=756,
-            height=246,
-            z=13,
+            y=486,
+            width=744,
+            height=224,
+            z=14,
             query_state={
                 "Values": {
                     "projections": [
-                        col_proj("dim_commodity", "commodity_name"),
-                        col_proj("dim_commodity", "unit"),
-                        meas_proj("fact_prices", "Avg Price (KES)"),
-                        meas_proj("fact_prices", "Prior Year Price (KES)"),
-                        meas_proj("fact_prices", "Commodity YoY Inflation %"),
-                        meas_proj("fact_prices", "Price Volatility CV %"),
+                        col_proj("dim_commodity", "commodity_name", display_name="Commodity"),
+                        col_proj("dim_commodity", "unit", display_name="Unit"),
+                        meas_proj("fact_prices", "Avg Price (KES)", display_name="12m Avg (KES)"),
+                        meas_proj("fact_prices", "Prior Year Price (KES)", display_name="Prior 12m (KES)"),
+                        meas_proj("fact_prices", "Commodity YoY Inflation %", display_name="12m YoY %"),
+                        meas_proj("fact_prices", "Price Volatility CV %", display_name="12m CV %"),
                     ]
                 }
             },
+            objects=_clean_table_objects(),
+            filter_config=_bool_filter("f_v13_recent", "dim_date", "is_recent", True),
         ),
         VisualSpec(
             page_name=p1,
             visual_id="v14_table_county_alerts",
             visual_type="tableEx",
-            title="County Inflation Watchlist & Rank",
-            subtitle="Dense descending rank across covered Kenyan counties",
-            x=784,
-            y=464,
-            width=480,
-            height=246,
-            z=14,
+            title="Top 10 County Inflation Watchlist (Recent 12m)",
+            subtitle="Dense rank across covered Kenyan counties (Nov 2025 to Oct 2026)",
+            x=772,
+            y=486,
+            width=492,
+            height=224,
+            z=15,
             query_state={
                 "Values": {
                     "projections": [
-                        col_proj("dim_markets", "adm2_name"),
-                        col_proj("dim_markets", "county_group"),
-                        meas_proj("fact_prices", "National Food Price Index"),
-                        meas_proj("fact_prices", "YoY Inflation %"),
-                        meas_proj("fact_prices", "County Inflation Rank"),
+                        meas_proj("fact_prices", "County Inflation Rank", display_name="Rank"),
+                        col_proj("dim_markets", "adm2_name", display_name="County"),
+                        meas_proj("fact_prices", "National Food Price Index", display_name="Index"),
+                        meas_proj("fact_prices", "YoY Inflation %", display_name="12m YoY %"),
                     ]
                 }
             },
+            sort=SortSpec("fact_prices", "YoY Inflation %", "Descending"),
+            objects=_clean_table_objects(),
+            filter_config=_combine_filters(
+                _bool_filter("f_v14_recent", "dim_date", "is_recent", True),
+                _categorical_in_filter("f_v14_top10", "dim_markets", "adm2_name", TOP10_RECENT_COUNTIES),
+            ),
         ),
-        # Page 2: County and Commodity (banner + 8 visuals)
+        # Page 2: County and Commodity (banner + nav + 8 visuals = 10)
         _banner_spec(p2, p2_sub),
+        _page_nav_spec(p2),
         _slicer_spec(
             p2,
             "v21_slicer_commodity",
             "Commodity",
             "3 tracked staples",
             16,
-            50,
+            64,
             300,
-            52,
-            1,
+            54,
+            2,
             "dim_commodity",
             "commodity_name",
         ),
@@ -665,32 +976,60 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             "County Group",
             "ASAL vs Agri/Urban",
             328,
-            50,
+            64,
             300,
-            52,
-            2,
+            54,
+            3,
             "dim_markets",
             "county_group",
         ),
         _slicer_spec(
-            p2, "v23_slicer_region", "Region", "7 Kenya regions", 640, 50, 300, 52, 3, "dim_markets", "adm1_name"
+            p2,
+            "v23_slicer_region",
+            "Region",
+            "7 Kenya regions",
+            640,
+            64,
+            300,
+            54,
+            4,
+            "dim_markets",
+            "adm1_name",
         ),
-        _slicer_spec(p2, "v24_slicer_year", "Year", "2007 to 2026", 952, 50, 312, 52, 4, "dim_date", "year"),
+        _slicer_spec(
+            p2,
+            "v24_slicer_year",
+            "Year",
+            "2007 to 2026",
+            952,
+            64,
+            312,
+            54,
+            5,
+            "dim_date",
+            "year",
+        ),
         VisualSpec(
             page_name=p2,
             visual_id="v25_bar_affordability_gap",
             visual_type="barChart",
-            title="Maize Affordability Gap vs National Mean (KES/kg)",
-            subtitle="Visual filtered to Maize (1 kg) | Teal: Agri/Urban, Orange: ASAL",
+            title="Maize Affordability Gap: Top 5 Deficit vs Bottom 5 Surplus",
+            subtitle="KES/kg vs national mean (56.02) | Teal: Agri/Urban, Orange: ASAL",
             x=16,
-            y=116,
-            width=620,
-            height=288,
-            z=5,
+            y=124,
+            width=618,
+            height=298,
+            z=6,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "adm2_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "Y": {"projections": [meas_proj("fact_prices", "Affordability Gap (KES)")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "adm2_name", active=True, display_name="County")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "Y": {
+                    "projections": [meas_proj("fact_prices", "Affordability Gap (KES)", display_name="Gap (KES)")]
+                },
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "Avg Price (KES)"),
@@ -699,33 +1038,46 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
                 },
             },
             sort=SortSpec("fact_prices", "Affordability Gap (KES)", "Descending"),
-            objects=_data_labels_on(),
-            filter_config=_commodity_in_filter("f_v25_maize", ("maize_fao",)),
+            objects=_clean_chart_objects(
+                data_labels=True,
+                hide_legend=True,
+                hide_y_title=True,
+                category_font_size="8",
+            ),
+            filter_config=_combine_filters(
+                _categorical_in_filter("f_v25_maize", "dim_commodity", "commodity_id", ("maize_fao",)),
+                _categorical_in_filter("f_v25_div", "dim_markets", "adm2_name", DIVERGING_MAIZE_COUNTIES),
+            ),
         ),
         VisualSpec(
             page_name=p2,
             visual_id="v26_scatter_county_risk",
             visual_type="scatterChart",
-            title="Geographic Distribution of 233 Physical Kenyan Markets (Lon vs Lat)",
-            subtitle="Plotted from market coordinates | Teal: 31 Agri/Urban, Orange: 202 ASAL",
-            x=648,
-            y=116,
-            width=616,
-            height=288,
-            z=6,
+            title="Geographic Distribution of 233 Physical Kenyan Markets",
+            subtitle="Plotted from verified coordinates | Teal: 31 Agri/Urban, Orange: 202 ASAL",
+            x=646,
+            y=124,
+            width=618,
+            height=298,
+            z=7,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "mkt_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "X": {"projections": [agg_proj("dim_markets", "lon", func=1)]},
-                "Y": {"projections": [agg_proj("dim_markets", "lat", func=1)]},
-                "Size": {"projections": [meas_proj("fact_prices", "Price Volatility CV %")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "mkt_name", active=True, display_name="Market")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "X": {"projections": [agg_proj("dim_markets", "lon", func=1, display_name="Longitude (E)")]},
+                "Y": {"projections": [agg_proj("dim_markets", "lat", func=1, display_name="Latitude (N)")]},
                 "Tooltips": {
                     "projections": [
-                        col_proj("dim_markets", "adm2_name"),
-                        meas_proj("fact_prices", "Affordability Gap (KES)"),
+                        col_proj("dim_markets", "adm2_name", display_name="County"),
+                        meas_proj("fact_prices", "Affordability Gap (KES)", display_name="Gap (KES)"),
+                        meas_proj("fact_prices", "Price Volatility CV %", display_name="CV %"),
                     ]
                 },
             },
+            objects=_scatter_objects(bubble_size="-22D"),
         ),
         VisualSpec(
             page_name=p2,
@@ -734,16 +1086,22 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             title="Price Volatility Comparison (CV %): ASAL vs Agri & Urban",
             subtitle="Coefficient of variation across Beans, Goat, and Maize",
             x=16,
-            y=412,
-            width=520,
-            height=298,
-            z=7,
+            y=430,
+            width=516,
+            height=280,
+            z=8,
             query_state={
                 "Category": {
-                    "projections": [col_proj("dim_commodity", "commodity_name", active=True)]
+                    "projections": [
+                        col_proj("dim_commodity", "commodity_name", active=True, display_name="Commodity")
+                    ]
                 },
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "Y": {"projections": [meas_proj("fact_prices", "Price Volatility CV %")]},
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "Y": {
+                    "projections": [meas_proj("fact_prices", "Price Volatility CV %", display_name="CV %")]
+                },
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "Avg Price (KES)"),
@@ -751,158 +1109,165 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
                     ]
                 },
             },
-            objects=_data_labels_on(),
+            objects=_clean_chart_objects(data_labels=True),
         ),
         VisualSpec(
             page_name=p2,
             visual_id="v28_table_county_drill",
             visual_type="tableEx",
-            title="County and Physical Market Affordability Matrix",
-            subtitle="Mean price, gap vs benchmark, YoY growth, and CV % by market",
-            x=548,
-            y=412,
-            width=716,
-            height=298,
-            z=8,
+            title="County Maize Affordability, Volatility & Survey Breakdown",
+            subtitle="Filtered to Maize (1 kg) | Sorted by Affordability Gap descending",
+            x=544,
+            y=430,
+            width=720,
+            height=280,
+            z=9,
             query_state={
                 "Values": {
                     "projections": [
-                        col_proj("dim_markets", "adm2_name"),
-                        col_proj("dim_markets", "mkt_name"),
-                        col_proj("dim_markets", "county_group"),
-                        meas_proj("fact_prices", "Avg Price (KES)"),
-                        meas_proj("fact_prices", "Affordability Gap (KES)"),
-                        meas_proj("fact_prices", "Commodity YoY Inflation %"),
-                        meas_proj("fact_prices", "Price Volatility CV %"),
+                        col_proj("dim_markets", "adm2_name", display_name="County"),
+                        col_proj("dim_markets", "county_group", display_name="Group"),
+                        meas_proj("fact_prices", "Avg Price (KES)", display_name="Avg (KES/kg)"),
+                        meas_proj("fact_prices", "Affordability Gap (KES)", display_name="Gap (KES)"),
+                        meas_proj("fact_prices", "Price Volatility CV %", display_name="CV %"),
+                        meas_proj("fact_prices", "Survey Coverage Rate %", display_name="Survey %"),
                     ]
                 }
             },
+            sort=SortSpec("fact_prices", "Affordability Gap (KES)", "Descending"),
+            objects=_clean_table_objects(),
+            filter_config=_categorical_in_filter("f_v28_maize", "dim_commodity", "commodity_id", ("maize_fao",)),
         ),
-        # Page 3: Trends and Diagnostics (banner + 9 visuals)
+        # Page 3: Trends and Diagnostics (banner + nav + 8 visuals = 10)
         _banner_spec(p3, p3_sub),
+        _page_nav_spec(p3),
         _slicer_spec(
             p3,
             "v31_slicer_commodity",
-            "Select Commodity",
+            "Commodity",
             "3 tracked staples",
             16,
-            50,
-            280,
-            58,
-            1,
+            64,
+            300,
+            54,
+            2,
             "dim_commodity",
             "commodity_name",
         ),
         _slicer_spec(
             p3,
             "v32_slicer_group",
-            "Select County Group",
+            "County Group",
             "ASAL vs Agri/Urban",
-            308,
-            50,
-            280,
-            58,
-            2,
+            328,
+            64,
+            300,
+            54,
+            3,
             "dim_markets",
             "county_group",
         ),
-        _card_spec(
+        _slicer_spec(
             p3,
-            "v33_card_mom",
-            "MoM Price Change %",
-            "Gap-safe prior month delta",
-            600,
-            50,
-            216,
-            58,
-            3,
-            "MoM Change %",
-            PALETTE_ORANGE,
-        ),
-        _card_spec(
-            p3,
-            "v34_card_rolling",
-            "12m Rolling Avg (KES)",
-            "Trailing 12-month smoothed",
-            828,
-            50,
-            216,
-            58,
+            "v33_slicer_region",
+            "Region",
+            "7 Kenya regions",
+            640,
+            64,
+            300,
+            54,
             4,
-            "12-Month Rolling Avg (KES)",
-            PALETTE_BLUE,
+            "dim_markets",
+            "adm1_name",
         ),
-        _card_spec(
+        _slicer_spec(
             p3,
-            "v35_card_volatility_kes",
-            "Price Volatility (KES)",
-            "Sample StdDev (STDEV.S)",
-            1056,
-            50,
-            208,
-            58,
+            "v34_slicer_season",
+            "Cropping Season",
+            "4 rainfall regimes",
+            952,
+            64,
+            312,
+            54,
             5,
-            "Price Volatility (KES)",
-            PALETTE_TEAL,
+            "dim_date",
+            "season",
         ),
         VisualSpec(
             page_name=p3,
             visual_id="v36_line_rolling_price",
             visual_type="lineChart",
-            title="Beans & Maize Retail Prices (KES/kg, 2007-2026)",
-            subtitle="Filtered to 1 kg staples (Beans & Maize); hover for 12m Rolling Avg & MoM %",
+            title="Beans & Maize Retail Prices (KES/kg, 2007 to 2026)",
+            subtitle="Filtered to 1 kg staples | Hover for 12m Rolling Avg, MoM % & StdDev",
             x=16,
-            y=116,
-            width=740,
-            height=288,
+            y=124,
+            width=732,
+            height=292,
             z=6,
             query_state={
                 "Category": {"projections": [col_proj("dim_date", "full_date", active=True)]},
-                "Series": {"projections": [col_proj("dim_commodity", "commodity_name", active=True)]},
+                "Series": {
+                    "projections": [
+                        col_proj("dim_commodity", "commodity_name", active=True, display_name="Commodity")
+                    ]
+                },
                 "Y": {"projections": [meas_proj("fact_prices", "Avg Price (KES)")]},
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "12-Month Rolling Avg (KES)"),
                         meas_proj("fact_prices", "MoM Change %"),
+                        meas_proj("fact_prices", "Price Volatility (KES)"),
                     ]
                 },
             },
-            filter_config=_commodity_in_filter("f_v36_staples", ("beans", "maize_fao")),
+            objects=_clean_chart_objects(),
+            filter_config=_categorical_in_filter(
+                "f_v36_staples", "dim_commodity", "commodity_id", ("beans", "maize_fao")
+            ),
         ),
         VisualSpec(
             page_name=p3,
             visual_id="v37_line_seasonality",
             visual_type="lineChart",
-            title="Monthly Seasonal Index Cycle (Jan-Dec, Parity = 1.000)",
+            title="Monthly Seasonal Index Cycle (Jan to Dec, Parity = 1.000)",
             subtitle="Crop staples peak Jun-Sep; live goats peak Dec-Feb",
-            x=768,
-            y=116,
-            width=496,
-            height=288,
+            x=760,
+            y=124,
+            width=504,
+            height=292,
             z=7,
             query_state={
                 "Category": {"projections": [col_proj("dim_date", "month_name", active=True)]},
                 "Series": {
-                    "projections": [col_proj("dim_commodity", "commodity_name", active=True)]
+                    "projections": [
+                        col_proj("dim_commodity", "commodity_name", active=True, display_name="Commodity")
+                    ]
                 },
                 "Y": {"projections": [meas_proj("fact_prices", "Seasonal Index")]},
             },
+            objects=_clean_chart_objects(),
         ),
         VisualSpec(
             page_name=p3,
             visual_id="v38_bar_volatility",
             visual_type="barChart",
-            title="Counties by Maize Price Volatility (CV % = StdDev / Mean)",
+            title="Top 10 Counties by Maize Price Volatility (CV %)",
             subtitle="Filtered to Maize (1 kg) | Teal: Agri/Urban, Orange: ASAL",
             x=16,
-            y=412,
-            width=620,
-            height=298,
+            y=424,
+            width=618,
+            height=286,
             z=8,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "adm2_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "Y": {"projections": [meas_proj("fact_prices", "Price Volatility CV %")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "adm2_name", active=True, display_name="County")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "Y": {
+                    "projections": [meas_proj("fact_prices", "Price Volatility CV %", display_name="CV %")]
+                },
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "Price Volatility (KES)"),
@@ -911,159 +1276,188 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
                 },
             },
             sort=SortSpec("fact_prices", "Price Volatility CV %", "Descending"),
-            objects=_data_labels_on(),
-            filter_config=_commodity_in_filter("f_v38_maize_cv", ("maize_fao",)),
+            objects=_clean_chart_objects(
+                data_labels=True,
+                hide_legend=True,
+                hide_y_title=True,
+                category_font_size="8",
+            ),
+            filter_config=_combine_filters(
+                _categorical_in_filter("f_v38_maize_cv", "dim_commodity", "commodity_id", ("maize_fao",)),
+                _categorical_in_filter("f_v38_top10_cv", "dim_markets", "adm2_name", TOP10_MAIZE_CV_COUNTIES),
+            ),
         ),
         VisualSpec(
             page_name=p3,
             visual_id="v39_col_season_window",
             visual_type="clusteredColumnChart",
             title="Seasonal Index by Kenyan Cropping Window & Commodity",
-            subtitle="Includes gap-safe MoM Change % & Avg Price tooltips",
-            x=648,
-            y=412,
-            width=616,
-            height=298,
+            subtitle="Includes gap-safe EDATE MoM % and Avg Price tooltips",
+            x=646,
+            y=424,
+            width=618,
+            height=286,
             z=9,
             query_state={
                 "Category": {"projections": [col_proj("dim_date", "season", active=True)]},
                 "Series": {
-                    "projections": [col_proj("dim_commodity", "commodity_name", active=True)]
+                    "projections": [
+                        col_proj("dim_commodity", "commodity_name", active=True, display_name="Commodity")
+                    ]
                 },
                 "Y": {"projections": [meas_proj("fact_prices", "Seasonal Index")]},
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "Avg Price (KES)"),
                         meas_proj("fact_prices", "MoM Change %"),
+                        meas_proj("fact_prices", "Price Volatility (KES)"),
                     ]
                 },
             },
-            objects=_data_labels_on(),
+            objects=_clean_chart_objects(data_labels=True),
         ),
-        # Page 4: Decisions and Action (banner + 9 visuals)
+        # Page 4: Decisions and Action (banner + nav + 8 visuals = 10)
         _banner_spec(p4, p4_sub),
+        _page_nav_spec(p4),
         _slicer_spec(
             p4,
             "v41_slicer_group",
-            "Target County Group",
+            "County Group",
             "ASAL vs Agri/Urban",
             16,
-            50,
-            280,
-            58,
-            1,
+            64,
+            300,
+            54,
+            2,
             "dim_markets",
             "county_group",
         ),
         _slicer_spec(
-            p4, "v42_slicer_region", "Target Region", "7 Kenya regions", 308, 50, 280, 58, 2, "dim_markets", "adm1_name"
-        ),
-        _card_spec(
             p4,
-            "v43_card_coverage",
-            "Field Survey Coverage %",
-            "Raw enumerator share",
-            600,
-            50,
-            216,
-            58,
+            "v42_slicer_region",
+            "Region",
+            "7 Kenya regions",
+            328,
+            64,
+            300,
+            54,
             3,
-            "Survey Coverage Rate %",
-            PALETTE_RED,
+            "dim_markets",
+            "adm1_name",
         ),
-        _card_spec(
+        _slicer_spec(
             p4,
-            "v44_card_gap",
-            "Affordability Gap (KES)",
-            "Local vs national mean",
-            828,
-            50,
-            216,
-            58,
+            "v43_slicer_commodity",
+            "Commodity",
+            "3 tracked staples",
+            640,
+            64,
+            300,
+            54,
             4,
-            "Affordability Gap (KES)",
-            PALETTE_ORANGE,
+            "dim_commodity",
+            "commodity_name",
         ),
-        _card_spec(
+        _slicer_spec(
             p4,
-            "v45_card_completeness",
-            "Data Completeness %",
-            "Model coverage rate",
-            1056,
-            50,
-            208,
-            58,
+            "v44_slicer_year",
+            "Year",
+            "2007 to 2026",
+            952,
+            64,
+            312,
+            54,
             5,
-            "Data Completeness %",
-            PALETTE_TEAL,
+            "dim_date",
+            "year",
         ),
         VisualSpec(
             page_name=p4,
             visual_id="v46_scatter_coverage_risk",
             visual_type="scatterChart",
-            title="Monitoring Priority Quadrant: Survey % (X) vs Maize Volatility CV % (Y)",
+            title="Monitoring Priority Quadrant: Survey % vs Maize CV %",
             subtitle="Filtered to Maize (1 kg) | Top-left flags urgent enumerator blind spots",
             x=16,
-            y=116,
-            width=580,
-            height=288,
+            y=124,
+            width=574,
+            height=292,
             z=6,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "adm2_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "X": {"projections": [meas_proj("fact_prices", "Survey Coverage Rate %")]},
-                "Y": {"projections": [meas_proj("fact_prices", "Price Volatility CV %")]},
-                "Size": {"projections": [meas_proj("fact_prices", "Data Completeness %")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "adm2_name", active=True, display_name="County")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "X": {
+                    "projections": [meas_proj("fact_prices", "Survey Coverage Rate %", display_name="Survey %")]
+                },
+                "Y": {
+                    "projections": [meas_proj("fact_prices", "Price Volatility CV %", display_name="Maize CV %")]
+                },
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "YoY Inflation %"),
                         meas_proj("fact_prices", "Affordability Gap (KES)"),
+                        meas_proj("fact_prices", "Data Completeness %"),
                     ]
                 },
             },
-            filter_config=_commodity_in_filter("f_v46_maize_quad", ("maize_fao",)),
+            objects=_scatter_objects(bubble_size="-14D"),
+            filter_config=_categorical_in_filter(
+                "f_v46_maize_quad", "dim_commodity", "commodity_id", ("maize_fao",)
+            ),
         ),
         VisualSpec(
             page_name=p4,
             visual_id="v47_table_priority_action",
             visual_type="tableEx",
-            title="County Priority Action Matrix: Inflation, Gap & Survey Rate",
-            subtitle="Combines index rank, price gap, and direct field check share",
-            x=608,
-            y=116,
-            width=656,
-            height=288,
+            title="County Priority Action Matrix: Survey Rate, CV & Maize Gap",
+            subtitle="Filtered to Maize (1 kg) | Sorted by Affordability Gap descending",
+            x=602,
+            y=124,
+            width=662,
+            height=292,
             z=7,
             query_state={
                 "Values": {
                     "projections": [
-                        col_proj("dim_markets", "adm2_name"),
-                        col_proj("dim_markets", "county_group"),
-                        meas_proj("fact_prices", "Data Completeness %"),
-                        meas_proj("fact_prices", "Survey Coverage Rate %"),
-                        meas_proj("fact_prices", "YoY Inflation %"),
-                        meas_proj("fact_prices", "Affordability Gap (KES)"),
-                        meas_proj("fact_prices", "Avg Price (KES)"),
-                        meas_proj("fact_prices", "County Inflation Rank"),
+                        col_proj("dim_markets", "adm2_name", display_name="County"),
+                        col_proj("dim_markets", "county_group", display_name="Group"),
+                        meas_proj("fact_prices", "Survey Coverage Rate %", display_name="Survey %"),
+                        meas_proj("fact_prices", "Price Volatility CV %", display_name="Maize CV %"),
+                        meas_proj("fact_prices", "Affordability Gap (KES)", display_name="Gap (KES)"),
+                        meas_proj("fact_prices", "Avg Price (KES)", display_name="Avg (KES)"),
                     ]
                 }
             },
+            sort=SortSpec("fact_prices", "Affordability Gap (KES)", "Descending"),
+            objects=_clean_table_objects(),
+            filter_config=_categorical_in_filter(
+                "f_v47_maize_tbl", "dim_commodity", "commodity_id", ("maize_fao",)
+            ),
         ),
         VisualSpec(
             page_name=p4,
             visual_id="v48_bar_coverage_gap",
             visual_type="barChart",
-            title="Counties by Direct Field Survey Coverage % (Sentinel Expansion)",
-            subtitle="Lowest coverage targets prioritized for enumerator deployment",
+            title="10 Low-Survey Counties Under 5% (Sentinel Expansion)",
+            subtitle="Teal: Agri/Urban, Orange: ASAL | Plus 8 zero-survey counties (0.00%)",
             x=16,
-            y=412,
-            width=580,
-            height=298,
+            y=424,
+            width=574,
+            height=286,
             z=8,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "adm2_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "Y": {"projections": [meas_proj("fact_prices", "Survey Coverage Rate %")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "adm2_name", active=True, display_name="County")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "Y": {
+                    "projections": [meas_proj("fact_prices", "Survey Coverage Rate %", display_name="Survey %")]
+                },
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "Data Completeness %"),
@@ -1072,23 +1466,37 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
                 },
             },
             sort=SortSpec("fact_prices", "Survey Coverage Rate %", "Ascending"),
-            objects=_data_labels_on(),
+            objects=_clean_chart_objects(
+                data_labels=True,
+                hide_legend=True,
+                hide_y_title=True,
+                category_font_size="8",
+            ),
+            filter_config=_categorical_in_filter(
+                "f_v48_low_survey", "dim_markets", "adm2_name", LOW_SURVEY_COUNTIES
+            ),
         ),
         VisualSpec(
             page_name=p4,
             visual_id="v49_col_basket_by_region",
             visual_type="clusteredColumnChart",
-            title="Average Commodity Price (KES) by Region & County Group",
-            subtitle="Regional cost disparities across 7 covered Kenyan provinces",
-            x=608,
-            y=412,
-            width=656,
-            height=298,
+            title="Average Maize Price (KES/kg) by Region & County Group",
+            subtitle="Filtered to Maize (1 kg) | Unit-safe comparison across 7 regions",
+            x=602,
+            y=424,
+            width=662,
+            height=286,
             z=9,
             query_state={
-                "Category": {"projections": [col_proj("dim_markets", "adm1_name", active=True)]},
-                "Series": {"projections": [col_proj("dim_markets", "county_group", active=True)]},
-                "Y": {"projections": [meas_proj("fact_prices", "Avg Price (KES)")]},
+                "Category": {
+                    "projections": [col_proj("dim_markets", "adm1_name", active=True, display_name="Region")]
+                },
+                "Series": {
+                    "projections": [col_proj("dim_markets", "county_group", active=True, display_name="Group")]
+                },
+                "Y": {
+                    "projections": [meas_proj("fact_prices", "Avg Price (KES)", display_name="Avg Maize (KES/kg)")]
+                },
                 "Tooltips": {
                     "projections": [
                         meas_proj("fact_prices", "YoY Inflation %"),
@@ -1096,20 +1504,78 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
                     ]
                 },
             },
-            objects=_data_labels_on(),
+            objects=_clean_chart_objects(data_labels=True),
+            filter_config=_categorical_in_filter(
+                "f_v49_maize_reg", "dim_commodity", "commodity_id", ("maize_fao",)
+            ),
         ),
     )
 
 
 def _container_objects(spec: VisualSpec) -> dict[str, Any]:
-    """Build executive visualContainerObjects styling for cards, charts, slicers, and banners."""
+    """Build executive visualContainerObjects styling for cards, charts, slicers, and nav."""
+    if spec.is_page_nav:
+        return {
+            "background": [
+                {
+                    "properties": {
+                        "show": _lit("true"),
+                        "color": _solid_color(PALETTE_NAVY),
+                        "transparency": _lit("0D"),
+                    }
+                }
+            ],
+            "border": [
+                {
+                    "properties": {
+                        "show": _lit("true"),
+                        "color": _solid_color(PALETTE_NAVY),
+                        "radius": _lit("0D"),
+                        "width": _lit("1D"),
+                    }
+                }
+            ],
+            "dropShadow": [{"properties": {"show": _lit("false")}}],
+            "title": [{"properties": {"show": _lit("false")}}],
+            "subTitle": [{"properties": {"show": _lit("false")}}],
+            "divider": [{"properties": {"show": _lit("false")}}],
+            "visualHeader": [{"properties": {"show": _lit("false")}}],
+            "padding": [
+                {
+                    "properties": {
+                        "top": _lit("8D"),
+                        "bottom": _lit("8D"),
+                        "left": _lit("6D"),
+                        "right": _lit("10D"),
+                    }
+                }
+            ],
+        }
+
     escaped_title = spec.title.replace("'", "''")
     escaped_sub = spec.subtitle.replace("'", "''")
 
     if spec.is_banner:
         return {
-            "background": [{"properties": {"show": _lit("true"), "color": _solid_color(PALETTE_NAVY), "transparency": _lit("0D")}}],
-            "border": [{"properties": {"show": _lit("true"), "color": _solid_color(PALETTE_NAVY), "radius": _lit("6D"), "width": _lit("1D")}}],
+            "background": [
+                {
+                    "properties": {
+                        "show": _lit("true"),
+                        "color": _solid_color(PALETTE_NAVY),
+                        "transparency": _lit("0D"),
+                    }
+                }
+            ],
+            "border": [
+                {
+                    "properties": {
+                        "show": _lit("true"),
+                        "color": _solid_color(PALETTE_NAVY),
+                        "radius": _lit("0D"),
+                        "width": _lit("1D"),
+                    }
+                }
+            ],
             "dropShadow": [{"properties": {"show": _lit("false")}}],
             "title": [
                 {
@@ -1130,8 +1596,8 @@ def _container_objects(spec: VisualSpec) -> dict[str, Any]:
                     "properties": {
                         "show": _lit("true"),
                         "text": _lit(f"'{escaped_sub}'"),
-                        "fontColor": _solid_color("#93C5FD"),
-                        "fontSize": _lit("8D"),
+                        "fontColor": _solid_color("#BAE6FD"),
+                        "fontSize": _lit("8.5D"),
                         "fontFamily": _lit("'Segoe UI'"),
                         "titleWrap": _lit("false"),
                     }
@@ -1142,10 +1608,10 @@ def _container_objects(spec: VisualSpec) -> dict[str, Any]:
             "padding": [
                 {
                     "properties": {
-                        "top": _lit("2D"),
-                        "bottom": _lit("2D"),
-                        "left": _lit("10D"),
-                        "right": _lit("10D"),
+                        "top": _lit("4D"),
+                        "bottom": _lit("4D"),
+                        "left": _lit("12D"),
+                        "right": _lit("6D"),
                     }
                 }
             ],
@@ -1153,8 +1619,25 @@ def _container_objects(spec: VisualSpec) -> dict[str, Any]:
 
     is_slicer = spec.visual_type == "slicer"
     return {
-        "background": [{"properties": {"show": _lit("true"), "color": _solid_color("#FFFFFF"), "transparency": _lit("0D")}}],
-        "border": [{"properties": {"show": _lit("true"), "color": _solid_color(spec.border_color), "radius": _lit("8D"), "width": _lit("1D")}}],
+        "background": [
+            {
+                "properties": {
+                    "show": _lit("true"),
+                    "color": _solid_color("#FFFFFF"),
+                    "transparency": _lit("0D"),
+                }
+            }
+        ],
+        "border": [
+            {
+                "properties": {
+                    "show": _lit("true"),
+                    "color": _solid_color(spec.border_color),
+                    "radius": _lit("8D"),
+                    "width": _lit("1D"),
+                }
+            }
+        ],
         "dropShadow": [
             {
                 "properties": {
@@ -1173,10 +1656,10 @@ def _container_objects(spec: VisualSpec) -> dict[str, Any]:
                     "text": _lit(f"'{escaped_title}'"),
                     "fontColor": _solid_color(PALETTE_NAVY),
                     "background": _solid_color(PALETTE_HEADER_BG),
-                    "fontSize": _lit("9D" if is_slicer else "10D"),
+                    "fontSize": _lit("8.5D" if is_slicer else "10D"),
                     "bold": _lit("true"),
                     "fontFamily": _lit("'Segoe UI Semibold'"),
-                    "titleWrap": _lit("true"),
+                    "titleWrap": _lit("false" if is_slicer else "true"),
                 }
             }
         ],
@@ -1188,16 +1671,24 @@ def _container_objects(spec: VisualSpec) -> dict[str, Any]:
                     "fontColor": _solid_color(PALETTE_SLATE),
                     "fontSize": _lit("8D"),
                     "fontFamily": _lit("'Segoe UI'"),
-                    "titleWrap": _lit("true"),
+                    "titleWrap": _lit("false" if is_slicer else "true"),
                 }
             }
         ],
-        "divider": [{"properties": {"show": _lit("false" if is_slicer else "true"), "color": _solid_color(PALETTE_DIVIDER), "width": _lit("1D")}}],
+        "divider": [
+            {
+                "properties": {
+                    "show": _lit("false" if is_slicer else "true"),
+                    "color": _solid_color(PALETTE_DIVIDER),
+                    "width": _lit("1D"),
+                }
+            }
+        ],
         "padding": [
             {
                 "properties": {
-                    "top": _lit("3D" if is_slicer else "6D"),
-                    "bottom": _lit("3D" if is_slicer else "6D"),
+                    "top": _lit("2D" if is_slicer else "5D"),
+                    "bottom": _lit("2D" if is_slicer else "5D"),
                     "left": _lit("6D"),
                     "right": _lit("6D"),
                 }
@@ -1208,28 +1699,29 @@ def _container_objects(spec: VisualSpec) -> dict[str, Any]:
 
 def spec_to_visual_payload(spec: VisualSpec) -> dict[str, Any]:
     """Convert a VisualSpec into a schema-valid visual.json dictionary."""
-    query: dict[str, Any] = {"queryState": spec.query_state}
-    if spec.sort is not None:
-        query["sortDefinition"] = {
-            "sort": [
-                {
-                    "field": {
-                        "Measure": {
-                            "Expression": {"SourceRef": {"Entity": spec.sort.entity}},
-                            "Property": spec.sort.prop,
-                        }
-                    },
-                    "direction": spec.sort.direction,
-                }
-            ],
-            "isDefaultSort": False,
-        }
-
     visual_obj: dict[str, Any] = {
         "visualType": spec.visual_type,
-        "query": query,
         "visualContainerObjects": _container_objects(spec),
     }
+    if spec.query_state is not None:
+        query: dict[str, Any] = {"queryState": spec.query_state}
+        if spec.sort is not None:
+            query["sortDefinition"] = {
+                "sort": [
+                    {
+                        "field": {
+                            "Measure": {
+                                "Expression": {"SourceRef": {"Entity": spec.sort.entity}},
+                                "Property": spec.sort.prop,
+                            }
+                        },
+                        "direction": spec.sort.direction,
+                    }
+                ],
+                "isDefaultSort": False,
+            }
+        visual_obj["query"] = query
+
     if spec.objects is not None:
         visual_obj["objects"] = spec.objects
 
@@ -1279,7 +1771,7 @@ def generate_pbir_visuals(
     specs: Sequence[VisualSpec] | None = None,
     report_root: Path | None = None,
 ) -> dict[str, list[Path]]:
-    """Write theme, report.json, styled page.json files, and all 44 visual.json files."""
+    """Write theme, report.json, styled page.json files, and all 46 visual.json files."""
     resolved_report_root = report_root or pages_dir.parent.parent
     theme_dir = resolved_report_root / "StaticResources" / "RegisteredResources"
     theme_dir.mkdir(parents=True, exist_ok=True)
@@ -1330,7 +1822,7 @@ def generate_pbir_visuals(
 
 
 def main() -> None:
-    """CLI entrypoint to generate custom theme, page styling, and 44 PBIR visuals."""
+    """CLI entrypoint to generate custom theme, page styling, and 46 PBIR visuals."""
     written = generate_pbir_visuals()
     total = sum(len(paths) for paths in written.values())
     for page, paths in written.items():

@@ -62,7 +62,7 @@ def _iter_field_refs(obj: Any) -> list[tuple[str, str, str]]:
 
 
 def test_report_json_defines_four_pages() -> None:
-    """Confirm custom theme, PBIR pages, 44 visual.json files, and bound TMDL symbols."""
+    """Confirm custom theme, PBIR pages, 46 non-overlapping visuals, and bound TMDL symbols."""
     report_root = PROJECT_ROOT / "pbip" / "mzigo-chakula.Report"
     theme_path = report_root / "StaticResources" / "RegisteredResources" / "MzigoChakulaTheme.json"
     assert theme_path.is_file(), f"Missing custom report theme: {theme_path}"
@@ -80,6 +80,12 @@ def test_report_json_defines_four_pages() -> None:
         "Trends and Diagnostics",
         "Decisions and Action",
     ]
+    expected_counts = {
+        "Executive Pulse": 16,
+        "County and Commodity": 10,
+        "Trends and Diagnostics": 10,
+        "Decisions and Action": 10,
+    }
     columns_by_table, measures_by_table = _load_tmdl_symbols()
 
     observed_titles: list[str] = []
@@ -89,31 +95,62 @@ def test_report_json_defines_four_pages() -> None:
         page_json_path = page_dir / "page.json"
         assert page_json_path.is_file(), f"Missing page.json: {page_json_path}"
         page_data = json.loads(page_json_path.read_text(encoding="utf-8"))
-        observed_titles.append(page_data["displayName"])
+        title = page_data["displayName"]
+        observed_titles.append(title)
         assert page_data["width"] == 1280
         assert page_data["height"] == 720
         assert (page_dir / "visuals" / "v00_header_banner" / "visual.json").is_file()
+        nav_path = page_dir / "visuals" / "v00_page_nav" / "visual.json"
+        assert nav_path.is_file(), f"Missing pageNavigator visual on {page_id}"
+        nav_payload = json.loads(nav_path.read_text(encoding="utf-8"))
+        assert nav_payload["visual"]["visualType"] == "pageNavigator"
 
-        visual_files = list((page_dir / "visuals").glob("*/visual.json"))
-        assert len(visual_files) >= 9, f"Expected >=9 visuals on {page_id}, found {len(visual_files)}"
+        visual_files = sorted((page_dir / "visuals").glob("*/visual.json"))
+        expected_n = expected_counts.get(title)
+        assert len(visual_files) == expected_n, (
+            f"Expected {expected_n} visuals on {title}, found {len(visual_files)}"
+        )
         total_visuals += len(visual_files)
 
+        boxes: list[tuple[str, float, float, float, float]] = []
         for vf in visual_files:
             payload = json.loads(vf.read_text(encoding="utf-8"))
-            refs = _iter_field_refs(payload["visual"]["query"])
-            assert refs, f"Visual {vf} has no field projections"
-            for kind, entity, prop in refs:
-                if kind == "Column":
-                    assert prop in columns_by_table.get(entity, set()), (
-                        f"{vf}: unknown column {entity}[{prop}]"
-                    )
-                else:
-                    assert prop in measures_by_table.get(entity, set()), (
-                        f"{vf}: unknown measure {entity}[{prop}]"
-                    )
+            visual = payload["visual"]
+            if visual["visualType"] == "pageNavigator":
+                assert "query" not in visual, f"{vf}: pageNavigator must not define query"
+            else:
+                refs = _iter_field_refs(visual["query"])
+                assert refs, f"Visual {vf} has no field projections"
+                for kind, entity, prop in refs:
+                    if kind == "Column":
+                        assert prop in columns_by_table.get(entity, set()), (
+                            f"{vf}: unknown column {entity}[{prop}]"
+                        )
+                    else:
+                        assert prop in measures_by_table.get(entity, set()), (
+                            f"{vf}: unknown measure {entity}[{prop}]"
+                        )
+
+            pos = payload["position"]
+            x, y = pos["x"], pos["y"]
+            w, h = pos["width"], pos["height"]
+            assert x >= 0 and y >= 0, f"{vf}: negative position ({x}, {y})"
+            assert w > 0 and h > 0, f"{vf}: non-positive size ({w}x{h})"
+            assert x + w <= 1280 and y + h <= 720, (
+                f"{vf}: exceeds 1280x720 bounds ({x}, {y}, {x + w}, {y + h})"
+            )
+            boxes.append((vf.parent.name, x, y, x + w, y + h))
+
+        for i, (name_a, ax0, ay0, ax1, ay1) in enumerate(boxes):
+            for name_b, bx0, by0, bx1, by1 in boxes[i + 1 :]:
+                disjoint = ax1 <= bx0 or bx1 <= ax0 or ay1 <= by0 or by1 <= ay0
+                assert disjoint, (
+                    f"{title}: overlapping visuals {name_a} {(ax0, ay0, ax1, ay1)} "
+                    f"and {name_b} {(bx0, by0, bx1, by1)}"
+                )
 
     assert observed_titles == expected_titles
-    assert total_visuals == 44
+    assert total_visuals == 46
 
 
 def test_week4_screenshots_dimensions_and_dpi() -> None:

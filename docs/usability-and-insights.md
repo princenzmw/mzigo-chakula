@@ -6,26 +6,25 @@
 
 ---
 
-## 1. Four-Page Report Architecture (18 Visuals Across 4 Pages)
+## 1. Four-Page Report Architecture (46 PBIR Visuals Across 4 Pages)
 
-All four report pages are defined in `pbip/mzigo-chakula.Report/report.json` (`1280 x 720`, 16:9) and rendered at 300 DPI under `screenshots/` and `output/`:
+All four report pages are defined in `pbip/mzigo-chakula.Report/definition/pages/` (`1280 x 720`, 16:9, custom theme `MzigoChakulaTheme.json`) and captured directly from Power BI Desktop at `2400 x 1350` (`300 DPI`) under `screenshots/` and `output/`:
 
-| Page | Purpose | Key Visuals Included | Analytical Question(s) |
+| Page | Purpose | Key Visuals Included (Live PBIR) | Analytical Question(s) |
 | --- | --- | --- | --- |
-| `1. Executive Pulse` (`screenshots/page1-executive-pulse.png`) | Rapid situational overview | 5 KPI cards, 238-month National Food Price Index line chart, Top 10 Counties by 12m YoY Inflation bar chart, Commodity summary matrix, Exception alerts | Q1, Q2 |
-| `2. County & Commodity` (`screenshots/page2-county-commodity.png`) | Geographic and commodity comparison | Diverging Maize Affordability Gap bar chart, 233-market Lon/Lat scatter map, ASAL vs. Agri/Urban CV grouped bars, Top 8 county cost matrix with drill-through | Q1, Q3, Q5 |
-| `3. Trends & Diagnostics` (`screenshots/page3-trends-diagnostics.png`) | Seasonality, smoothing, and anomaly audit | Beans/Maize 238-month prices + 12m rolling avg + custom tooltip card, Jan to Dec Seasonal Index curves, Top 10 county Maize CV bars, Outlier diagnostic breakdown | Q2, Q4 |
-| `4. Decisions & Action` (`screenshots/page4-decisions-action.png`) | Stakeholder response matrix | Survey Coverage % vs. Maize CV quadrant scatter, Top 10 Priority Action county table, 3 Decision playbook cards, Limitations footer | All (Q1 to Q5) |
+| `1. Executive Pulse` (`screenshots/page1-executive-pulse.png`) | Rapid situational overview (`16` visuals) | Top banner + native `pageNavigator`, 5 dropdown slicers, 5 KPI cards (`1.88`, `+7.56%`, `1.92 YTD`, `100.00%`, `4.49%`), 238-month National Food Price Index line chart, Top 10 Counties by Recent 12m YoY Inflation bar chart, Recent 12m Commodity Matrix, Top 10 County Watchlist table | Q1, Q2 |
+| `2. County & Commodity` (`screenshots/page2-county-commodity.png`) | Geographic and commodity comparison (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Top 5 Deficit vs. Bottom 5 Surplus Maize Affordability Gap diverging bar chart, 233-market Lon/Lat scatter plot, ASAL vs. Agri/Urban CV% grouped columns, County Maize Affordability & Survey table | Q1, Q3, Q5 |
+| `3. Trends & Diagnostics` (`screenshots/page3-trends-diagnostics.png`) | Seasonality, smoothing, and volatility audit (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Beans & Maize 238-month prices (with `12m Rolling Avg`, `MoM %`, and `StdDev` hover tooltips), Jan-to-Dec Seasonal Index curves, Top 10 Counties by Maize CV% bars, Seasonal Index by Cropping Window columns | Q2, Q4 |
+| `4. Decisions & Action` (`screenshots/page4-decisions-action.png`) | Stakeholder triage and monitoring matrix (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Survey % vs. Maize CV% Monitoring Priority scatter (plotting zero-survey counties at `0.00%`), County Priority Action Matrix, 10 Low-Survey Counties Under 5% bar chart, Regional Maize Price (KES/kg) grouped columns | All (Q1 to Q5) |
 
 ---
 
-## 2. Interactive Controls Designed in Report Architecture
+## 2. Interactive Controls Built in Power BI Desktop
 
-- **Global Slicer Ribbon:** Filters all visuals across `dim_date[year]`, `dim_markets[adm1_name]`, `dim_markets[county_group]`, `dim_commodity[commodity_name]`, and `dim_date[season]` using single-direction `1:*` relationships.
-- **Cross-Filtering:** Clicking any county bar or map marker filters time trends, KPI cards, and commodity tables synchronously without bidirectional ambiguity.
-- **County-to-Market Drill-Through:** `Page 2` supports drilling from any `adm2_name` county row directly to individual `mkt_name` physical markets.
-- **Custom Tooltips:** Hovering time-series or county visuals displays closing KES price, `MoM Change %`, and `12-Month Rolling Avg (KES)`.
-- **Top Header Navigation:** Persistent 4-tab bar across the top of all four pages (`Executive Pulse`, `County & Commodity`, `Trends & Diagnostics`, `Decisions & Action`).
+- **Global Slicer Dropdowns:** Every page provides dropdown slicers across `dim_date[year]`, `dim_markets[adm1_name]`, `dim_markets[county_group]`, `dim_commodity[commodity_name]`, and `dim_date[season]` over single-direction `1:*` joins.
+- **Cross-Filtering:** Clicking any county bar, scatter marker, or table row filters time trajectories and comparison metrics without bidirectional ambiguity.
+- **Hover Tooltips:** Line, bar, scatter, and column charts include rich hover tooltips for `12-Month Rolling Avg (KES)`, gap-safe `MoM Change %`, `Price Volatility (KES)`, and `County Inflation Rank`.
+- **Top Header Page Navigator:** Native PBIR `pageNavigator` button strip (`v00_page_nav`) integrated inside the `#0F2942` top banner on all four pages with `#0284C7` active page highlighting.
 
 ---
 
@@ -33,12 +32,12 @@ All four report pages are defined in `pbip/mzigo-chakula.Report/report.json` (`1
 
 | Category | Check Item | Verification Status |
 | --- | --- | --- |
-| **Color Palette** | Colorblind-safe Orange (`#EA580C`) vs. Teal (`#0F766E`) used for ASAL vs. Agricultural/Urban groups instead of Red/Green pairs | Verified |
-| **Honest Axes** | Price and index time-series start cleanly at zero (`0.0`); seasonal parity chart explicitly labels dashed `1.000` reference baseline | Verified |
-| **Typography** | Clear hierarchy (32pt page header, 21pt chart titles, 38pt KPI values, 16pt table labels) with zero overlapping annotations | Verified |
-| **Grain Integrity** | Composite `National Food Price Index` evaluated once per `(mkt_id, date_key)` via `SUMMARIZE` so multi-commodity pages never triple-count | Verified |
-| **Direct Labeling** | Horizontal bar charts and KPI cards include exact formatted units (`KES`, `%`, index points) directly on marks | Verified |
-| **Decision Framing** | Page 4 separates monitoring deployment, seasonal timing, and commodity targeting into concrete actions with limitations stated | Verified |
+| **Color Palette** | Colorblind-safe Orange (`#EA580C`) vs. Teal (`#0F766E`) distinguishes ASAL vs. Agricultural/Urban groups instead of Red/Green pairs | Verified live |
+| **Honest Axes** | Price and index charts start cleanly at zero (`0.0`) except the focused Seasonal Index parity plot (`0.90` to `1.10` around `1.000`) | Verified live |
+| **Non-Overlap & Bounds** | Automated unit tests verify all 46 PBIR visual containers fit inside `1280 x 720` with zero overlapping bounding boxes | Verified |
+| **Grain Integrity** | Composite `National Food Price Index` evaluates once per `(mkt_id, date_key)` via `SUMMARIZE` and mixed-unit table totals are suppressed (`totals = false`) | Verified live |
+| **Zero-Survey Visibility** | `Survey Coverage Rate %` adds `+ 0` to `COUNT(raw_spot_price)` so un-surveyed counties plot at `0.00%` instead of vanishing as blanks | Verified live |
+| **Decision Framing** | Page 4 isolates blind-spot priority quadrants, regional maize disparities, and sub-5% survey targets for direct enumerator deployment | Verified live |
 
 ---
 

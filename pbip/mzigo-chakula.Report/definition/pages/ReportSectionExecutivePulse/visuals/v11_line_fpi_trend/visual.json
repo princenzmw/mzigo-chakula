@@ -3,87 +3,14 @@
   "name": "v11_line_fpi_trend",
   "position": {
     "x": 16,
-    "y": 200,
-    "z": 11,
-    "width": 756,
-    "height": 256,
-    "tabOrder": 11
+    "y": 204,
+    "z": 12,
+    "width": 744,
+    "height": 274,
+    "tabOrder": 12
   },
   "visual": {
     "visualType": "lineChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_date"
-                    }
-                  },
-                  "Property": "full_date"
-                }
-              },
-              "queryRef": "dim_date.full_date",
-              "nativeQueryRef": "full_date",
-              "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "National Food Price Index"
-                }
-              },
-              "queryRef": "fact_prices.National Food Price Index",
-              "nativeQueryRef": "National Food Price Index"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "Cumulative Index YTD"
-                }
-              },
-              "queryRef": "fact_prices.Cumulative Index YTD",
-              "nativeQueryRef": "Cumulative Index YTD"
-            }
-          ]
-        },
-        "Tooltips": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_prices"
-                    }
-                  },
-                  "Property": "YoY Inflation %"
-                }
-              },
-              "queryRef": "fact_prices.YoY Inflation %",
-              "nativeQueryRef": "YoY Inflation %"
-            }
-          ]
-        }
-      }
-    },
     "visualContainerObjects": {
       "background": [
         {
@@ -212,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'National Food Price Index Trend (2007-2026)'"
+                  "Value": "'National Food Price Index Trend (2007 to 2026)'"
                 }
               }
             },
@@ -282,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Grain-safe composite index alongside YTD running mean'"
+                  "Value": "'Grain-safe composite index across 238 months | 19-year baseline: 1.20'"
                 }
               }
             },
@@ -358,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "5D"
                 }
               }
             },
@@ -380,6 +307,107 @@
               "expr": {
                 "Literal": {
                   "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "full_date"
+                }
+              },
+              "queryRef": "dim_date.full_date",
+              "nativeQueryRef": "full_date",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "National Food Price Index"
+                }
+              },
+              "queryRef": "fact_prices.National Food Price Index",
+              "nativeQueryRef": "National Food Price Index"
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "Cumulative Index YTD"
+                }
+              },
+              "queryRef": "fact_prices.Cumulative Index YTD",
+              "nativeQueryRef": "Cumulative Index YTD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_prices"
+                    }
+                  },
+                  "Property": "YoY Inflation %"
+                }
+              },
+              "queryRef": "fact_prices.YoY Inflation %",
+              "nativeQueryRef": "YoY Inflation %"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
