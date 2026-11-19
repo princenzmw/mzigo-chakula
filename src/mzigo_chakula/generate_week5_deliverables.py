@@ -186,7 +186,7 @@ def _findings_and_recommendations(
         ),
         (
             "Recommendation 2: Deploy Emergency Price Audits to Zero-Survey High-Risk Counties",
-            "Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 3.0% and Garissa at 3.9% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.",
+            "Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 1.96%, Marsabit at 3.00%, and Garissa at 3.85% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.",
         ),
         (
             "Recommendation 3: Pre-Position Grain Buffers Ahead of June-to-September Peaks",

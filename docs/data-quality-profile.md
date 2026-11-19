@@ -98,7 +98,7 @@ Normalizing these labels assigns every physical market to 27 Kenyan counties acr
 
 ## 5. County Coverage Imbalance
 
-Market representation varies sharply by county. Turkana alone contains 57 markets (24.5% of physical markets), Samburu has 20, and Garissa has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each.
+Market representation varies sharply by county. Turkana alone contains 57 markets (24.5% of physical markets), Garissa has 21, Samburu has 20, and Marsabit has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each.
 
 | Clean Region | Clean County | Markets | Sample Markets |
 | --- | --- | ---: | --- |

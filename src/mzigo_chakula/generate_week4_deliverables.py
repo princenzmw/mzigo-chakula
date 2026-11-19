@@ -907,7 +907,7 @@ def _render_page4(
         (
             "DECISION 1: WHERE TO MONITOR",
             "Target Field Survey Blind Spots",
-            "Samburu (20 mkts, 0.00% raw survey), Kisumu, Nakuru, and Nyeri lack field checks; Garissa (3.9%) and Turkana (3.0%) carry thin logs relative to size.",
+            "Samburu (20 mkts, 0.00% raw survey), Kisumu, Nakuru, and Nyeri lack field checks; Garissa (3.85%) and Turkana (1.96%) carry thin logs relative to size.",
             COLOR_BLUE,
         ),
         (

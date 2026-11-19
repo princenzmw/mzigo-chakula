@@ -1442,7 +1442,7 @@ def build_visual_specs() -> tuple[VisualSpec, ...]:
             visual_id="v48_bar_coverage_gap",
             visual_type="barChart",
             title="10 Low-Survey Counties Under 5% (Sentinel Expansion)",
-            subtitle="Teal: Agri/Urban, Orange: ASAL | Plus 8 zero-survey counties (0.00%)",
+            subtitle="Teal: Agri/Urban, Orange: ASAL | Plus 7 zero-survey counties (0.00%)",
             x=16,
             y=424,
             width=574,

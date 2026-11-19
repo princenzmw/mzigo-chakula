@@ -174,7 +174,7 @@ Interactions: Slicers (county, commodity category, year range, season), cross-fi
 ## Recommendations
 
 1. **Recommendation 1: Decouple Grain Price Tracking From the Composite Index:** County food-security dashboards should alert on commodity-specific [Commodity YoY Inflation %] and [Avg Price (KES)] for Maize (1 kg) and Beans (1 kg) alongside [National Food Price Index], because raw index shifts reflect 99.99% co-movement with Goat (1 head) prices.
-2. **Recommendation 2: Deploy Emergency Price Audits to Zero-Survey High-Risk Counties:** Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 3.0% and Garissa at 3.9% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.
+2. **Recommendation 2: Deploy Emergency Price Audits to Zero-Survey High-Risk Counties:** Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 1.96%, Marsabit at 3.00%, and Garissa at 3.85% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.
 3. **Recommendation 3: Pre-Position Grain Buffers Ahead of June-to-September Peaks:** Trigger county maize and bean strategic reserve releases in May before the Cool Dry / Harvest (Jun-Sep) seasonal price peak (1.023 maize index, 1.013 beans index), and schedule livestock offtake or pastoral support for Jan-Feb (1.060 goat peak).
 4. **Recommendation 4: Target ASAL Transport Subsidies Using Affordability Gaps:** Direct staple grain logistics support toward chronic net-deficit markets with the largest positive [Affordability Gap (KES)], specifically Turkana (+15.26 KES/kg), Mandera (+10.65 KES/kg), and Kisumu (+9.89 KES/kg), paired with market linkages from surplus hubs like Lamu (-17.51 KES/kg) and Kitui (-15.59 KES/kg).
 5. **Recommendation 5: Expand Market Instrumentation Into Western Kenya Counties:** Partner with KNBS and county trade offices to onboard physical market monitoring sites across Western Province and single-market counties (Embu, Lamu, Machakos, Nyeri, Uasin Gishu) so future RTFP releases reflect all 47 Kenyan counties.
@@ -192,7 +192,7 @@ All four report pages (300 DPI) and the star schema diagram are saved in the rep
 ## Limitations
 
 * Data consists of market-level retail prices without household income or expenditure surveys. Affordability is inferred from regional price levels and cross-county price gaps.
-* The 233 physical markets cover 27 of Kenya's 47 counties unevenly. Turkana has 57 monitored markets, Samburu has 20, and Garissa has 19, while five counties have 1 market each and Western Province has no markets in this release.
+* The 233 physical markets cover 27 of Kenya's 47 counties unevenly. Turkana has 57 monitored markets, Garissa has 21, Samburu has 20, and Marsabit has 19, while five counties have 1 market each and Western Province has no markets in this release.
 * The dataset ends in October 2026. Recent events may not be fully captured.
 * Food price index is a composite measure that masks individual commodity movements.
 * No income data is included. Affordability gap is a price comparison rather than a true income-to-cost ratio.
