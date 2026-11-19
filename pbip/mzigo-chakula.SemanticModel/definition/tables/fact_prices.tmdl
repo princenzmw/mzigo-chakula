@@ -18,8 +18,19 @@ table fact_prices
 		displayFolder: 01. Core Price & Index
 		lineageTag: d281bfff-7bfd-4d70-aabe-f1c142214dce
 
-	/// Mean closing commodity price shifted back exactly 12 months via SAMEPERIODLASTYEAR.
-	measure 'Prior Year Price (KES)' = CALCULATE([Avg Price (KES)], SAMEPERIODLASTYEAR(dim_date[full_date]))
+	/// Mean closing commodity price shifted back exactly 12 months via gap-safe EDATE + TREATAS.
+	measure 'Prior Year Price (KES)' =
+			VAR PriorDates =
+			    SELECTCOLUMNS(
+			        VALUES(dim_date[full_date]),
+			        "prior_date", EDATE(dim_date[full_date], -12)
+			    )
+			RETURN
+			    CALCULATE(
+			        [Avg Price (KES)],
+			        REMOVEFILTERS(dim_date),
+			        TREATAS(PriorDates, dim_date[full_date])
+			    )
 		formatString: #,0.00
 		displayFolder: 02. Time Intelligence & Growth
 		lineageTag: a8f13670-0d7b-42d2-b777-67ca22376140
@@ -27,7 +38,17 @@ table fact_prices
 	/// Year-over-year percentage change in the grain-safe composite food price index.
 	measure 'YoY Inflation %' =
 			VAR CurrentIdx = [National Food Price Index]
-			VAR PriorYearIdx = CALCULATE([National Food Price Index], SAMEPERIODLASTYEAR(dim_date[full_date]))
+			VAR PriorDates =
+			    SELECTCOLUMNS(
+			        VALUES(dim_date[full_date]),
+			        "prior_date", EDATE(dim_date[full_date], -12)
+			    )
+			VAR PriorYearIdx =
+			    CALCULATE(
+			        [National Food Price Index],
+			        REMOVEFILTERS(dim_date),
+			        TREATAS(PriorDates, dim_date[full_date])
+			    )
 			RETURN
 			    DIVIDE(CurrentIdx - PriorYearIdx, PriorYearIdx)
 		formatString: 0.00%
@@ -44,10 +65,20 @@ table fact_prices
 		displayFolder: 02. Time Intelligence & Growth
 		lineageTag: 99d8bfdf-557f-4a8a-91c0-7f478b14f7e7
 
-	/// Month-over-month percentage change in average commodity price relative to the prior month.
+	/// Month-over-month percentage change in average commodity price via gap-safe EDATE + TREATAS.
 	measure 'MoM Change %' =
 			VAR CurrentPrice = [Avg Price (KES)]
-			VAR PriorMonthPrice = CALCULATE([Avg Price (KES)], DATEADD(dim_date[full_date], -1, MONTH))
+			VAR PriorDates =
+			    SELECTCOLUMNS(
+			        VALUES(dim_date[full_date]),
+			        "prior_date", EDATE(dim_date[full_date], -1)
+			    )
+			VAR PriorMonthPrice =
+			    CALCULATE(
+			        [Avg Price (KES)],
+			        REMOVEFILTERS(dim_date),
+			        TREATAS(PriorDates, dim_date[full_date])
+			    )
 			RETURN
 			    DIVIDE(CurrentPrice - PriorMonthPrice, PriorMonthPrice)
 		formatString: 0.00%
@@ -60,14 +91,27 @@ table fact_prices
 		displayFolder: 03. Risk & Seasonality
 		lineageTag: c01f3b5c-e807-4060-b8ba-7bbe5a8e8022
 
-	/// Coefficient of variation allowing unit-free volatility comparisons across commodities and counties.
-	measure 'Price Volatility CV %' = DIVIDE([Price Volatility (KES)], [Avg Price (KES)])
+	/// Unit-safe coefficient of variation computed per commodity for cross-commodity comparisons.
+	measure 'Price Volatility CV %' =
+			AVERAGEX(
+			    VALUES(fact_prices[commodity_id]),
+			    DIVIDE([Price Volatility (KES)], [Avg Price (KES)])
+			)
 		formatString: 0.00%
 		displayFolder: 03. Risk & Seasonality
 		lineageTag: 1897347c-8bab-4bfa-a329-c70da640093b
 
-	/// Year-to-date running mean composite food price index within the calendar year.
-	measure 'Cumulative Index YTD' = TOTALYTD([National Food Price Index], dim_date[full_date])
+	/// Year-to-date running mean composite food price index within the anchor calendar year.
+	measure 'Cumulative Index YTD' =
+			VAR AnchorDate = MAX(dim_date[full_date])
+			VAR AnchorYear = YEAR(AnchorDate)
+			RETURN
+			    CALCULATE(
+			        [National Food Price Index],
+			        REMOVEFILTERS(dim_date),
+			        dim_date[year] = AnchorYear,
+			        dim_date[full_date] <= AnchorDate
+			    )
 		formatString: 0.00
 		displayFolder: 02. Time Intelligence & Growth
 		lineageTag: 73122316-1383-480c-bf94-ff22fcad54eb
@@ -98,12 +142,15 @@ table fact_prices
 		displayFolder: 04. Coverage & Disparities
 		lineageTag: f5134d80-65bc-4c01-b235-78fec74a35a0
 
-	/// Local price premium or discount in KES compared to the national all-market mean.
+	/// Unit-safe local price premium or discount in KES compared to the national all-market mean.
 	measure 'Affordability Gap (KES)' =
-			VAR LocalAvg = [Avg Price (KES)]
-			VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))
-			RETURN
-			    LocalAvg - NationalAvg
+			AVERAGEX(
+			    VALUES(fact_prices[commodity_id]),
+			    VAR LocalAvg = [Avg Price (KES)]
+			    VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))
+			    RETURN
+			        LocalAvg - NationalAvg
+			)
 		formatString: #,0.00
 		displayFolder: 04. Coverage & Disparities
 		lineageTag: ed0576fa-32d3-4b14-89da-65a3d1c723a5
@@ -118,12 +165,20 @@ table fact_prices
 		displayFolder: 03. Risk & Seasonality
 		lineageTag: a1df5330-c83d-41f0-8e8e-4bf660ce225e
 
-	/// Trailing 12-month smoothed commodity price average ending at the selected period.
+	/// Trailing 12-month smoothed commodity price average ending at the anchor period via gap-safe EDATE.
 	measure '12-Month Rolling Avg (KES)' =
-			AVERAGEX(
-			    DATESINPERIOD(dim_date[full_date], MAX(dim_date[full_date]), -12, MONTH),
-			    [Avg Price (KES)]
-			)
+			VAR AnchorDate = MAX(dim_date[full_date])
+			VAR StartDate = EDATE(AnchorDate, -11)
+			RETURN
+			    CALCULATE(
+			        AVERAGEX(
+			            VALUES(dim_date[full_date]),
+			            [Avg Price (KES)]
+			        ),
+			        REMOVEFILTERS(dim_date),
+			        dim_date[full_date] >= StartDate,
+			        dim_date[full_date] <= AnchorDate
+			    )
 		formatString: #,0.00
 		displayFolder: 02. Time Intelligence & Growth
 		lineageTag: 380d8d02-cf07-4883-8519-821226119642

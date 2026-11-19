@@ -72,3 +72,17 @@ def test_tracked_week5_artifacts_and_readme_clean() -> None:
     assert "Tharaka Nithi" in readme_text
     assert "Prince Nzamuwe" in readme_text
     assert "Yizere Denis Derick" in readme_text
+
+    expected_visuals = (
+        PROJECT_ROOT / "screenshots" / "week1-initial-import.png",
+        PROJECT_ROOT / "screenshots" / "week2-powerquery-cleaning.png",
+        PROJECT_ROOT / "screenshots" / "week3-powerbi-model-view.png",
+        PROJECT_ROOT / "screenshots" / "week3-dax-validation.png",
+        PROJECT_ROOT / "docs" / "model-diagram.png",
+        PROJECT_ROOT / "screenshots" / "page1-executive-pulse.png",
+        PROJECT_ROOT / "screenshots" / "page2-county-commodity.png",
+        PROJECT_ROOT / "screenshots" / "page3-trends-diagnostics.png",
+        PROJECT_ROOT / "screenshots" / "page4-decisions-action.png",
+    )
+    for vis_path in expected_visuals:
+        assert vis_path.is_file(), f"Missing embedded workflow visual: {vis_path}"

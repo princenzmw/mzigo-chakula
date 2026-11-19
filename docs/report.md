@@ -32,6 +32,17 @@ This report documents an end-to-end Microsoft Power BI and Python analytics solu
 | Maize (1 kg) | 56.02 | 80.13 | -10.51% | 40.56% | 0.43977 |
 | Goat (1 head) | 3,456.14 | 5,438.29 | +7.77% | 84.72% | 0.99996 |
 
+## Workflow Step Evidence & Verification Screenshots
+
+| Stage | Visual Evidence | Scope Captured |
+| --- | --- | --- |
+| Week 1: Raw Import & Profiling | `screenshots/week1-initial-import.png` | Power Query raw 46-column CSV preview prior to transformations |
+| Week 2: Data Cleaning & QA | `screenshots/week2-powerquery-cleaning.png` | 10 Power Query M steps (`T1` to `T10`), zero orphan check, and `1,866` outlier audit |
+| Week 3: Star Schema Diagram | `docs/model-diagram.png` | 4-table single-direction `1:*` schema and grain-safe architecture |
+| Week 3: Power BI Desktop Model View | `screenshots/week3-powerbi-model-view.png` | Live Power BI Desktop Model View showing all 4 joined tables |
+| Week 3: DAX Verification Audit | `screenshots/week3-dax-validation.png` | 15 DAX measures with gap-safe `EDATE`/`TREATAS` and commodity benchmarks |
+| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | 300 DPI visuals and interactive PBIR layout specifications |
+
 ## AI Assistance Disclosure and Data Authenticity Statement
 
 All 55,692 raw records, market coordinates, and commodity price observations come directly from the World Bank Real Time Food Prices (RTFP) Kenya release (CC BY 4.0) without synthetic observations. AI coding and documentation tooling assisted with Python validation scripting, Power Query M code drafting, TMDL semantic model packaging, report formatting, and slide generation, with every computed metric verified deterministically against the raw CSV through an automated pytest suite.

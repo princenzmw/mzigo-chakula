@@ -62,8 +62,12 @@ def _iter_field_refs(obj: Any) -> list[tuple[str, str, str]]:
 
 
 def test_report_json_defines_four_pages() -> None:
-    """Confirm PBIR pages, 40 visual.json files, and all bound TMDL symbols are valid."""
-    pages_root = PROJECT_ROOT / "pbip" / "mzigo-chakula.Report" / "definition" / "pages"
+    """Confirm custom theme, PBIR pages, 44 visual.json files, and bound TMDL symbols."""
+    report_root = PROJECT_ROOT / "pbip" / "mzigo-chakula.Report"
+    theme_path = report_root / "StaticResources" / "RegisteredResources" / "MzigoChakulaTheme.json"
+    assert theme_path.is_file(), f"Missing custom report theme: {theme_path}"
+
+    pages_root = report_root / "definition" / "pages"
     pages_meta_path = pages_root / "pages.json"
     assert pages_meta_path.is_file()
     pages_meta = json.loads(pages_meta_path.read_text(encoding="utf-8"))
@@ -88,9 +92,10 @@ def test_report_json_defines_four_pages() -> None:
         observed_titles.append(page_data["displayName"])
         assert page_data["width"] == 1280
         assert page_data["height"] == 720
+        assert (page_dir / "visuals" / "v00_header_banner" / "visual.json").is_file()
 
         visual_files = list((page_dir / "visuals").glob("*/visual.json"))
-        assert len(visual_files) >= 8, f"Expected >=8 visuals on {page_id}, found {len(visual_files)}"
+        assert len(visual_files) >= 9, f"Expected >=9 visuals on {page_id}, found {len(visual_files)}"
         total_visuals += len(visual_files)
 
         for vf in visual_files:
@@ -108,7 +113,7 @@ def test_report_json_defines_four_pages() -> None:
                     )
 
     assert observed_titles == expected_titles
-    assert total_visuals == 40
+    assert total_visuals == 44
 
 
 def test_week4_screenshots_dimensions_and_dpi() -> None:

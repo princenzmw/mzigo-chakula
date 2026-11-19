@@ -1,0 +1,100 @@
+{
+  "name": "MzigoChakulaTheme",
+  "dataColors": [
+    "#0F766E",
+    "#EA580C",
+    "#1D4ED8",
+    "#0F2942",
+    "#B91C1C",
+    "#D97706",
+    "#4338CA",
+    "#0369A1",
+    "#15803D",
+    "#7C2D12"
+  ],
+  "foreground": "#0F172A",
+  "foregroundNeutralSecondary": "#475569",
+  "foregroundNeutralTertiary": "#94A3B8",
+  "background": "#FFFFFF",
+  "backgroundLight": "#F8FAFC",
+  "backgroundNeutral": "#E2E8F0",
+  "tableAccent": "#0F766E",
+  "good": "#0F766E",
+  "neutral": "#D97706",
+  "bad": "#B91C1C",
+  "maximum": "#1D4ED8",
+  "center": "#D97706",
+  "minimum": "#E0F2FE",
+  "null": "#94A3B8",
+  "hyperlink": "#1D4ED8",
+  "visitedHyperlink": "#0F766E",
+  "textClasses": {
+    "callout": {
+      "fontSize": 20,
+      "fontFace": "Segoe UI Bold",
+      "color": "#0F2942"
+    },
+    "title": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#0F2942"
+    },
+    "header": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#0F2942"
+    },
+    "label": {
+      "fontSize": 9,
+      "fontFace": "Segoe UI",
+      "color": "#334155"
+    }
+  },
+  "visualStyles": {
+    "tableEx": {
+      "*": {
+        "columnHeaders": [
+          {
+            "backColor": {
+              "solid": {
+                "color": "#0F2942"
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "bold": true,
+            "fontSize": 9
+          }
+        ],
+        "values": [
+          {
+            "backColorPrimary": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": "#F8FAFC"
+              }
+            },
+            "fontColorPrimary": {
+              "solid": {
+                "color": "#0F172A"
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": "#0F172A"
+              }
+            },
+            "fontSize": 9
+          }
+        ]
+      }
+    }
+  }
+}
