@@ -19,7 +19,7 @@ This report documents an end-to-end Microsoft Power BI and Python analytics solu
 ## Five Stakeholder Recommendations
 
 - **Recommendation 1: Decouple Grain Price Tracking From the Composite Index:** County food-security dashboards should alert on commodity-specific [Commodity YoY Inflation %] and [Avg Price (KES)] for Maize (1 kg) and Beans (1 kg) alongside [National Food Price Index], because raw index shifts reflect 99.99% co-movement with Goat (1 head) prices.
-- **Recommendation 2: Deploy Emergency Price Audits to Zero-Survey High-Risk Counties:** Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 3.0% and Garissa at 3.9% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.
+- **Recommendation 2: Deploy Emergency Price Audits to Zero-Survey High-Risk Counties:** Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 1.96%, Marsabit at 3.00%, and Garissa at 3.85% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.
 - **Recommendation 3: Pre-Position Grain Buffers Ahead of June-to-September Peaks:** Trigger county maize and bean strategic reserve releases in May before the Cool Dry / Harvest (Jun-Sep) seasonal price peak (1.023 maize index, 1.013 beans index), and schedule livestock offtake or pastoral support for Jan-Feb (1.060 goat peak).
 - **Recommendation 4: Target ASAL Transport Subsidies Using Affordability Gaps:** Direct staple grain logistics support toward chronic net-deficit markets with the largest positive [Affordability Gap (KES)], specifically Turkana (+15.26 KES/kg), Mandera (+10.65 KES/kg), and Kisumu (+9.89 KES/kg), paired with market linkages from surplus hubs like Lamu (-17.51 KES/kg) and Kitui (-15.59 KES/kg).
 - **Recommendation 5: Expand Market Instrumentation Into Western Kenya Counties:** Partner with KNBS and county trade offices to onboard physical market monitoring sites across Western Province and single-market counties (Embu, Lamu, Machakos, Nyeri, Uasin Gishu) so future RTFP releases reflect all 47 Kenyan counties.
@@ -31,6 +31,17 @@ This report documents an end-to-end Microsoft Power BI and Python analytics solu
 | Beans (1 kg) | 105.69 | 150.42 | +0.55% | 31.02% | 0.69163 |
 | Maize (1 kg) | 56.02 | 80.13 | -10.51% | 40.56% | 0.43977 |
 | Goat (1 head) | 3,456.14 | 5,438.29 | +7.77% | 84.72% | 0.99996 |
+
+## Workflow Step Evidence & Verification Screenshots
+
+| Stage | Visual Evidence | Scope Captured |
+| --- | --- | --- |
+| Week 1: Raw Import & Profiling | `screenshots/week1-initial-import.png` | Power Query raw 46-column CSV preview prior to transformations |
+| Week 2: Data Cleaning & QA | `screenshots/week2-powerquery-cleaning.png` | 10 Power Query M steps (`T1` to `T10`), zero orphan check, and `1,866` outlier audit |
+| Week 3: Star Schema Diagram | `docs/model-diagram.png` | 4-table single-direction `1:*` schema and grain-safe architecture |
+| Week 3: Power BI Desktop Model View | `screenshots/week3-powerbi-model-view.png` | Live Power BI Desktop Model View showing all 4 joined tables |
+| Week 3: DAX Verification Audit | `screenshots/week3-dax-validation.png` | 15 DAX measures with gap-safe `EDATE`/`TREATAS` and commodity benchmarks |
+| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | Live Power BI Desktop captures of all 4 pages (46 PBIR visuals, custom theme, native `pageNavigator`) |
 
 ## AI Assistance Disclosure and Data Authenticity Statement
 

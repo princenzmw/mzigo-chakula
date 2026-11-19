@@ -156,7 +156,7 @@ def build_data_quality_profile_markdown(profile: dict[str, Any]) -> str:
             "## 5. County Coverage Imbalance",
             "",
             ("Market representation varies sharply by county. Turkana alone contains 57 markets (24.5% of physical markets), "
-            "Samburu has 20, and Garissa has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each."),
+            "Garissa has 21, Samburu has 20, and Marsabit has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each."),
             "",
             "| Clean Region | Clean County | Markets | Sample Markets |",
             "| --- | --- | ---: | --- |",

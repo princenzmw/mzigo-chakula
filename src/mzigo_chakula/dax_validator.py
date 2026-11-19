@@ -57,8 +57,22 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         table_name="fact_prices",
         display_folder="02. Time Intelligence & Growth",
         format_string="#,0.00",
-        dax_expression="CALCULATE([Avg Price (KES)], SAMEPERIODLASTYEAR(dim_date[full_date]))",
-        description="Mean closing commodity price shifted back exactly 12 months via SAMEPERIODLASTYEAR.",
+        dax_expression=(
+            "VAR PriorDates =\n"
+            "    SELECTCOLUMNS(\n"
+            "        VALUES(dim_date[full_date]),\n"
+            '        "prior_date", EDATE(dim_date[full_date], -12)\n'
+            "    )\n"
+            "RETURN\n"
+            "    CALCULATE(\n"
+            "        [Avg Price (KES)],\n"
+            "        REMOVEFILTERS(dim_date),\n"
+            "        TREATAS(PriorDates, dim_date[full_date])\n"
+            "    )"
+        ),
+        description=(
+            "Mean closing commodity price shifted back 12 months via gap-safe EDATE and TREATAS."
+        ),
     ),
     DAXMeasureSpec(
         measure_number=4,
@@ -68,7 +82,17 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         format_string="0.00%",
         dax_expression=(
             "VAR CurrentIdx = [National Food Price Index]\n"
-            "VAR PriorYearIdx = CALCULATE([National Food Price Index], SAMEPERIODLASTYEAR(dim_date[full_date]))\n"
+            "VAR PriorDates =\n"
+            "    SELECTCOLUMNS(\n"
+            "        VALUES(dim_date[full_date]),\n"
+            '        "prior_date", EDATE(dim_date[full_date], -12)\n'
+            "    )\n"
+            "VAR PriorYearIdx =\n"
+            "    CALCULATE(\n"
+            "        [National Food Price Index],\n"
+            "        REMOVEFILTERS(dim_date),\n"
+            "        TREATAS(PriorDates, dim_date[full_date])\n"
+            "    )\n"
             "RETURN\n"
             "    DIVIDE(CurrentIdx - PriorYearIdx, PriorYearIdx)"
         ),
@@ -96,11 +120,23 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         format_string="0.00%",
         dax_expression=(
             "VAR CurrentPrice = [Avg Price (KES)]\n"
-            "VAR PriorMonthPrice = CALCULATE([Avg Price (KES)], DATEADD(dim_date[full_date], -1, MONTH))\n"
+            "VAR PriorDates =\n"
+            "    SELECTCOLUMNS(\n"
+            "        VALUES(dim_date[full_date]),\n"
+            '        "prior_date", EDATE(dim_date[full_date], -1)\n'
+            "    )\n"
+            "VAR PriorMonthPrice =\n"
+            "    CALCULATE(\n"
+            "        [Avg Price (KES)],\n"
+            "        REMOVEFILTERS(dim_date),\n"
+            "        TREATAS(PriorDates, dim_date[full_date])\n"
+            "    )\n"
             "RETURN\n"
             "    DIVIDE(CurrentPrice - PriorMonthPrice, PriorMonthPrice)"
         ),
-        description="Month-over-month percentage change in average commodity price relative to the prior month.",
+        description=(
+            "Month-over-month percentage change in average commodity price via gap-safe EDATE."
+        ),
     ),
     DAXMeasureSpec(
         measure_number=7,
@@ -117,8 +153,15 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         table_name="fact_prices",
         display_folder="03. Risk & Seasonality",
         format_string="0.00%",
-        dax_expression="DIVIDE([Price Volatility (KES)], [Avg Price (KES)])",
-        description="Coefficient of variation allowing unit-free volatility comparisons across commodities and counties.",
+        dax_expression=(
+            "AVERAGEX(\n"
+            "    VALUES(fact_prices[commodity_id]),\n"
+            "    DIVIDE([Price Volatility (KES)], [Avg Price (KES)])\n"
+            ")"
+        ),
+        description=(
+            "Unit-safe coefficient of variation computed per commodity for cross-commodity comparisons."
+        ),
     ),
     DAXMeasureSpec(
         measure_number=9,
@@ -126,8 +169,18 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         table_name="fact_prices",
         display_folder="02. Time Intelligence & Growth",
         format_string="0.00",
-        dax_expression="TOTALYTD([National Food Price Index], dim_date[full_date])",
-        description="Year-to-date running mean composite food price index within the calendar year.",
+        dax_expression=(
+            "VAR AnchorDate = MAX(dim_date[full_date])\n"
+            "VAR AnchorYear = YEAR(AnchorDate)\n"
+            "RETURN\n"
+            "    CALCULATE(\n"
+            "        [National Food Price Index],\n"
+            "        REMOVEFILTERS(dim_date),\n"
+            "        dim_date[year] = AnchorYear,\n"
+            "        dim_date[full_date] <= AnchorDate\n"
+            "    )"
+        ),
+        description="Year-to-date running mean composite food price index within the anchor year.",
     ),
     DAXMeasureSpec(
         measure_number=10,
@@ -163,7 +216,7 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         table_name="fact_prices",
         display_folder="04. Coverage & Disparities",
         format_string="0.00%",
-        dax_expression="DIVIDE(COUNT(fact_prices[raw_spot_price]), COUNTROWS(fact_prices))",
+        dax_expression="DIVIDE(COUNT(fact_prices[raw_spot_price]) + 0, COUNTROWS(fact_prices))",
         description="Share of market-month-commodity records backed by a direct raw field survey observation.",
     ),
     DAXMeasureSpec(
@@ -173,12 +226,17 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         display_folder="04. Coverage & Disparities",
         format_string="#,0.00",
         dax_expression=(
-            "VAR LocalAvg = [Avg Price (KES)]\n"
-            "VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))\n"
-            "RETURN\n"
-            "    LocalAvg - NationalAvg"
+            "AVERAGEX(\n"
+            "    VALUES(fact_prices[commodity_id]),\n"
+            "    VAR LocalAvg = [Avg Price (KES)]\n"
+            "    VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))\n"
+            "    RETURN\n"
+            "        LocalAvg - NationalAvg\n"
+            ")"
         ),
-        description="Local price premium or discount in KES compared to the national all-market mean.",
+        description=(
+            "Unit-safe local price premium or discount in KES compared to the national mean."
+        ),
     ),
     DAXMeasureSpec(
         measure_number=14,
@@ -201,12 +259,20 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
         display_folder="02. Time Intelligence & Growth",
         format_string="#,0.00",
         dax_expression=(
-            "AVERAGEX(\n"
-            "    DATESINPERIOD(dim_date[full_date], MAX(dim_date[full_date]), -12, MONTH),\n"
-            "    [Avg Price (KES)]\n"
-            ")"
+            "VAR AnchorDate = MAX(dim_date[full_date])\n"
+            "VAR StartDate = EDATE(AnchorDate, -11)\n"
+            "RETURN\n"
+            "    CALCULATE(\n"
+            "        AVERAGEX(\n"
+            "            VALUES(dim_date[full_date]),\n"
+            "            [Avg Price (KES)]\n"
+            "        ),\n"
+            "        REMOVEFILTERS(dim_date),\n"
+            "        dim_date[full_date] >= StartDate,\n"
+            "        dim_date[full_date] <= AnchorDate\n"
+            "    )"
         ),
-        description="Trailing 12-month smoothed commodity price average ending at the selected period.",
+        description="Trailing 12-month smoothed commodity price average via gap-safe EDATE.",
     ),
 )
 

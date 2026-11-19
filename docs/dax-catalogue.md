@@ -61,10 +61,20 @@ AVERAGEX(
 
 - **Table / Folder:** `fact_prices` / `02. Time Intelligence & Growth`
 - **Format String:** `#,0.00`
-- **Purpose:** Mean closing commodity price shifted back exactly 12 months via SAMEPERIODLASTYEAR.
+- **Purpose:** Mean closing commodity price shifted back 12 months via gap-safe EDATE and TREATAS.
 
 ```dax
-CALCULATE([Avg Price (KES)], SAMEPERIODLASTYEAR(dim_date[full_date]))
+VAR PriorDates =
+    SELECTCOLUMNS(
+        VALUES(dim_date[full_date]),
+        "prior_date", EDATE(dim_date[full_date], -12)
+    )
+RETURN
+    CALCULATE(
+        [Avg Price (KES)],
+        REMOVEFILTERS(dim_date),
+        TREATAS(PriorDates, dim_date[full_date])
+    )
 ```
 
 ### 4. `YoY Inflation %`
@@ -75,7 +85,17 @@ CALCULATE([Avg Price (KES)], SAMEPERIODLASTYEAR(dim_date[full_date]))
 
 ```dax
 VAR CurrentIdx = [National Food Price Index]
-VAR PriorYearIdx = CALCULATE([National Food Price Index], SAMEPERIODLASTYEAR(dim_date[full_date]))
+VAR PriorDates =
+    SELECTCOLUMNS(
+        VALUES(dim_date[full_date]),
+        "prior_date", EDATE(dim_date[full_date], -12)
+    )
+VAR PriorYearIdx =
+    CALCULATE(
+        [National Food Price Index],
+        REMOVEFILTERS(dim_date),
+        TREATAS(PriorDates, dim_date[full_date])
+    )
 RETURN
     DIVIDE(CurrentIdx - PriorYearIdx, PriorYearIdx)
 ```
@@ -97,11 +117,21 @@ RETURN
 
 - **Table / Folder:** `fact_prices` / `02. Time Intelligence & Growth`
 - **Format String:** `0.00%`
-- **Purpose:** Month-over-month percentage change in average commodity price relative to the prior month.
+- **Purpose:** Month-over-month percentage change in average commodity price via gap-safe EDATE.
 
 ```dax
 VAR CurrentPrice = [Avg Price (KES)]
-VAR PriorMonthPrice = CALCULATE([Avg Price (KES)], DATEADD(dim_date[full_date], -1, MONTH))
+VAR PriorDates =
+    SELECTCOLUMNS(
+        VALUES(dim_date[full_date]),
+        "prior_date", EDATE(dim_date[full_date], -1)
+    )
+VAR PriorMonthPrice =
+    CALCULATE(
+        [Avg Price (KES)],
+        REMOVEFILTERS(dim_date),
+        TREATAS(PriorDates, dim_date[full_date])
+    )
 RETURN
     DIVIDE(CurrentPrice - PriorMonthPrice, PriorMonthPrice)
 ```
@@ -120,20 +150,31 @@ STDEV.S(fact_prices[price_value])
 
 - **Table / Folder:** `fact_prices` / `03. Risk & Seasonality`
 - **Format String:** `0.00%`
-- **Purpose:** Coefficient of variation allowing unit-free volatility comparisons across commodities and counties.
+- **Purpose:** Unit-safe coefficient of variation computed per commodity for cross-commodity comparisons.
 
 ```dax
-DIVIDE([Price Volatility (KES)], [Avg Price (KES)])
+AVERAGEX(
+    VALUES(fact_prices[commodity_id]),
+    DIVIDE([Price Volatility (KES)], [Avg Price (KES)])
+)
 ```
 
 ### 9. `Cumulative Index YTD`
 
 - **Table / Folder:** `fact_prices` / `02. Time Intelligence & Growth`
 - **Format String:** `0.00`
-- **Purpose:** Year-to-date running mean composite food price index within the calendar year.
+- **Purpose:** Year-to-date running mean composite food price index within the anchor year.
 
 ```dax
-TOTALYTD([National Food Price Index], dim_date[full_date])
+VAR AnchorDate = MAX(dim_date[full_date])
+VAR AnchorYear = YEAR(AnchorDate)
+RETURN
+    CALCULATE(
+        [National Food Price Index],
+        REMOVEFILTERS(dim_date),
+        dim_date[year] = AnchorYear,
+        dim_date[full_date] <= AnchorDate
+    )
 ```
 
 ### 10. `County Inflation Rank`
@@ -169,20 +210,23 @@ RETURN
 - **Purpose:** Share of market-month-commodity records backed by a direct raw field survey observation.
 
 ```dax
-DIVIDE(COUNT(fact_prices[raw_spot_price]), COUNTROWS(fact_prices))
+DIVIDE(COUNT(fact_prices[raw_spot_price]) + 0, COUNTROWS(fact_prices))
 ```
 
 ### 13. `Affordability Gap (KES)`
 
 - **Table / Folder:** `fact_prices` / `04. Coverage & Disparities`
 - **Format String:** `#,0.00`
-- **Purpose:** Local price premium or discount in KES compared to the national all-market mean.
+- **Purpose:** Unit-safe local price premium or discount in KES compared to the national mean.
 
 ```dax
-VAR LocalAvg = [Avg Price (KES)]
-VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))
-RETURN
-    LocalAvg - NationalAvg
+AVERAGEX(
+    VALUES(fact_prices[commodity_id]),
+    VAR LocalAvg = [Avg Price (KES)]
+    VAR NationalAvg = CALCULATE([Avg Price (KES)], ALL(dim_markets))
+    RETURN
+        LocalAvg - NationalAvg
+)
 ```
 
 ### 14. `Seasonal Index`
@@ -202,13 +246,21 @@ RETURN
 
 - **Table / Folder:** `fact_prices` / `02. Time Intelligence & Growth`
 - **Format String:** `#,0.00`
-- **Purpose:** Trailing 12-month smoothed commodity price average ending at the selected period.
+- **Purpose:** Trailing 12-month smoothed commodity price average via gap-safe EDATE.
 
 ```dax
-AVERAGEX(
-    DATESINPERIOD(dim_date[full_date], MAX(dim_date[full_date]), -12, MONTH),
-    [Avg Price (KES)]
-)
+VAR AnchorDate = MAX(dim_date[full_date])
+VAR StartDate = EDATE(AnchorDate, -11)
+RETURN
+    CALCULATE(
+        AVERAGEX(
+            VALUES(dim_date[full_date]),
+            [Avg Price (KES)]
+        ),
+        REMOVEFILTERS(dim_date),
+        dim_date[full_date] >= StartDate,
+        dim_date[full_date] <= AnchorDate
+    )
 ```
 
 ---
