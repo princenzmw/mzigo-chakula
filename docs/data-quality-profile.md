@@ -17,19 +17,19 @@ Power Query must separate or filter out the 238 `Market Average` rows before bui
 
 ## 2. Missing Values Audit
 
-Missing values appear in only 13 of the 46 columns and follow three distinct causes:
+Missing values appear in only 13 of the 46 columns and follow three causes:
 
-1. Coordinates (`lat`, `lon`): Exactly 238 rows (0.43%) are blank because `Market Average` has no physical location. All 55,454 physical market rows have valid coordinates.
-2. Year-over-year inflation columns (`inflation_beans`, `inflation_livestock_goat_s_fao`, `inflation_maize_fao`, `inflation_food_price_index`): Exactly 2,808 rows (5.04%, equal to 234 series times 12 months) are blank in 2007 because no 2006 baseline exists for year-over-year calculation. From January 2008 onward, these columns are 100% populated.
-3. Raw spot survey columns (`beans`, `livestock_goat_s_fao`, `maize_fao`): Between 94.53% and 96.72% of cells are empty because physical market surveys occur sporadically. The dataset pairs those sparse raw surveys with modelled open, high, low, and close estimates (`o_`, `h_`, `l_`, `c_`) that have 0.00% missingness.
+1. Coordinates (`lat`, `lon`): 238 rows (0.43%) are blank because `Market Average` has no physical location. All 55,454 physical market rows have valid coordinates.
+2. Year-over-year inflation columns (`inflation_beans`, `inflation_livestock_goat_s_fao`, `inflation_maize_fao`, `inflation_food_price_index`): 2,808 rows (5.04%, equal to 234 series times 12 months) are blank in 2007 because no 2006 baseline exists for year-over-year calculation. From January 2008 onward, these columns are 100% populated.
+3. Raw spot survey columns (`beans`, `livestock_goat_s_fao`, `maize_fao`): Between 94.53% and 96.72% of cells are empty because physical market surveys occur sporadically. The dataset pairs those sparse raw surveys with modeled open, high, low, and close estimates (`o_`, `h_`, `l_`, `c_`) that have 0.00% missingness.
 
 | Column | Non-Null Rows | Null Rows | Missing % | Reason |
 | --- | ---: | ---: | ---: | --- |
 | `lat` | 55,454 | 238 | 0.43% | Market Average rows have no point coordinates |
 | `lon` | 55,454 | 238 | 0.43% | Market Average rows have no point coordinates |
-| `beans` | 1,824 | 53,868 | 96.72% | Sporadic raw field survey coverage; modelled OHLC series are complete |
-| `livestock_goat_s_fao` | 2,601 | 53,091 | 95.33% | Sporadic raw field survey coverage; modelled OHLC series are complete |
-| `maize_fao` | 3,045 | 52,647 | 94.53% | Sporadic raw field survey coverage; modelled OHLC series are complete |
+| `beans` | 1,824 | 53,868 | 96.72% | Sporadic raw field survey coverage; modeled OHLC series are complete |
+| `livestock_goat_s_fao` | 2,601 | 53,091 | 95.33% | Sporadic raw field survey coverage; modeled OHLC series are complete |
+| `maize_fao` | 3,045 | 52,647 | 94.53% | Sporadic raw field survey coverage; modeled OHLC series are complete |
 | `inflation_beans` | 52,884 | 2,808 | 5.04% | First 12 months (2007) lack a 2006 prior-year baseline |
 | `inflation_livestock_goat_s_fao` | 52,884 | 2,808 | 5.04% | First 12 months (2007) lack a 2006 prior-year baseline |
 | `inflation_maize_fao` | 52,884 | 2,808 | 5.04% | First 12 months (2007) lack a 2006 prior-year baseline |
@@ -41,16 +41,16 @@ Missing values appear in only 13 of the 46 columns and follow three distinct cau
 
 | Column | Constant Value | Handling in Model |
 | --- | --- | --- |
-| `ISO3` | `KEN` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `country` | `Kenya` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `currency` | `KES` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `components` | `beans (1 KG, Index Weight = 1), livestock_goat_s_fao...` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `start_dense_data` | `Jan 2007` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `last_survey_point` | `Sep 2026` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `data_coverage` | `4.46` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `data_coverage_recent` | `5.45` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `index_confidence_score` | `0.97` | Move to documentation or `dim_commodity` / `dim_markets` |
-| `spatially_interpolated` | `0` | Move to documentation or `dim_commodity` / `dim_markets` |
+| `ISO3` | `KEN` | Documented in metadata; excluded from fact table |
+| `country` | `Kenya` | Documented in metadata; excluded from fact table |
+| `currency` | `KES` | Documented in metadata; excluded from fact table |
+| `components` | `beans (1 KG, Index Weight = 1), livestock_goat_s_fao...` | Mapped into `dim_commodity[index_weight_note]` |
+| `start_dense_data` | `Jan 2007` | Documented in metadata; excluded from fact table |
+| `last_survey_point` | `Sep 2026` | Documented in metadata; excluded from fact table |
+| `data_coverage` | `4.46` | Kept on `dim_markets` |
+| `data_coverage_recent` | `5.45` | Kept on `dim_markets` |
+| `index_confidence_score` | `0.97` | Documented in metadata; excluded from fact table |
+| `spatially_interpolated` | `0` | Documented in metadata; excluded from fact table |
 
 ## 4. Administrative Label Inconsistencies
 
@@ -98,7 +98,7 @@ Normalizing these labels assigns every physical market to 27 Kenyan counties acr
 
 ## 5. County Coverage Imbalance
 
-Market representation varies sharply by county. Turkana alone contains 57 markets (24.5% of physical markets), Garissa has 21, Samburu has 20, and Marsabit has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each.
+Market representation varies across counties. Turkana alone contains 57 markets (24.5% of physical markets), Garissa has 21, Samburu has 20, and Marsabit has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each.
 
 | Clean Region | Clean County | Markets | Sample Markets |
 | --- | --- | ---: | --- |
@@ -139,6 +139,6 @@ Market representation varies sharply by county. Turkana alone contains 57 market
 | Goat close (`c_livestock_goat_s_fao`, KES/head) | 480.69 | 2782.73 | 3456.14 | 28380.59 | 2928.08 |
 | Food Price Index (`c_food_price_index`) | 0.19 | 0.97 | 1.20 | 9.63 | 0.99 |
 
-## 7. Grain Note for Modelling
+## 7. Grain Note for Modeling
 
-Beans, maize, and goat prices sit at the `(market, month, commodity)` grain once unpivoted, whereas `c_food_price_index` sits at the `(market, month)` grain (each market-month carries one composite index value). Week 3 modelling will either place `c_food_price_index` in a dedicated `fact_market_index` table or aggregate it at the market-month grain in DAX so unpivoting three commodities does not triple-count the index.
+Beans, maize, and goat prices sit at the `(market, month, commodity)` grain once unpivoted, whereas `c_food_price_index` sits at the `(market, month)` grain (each market-month carries one composite index value). In the semantic model, `food_price_index` sits on `fact_prices` and `[National Food Price Index]` aggregates across distinct `(mkt_id, date_key)` pairs via `SUMMARIZE` so unpivoting three commodities does not triple-count the index.

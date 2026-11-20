@@ -236,16 +236,16 @@ COLUMN_SPECS: dict[str, ColumnSpec] = {
         "Raw observed retail price for maize (94.53% missing).",
     ),
     "o_beans": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly opening price for beans."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly opening price for beans."
     ),
     "h_beans": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly high price for beans."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly high price for beans."
     ),
     "l_beans": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly low price for beans."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly low price for beans."
     ),
     "c_beans": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly closing price for beans."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly closing price for beans."
     ),
     "inflation_beans": ColumnSpec(
         "decimal",
@@ -257,16 +257,16 @@ COLUMN_SPECS: dict[str, ColumnSpec] = {
         "decimal", "fact_prices", "0-10", "Model trust score for beans price estimates."
     ),
     "o_livestock_goat_s_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 head", "Modelled monthly opening price for a goat."
+        "decimal", "fact_prices", "KES / 1 head", "Modeled monthly opening price for a goat."
     ),
     "h_livestock_goat_s_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 head", "Modelled monthly high price for a goat."
+        "decimal", "fact_prices", "KES / 1 head", "Modeled monthly high price for a goat."
     ),
     "l_livestock_goat_s_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 head", "Modelled monthly low price for a goat."
+        "decimal", "fact_prices", "KES / 1 head", "Modeled monthly low price for a goat."
     ),
     "c_livestock_goat_s_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 head", "Modelled monthly closing price for a goat."
+        "decimal", "fact_prices", "KES / 1 head", "Modeled monthly closing price for a goat."
     ),
     "inflation_livestock_goat_s_fao": ColumnSpec(
         "decimal",
@@ -278,16 +278,16 @@ COLUMN_SPECS: dict[str, ColumnSpec] = {
         "decimal", "fact_prices", "0-10", "Model trust score for goat price estimates."
     ),
     "o_maize_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly opening price for maize."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly opening price for maize."
     ),
     "h_maize_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly high price for maize."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly high price for maize."
     ),
     "l_maize_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly low price for maize."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly low price for maize."
     ),
     "c_maize_fao": ColumnSpec(
-        "decimal", "fact_prices", "KES / 1 kg", "Modelled monthly closing price for maize."
+        "decimal", "fact_prices", "KES / 1 kg", "Modeled monthly closing price for maize."
     ),
     "inflation_maize_fao": ColumnSpec(
         "decimal",
@@ -300,37 +300,37 @@ COLUMN_SPECS: dict[str, ColumnSpec] = {
     ),
     "o_food_price_index": ColumnSpec(
         "decimal",
-        "fact_market_index",
+        "raw source (unused)",
         "index",
-        "Modelled monthly opening composite food price index.",
+        "Modeled monthly opening composite food price index.",
     ),
     "h_food_price_index": ColumnSpec(
         "decimal",
-        "fact_market_index",
+        "raw source (unused)",
         "index",
-        "Modelled monthly high composite food price index.",
+        "Modeled monthly high composite food price index.",
     ),
     "l_food_price_index": ColumnSpec(
         "decimal",
-        "fact_market_index",
+        "raw source (unused)",
         "index",
-        "Modelled monthly low composite food price index.",
+        "Modeled monthly low composite food price index.",
     ),
     "c_food_price_index": ColumnSpec(
         "decimal",
-        "fact_market_index",
+        "fact_prices (market-month grain)",
         "index",
-        "Modelled monthly closing composite food price index.",
+        "Modeled monthly closing composite food price index.",
     ),
     "inflation_food_price_index": ColumnSpec(
         "decimal",
-        "fact_market_index",
+        "fact_prices (market-month grain)",
         "%",
         "Year-over-year change in composite food price index; blank in 2007.",
     ),
     "trust_food_price_index": ColumnSpec(
         "decimal",
-        "fact_market_index",
+        "raw source (unused)",
         "0-10",
         "Model trust score for the composite food price index.",
     ),

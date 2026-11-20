@@ -80,15 +80,15 @@ def build_data_quality_profile_markdown(profile: dict[str, Any]) -> str:
         "",
         "## 2. Missing Values Audit",
         "",
-        "Missing values appear in only 13 of the 46 columns and follow three distinct causes:",
+        "Missing values appear in only 13 of the 46 columns and follow three causes:",
         "",
-        ("1. Coordinates (`lat`, `lon`): Exactly 238 rows (0.43%) are blank because `Market Average` has no physical location. "
+        ("1. Coordinates (`lat`, `lon`): 238 rows (0.43%) are blank because `Market Average` has no physical location. "
         "All 55,454 physical market rows have valid coordinates."),
         ("2. Year-over-year inflation columns (`inflation_beans`, `inflation_livestock_goat_s_fao`, `inflation_maize_fao`, "
-        "`inflation_food_price_index`): Exactly 2,808 rows (5.04%, equal to 234 series times 12 months) are blank in 2007 "
+        "`inflation_food_price_index`): 2,808 rows (5.04%, equal to 234 series times 12 months) are blank in 2007 "
         "because no 2006 baseline exists for year-over-year calculation. From January 2008 onward, these columns are 100% populated."),
         ("3. Raw spot survey columns (`beans`, `livestock_goat_s_fao`, `maize_fao`): Between 94.53% and 96.72% of cells are empty "
-        "because physical market surveys occur sporadically. The dataset pairs those sparse raw surveys with modelled open, high, "
+        "because physical market surveys occur sporadically. The dataset pairs those sparse raw surveys with modeled open, high, "
         "low, and close estimates (`o_`, `h_`, `l_`, `c_`) that have 0.00% missingness."),
         "",
         "| Column | Non-Null Rows | Null Rows | Missing % | Reason |",
@@ -101,7 +101,7 @@ def build_data_quality_profile_markdown(profile: dict[str, Any]) -> str:
         elif col["column_name"].startswith("inflation_"):
             reason = "First 12 months (2007) lack a 2006 prior-year baseline"
         else:
-            reason = "Sporadic raw field survey coverage; modelled OHLC series are complete"
+            reason = "Sporadic raw field survey coverage; modeled OHLC series are complete"
         lines.append(
             f"| `{col['column_name']}` | {col['non_null_count']:,} | {col['null_count']:,} | "
             f"{col['pct_missing']:.2f}% | {reason} |"
@@ -119,10 +119,17 @@ def build_data_quality_profile_markdown(profile: dict[str, Any]) -> str:
         ]
     )
     for col in constant_cols:
+        cname = col["column_name"]
         val = col["sample_value"]
         if len(val) > 55:
             val = val[:52] + "..."
-        lines.append(f"| `{col['column_name']}` | `{val}` | Move to documentation or `dim_commodity` / `dim_markets` |")
+        if cname in {"data_coverage", "data_coverage_recent"}:
+            handling = "Kept on `dim_markets`"
+        elif cname == "components":
+            handling = "Mapped into `dim_commodity[index_weight_note]`"
+        else:
+            handling = "Documented in metadata; excluded from fact table"
+        lines.append(f"| `{cname}` | `{val}` | {handling} |")
 
     lines.extend(
         [
@@ -155,7 +162,7 @@ def build_data_quality_profile_markdown(profile: dict[str, Any]) -> str:
             "",
             "## 5. County Coverage Imbalance",
             "",
-            ("Market representation varies sharply by county. Turkana alone contains 57 markets (24.5% of physical markets), "
+            ("Market representation varies across counties. Turkana alone contains 57 markets (24.5% of physical markets), "
             "Garissa has 21, Samburu has 20, and Marsabit has 19, while Nyeri, Embu, Machakos, Lamu, and Uasin Gishu have 1 market each."),
             "",
             "| Clean Region | Clean County | Markets | Sample Markets |",
@@ -183,12 +190,12 @@ def build_data_quality_profile_markdown(profile: dict[str, Any]) -> str:
             (f"| Food Price Index (`c_food_price_index`) | {fpi['min']:.2f} | {fpi['median']:.2f} | "
             f"{fpi['mean']:.2f} | {fpi['max']:.2f} | {fpi['std']:.2f} |"),
             "",
-            "## 7. Grain Note for Modelling",
+            "## 7. Grain Note for Modeling",
             "",
             ("Beans, maize, and goat prices sit at the `(market, month, commodity)` grain once unpivoted, whereas "
             "`c_food_price_index` sits at the `(market, month)` grain (each market-month carries one composite index value). "
-            "Week 3 modelling will either place `c_food_price_index` in a dedicated `fact_market_index` table or aggregate it "
-            "at the market-month grain in DAX so unpivoting three commodities does not triple-count the index."),
+            "In the semantic model, `food_price_index` sits on `fact_prices` and `[National Food Price Index]` aggregates "
+            "across distinct `(mkt_id, date_key)` pairs via `SUMMARIZE` so unpivoting three commodities does not triple-count the index."),
             "",
         ]
     )
@@ -206,7 +213,7 @@ def write_data_quality_profile(profile: dict[str, Any], output_path: Path) -> Pa
 def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> str:
     """Build the 2-to-3-page Week 1 proposal markdown in plain human prose."""
     screenshot_note = (
-        "Power Query Editor screenshot captured immediately upon importing `data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv` "
+        "Power Query Editor screenshot captured upon importing `data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv` "
         "(showing 46 columns, 999+ rows in the 1,000-row profiling preview, column quality and distribution bars, "
         "and Power BI's default CSV import steps `Source`, `Use First Row as Headers`, and `Change Type` under Applied Steps):\n\n"
         "![Initial Power BI Power Query Import](../screenshots/week1-initial-import.png)"
@@ -215,7 +222,7 @@ def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> st
     )
 
     lines: list[str] = [
-            "# Mzigo Chakula: Food Price Inflation and Household Affordability Intelligence for Kenya",
+            "# Mzigo Chakula: Food Price Inflation and Household Affordability in Kenya",
             "",
             "**Course:** DSA 3050A | Business Intelligence and Data Visualization (Group Project B)",
             "**Project Area:** 10. Food-price inflation and household affordability",
@@ -226,12 +233,11 @@ def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> st
             "",
             ("Public inflation reports in Kenya summarize food costs as one national percentage, which hides sharp regional "
             "differences across counties. A household in Turkana or Mandera buys staple maize, beans, and livestock under "
-            "very different supply conditions and seasonal shocks than a household in Nairobi or Mombasa. Over the past two "
-            "decades, drought cycles, fuel costs, and exchange-rate movements have pushed staple prices up unevenly across "
-            "urban centres and arid regions."),
+            "different supply conditions and seasonal shocks than a household in Nairobi or Mombasa. Over the past two "
+            "decades, retail food prices rose at different rates across urban centers and arid regions."),
             "",
-            ("This project builds a Power BI decision tool to measure how retail food prices and price volatility shifted "
-            "across Kenyan markets between January 2007 and October 2026. The goal is to show which counties, commodities, "
+            ("This project builds a Power BI report to measure how retail food prices and price volatility shifted "
+            "across Kenyan markets between January 2007 and October 2026. The report shows which counties, commodities, "
             "and calendar months carry the heaviest cost burden so planners can direct subsidies and monitoring where pressure "
             "is highest."),
             "",
@@ -252,7 +258,7 @@ def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> st
             "1. Which Kenyan counties experienced the highest 12-month food price inflation over the last three years (2024 to 2026)?",
             "2. Which tracked commodity (maize, beans, or goats) drives the largest share of changes in the composite food price index?",
             ("3. Is monthly price volatility higher in arid and semi-arid counties (such as Turkana, Marsabit, Mandera, Wajir, "
-            "and Garissa) than in higher-potential agricultural or urban counties?"),
+            "and Garissa) than in agricultural or urban counties?"),
             "4. What seasonal price cycles repeat across the year, and how do peak months differ between regions?",
             "5. How uneven is market density across counties, and which counties rely on a single monitored market?",
             "",
@@ -263,7 +269,7 @@ def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> st
             "| National Food Price Index | Average closing composite food price index (`c_food_price_index`) across physical markets | Tracks overall basket cost trend across periods |",
             "| YoY Inflation Rate (%) | Percentage change in price or index against the same month one year earlier | Separates sustained inflation from normal seasonal swings |",
             "| Price Volatility (KES / Std Dev) | Standard deviation of monthly closing prices per commodity and county | Measures price instability and household budget risk |",
-            "| Market Coverage Rate (%) | Share of expected market-month observations with valid modelled prices and raw surveys | Flags data reliability differences before drawing conclusions |",
+            "| Market Coverage Rate (%) | Share of expected market-month observations with valid modeled prices and raw surveys | Flags data reliability differences before drawing conclusions |",
             "| Affordability Gap (KES) | County average commodity price minus the national market average for the same period | Quantifies local price premiums paid by households |",
             "",
             "## 5. Dataset Summary and Main Fields",
@@ -280,20 +286,20 @@ def build_proposal_markdown(profile: dict[str, Any], has_screenshot: bool) -> st
             "| Time Span | January 2007 to October 2026 (238 consecutive months) |",
             "",
             ("Main fields include `adm1_name`, `adm2_name`, `mkt_name`, `lat`, `lon`, `geo_id`, `price_date`, `year`, `month`, "
-            "modelled close prices (`c_beans`, `c_maize_fao`, `c_livestock_goat_s_fao`), `c_food_price_index`, "
+            "modeled close prices (`c_beans`, `c_maize_fao`, `c_livestock_goat_s_fao`), `c_food_price_index`, "
             "YoY inflation columns (`inflation_*`), and model trust scores (`trust_*`). All 46 fields with types, units, "
             "null rates, ranges, and descriptions are listed in `docs/dataset-dictionary.csv`."),
             "",
             "## 6. Initial Data Quality Assessment",
             "",
-            ("Profiling all 55,692 rows surfaced four cleaning rules for Week 2 Power Query work. First, 238 rows belong to a "
+            ("Profiling all 55,692 rows identified four cleaning rules for Week 2 Power Query work. First, 238 rows belong to a "
             "synthetic `Market Average` series with blank coordinates (`lat` and `lon` missing on 0.43% of rows) that must be "
             "excluded from market-level sums and averages. Second, the raw survey price columns (`beans`, `maize_fao`, "
-            "`livestock_goat_s_fao`) are missing on 94.53% to 96.72% of rows, whereas the 16 modelled OHLC columns (`o_`, `h_`, "
+            "`livestock_goat_s_fao`) are missing on 94.53% to 96.72% of rows, whereas the 16 modeled OHLC columns (`o_`, `h_`, "
             "`l_`, `c_`) have 0.00% missingness and supply a continuous 238-month series. Third, the four `inflation_*` columns "
             "are blank for all 12 months of 2007 (2,808 rows, 5.04%) because 2006 prices are absent. Fourth, `adm1_name` and "
             "`adm2_name` mix former provinces with modern counties across 35 pairs (for example, splitting Kwale, Kajiado, "
-            "Tana River, Taita Taveta, and Meru), requiring a deterministic lookup table to normalize all 233 markets into "
+            "Tana River, Taita Taveta, and Meru). A 35-pair lookup table normalizes all 233 markets into "
             "27 counties and 7 regions."),
             "",
             "## 7. Limitations and Ethics",
@@ -350,7 +356,7 @@ def _heading(pdf: FPDF, title: str) -> None:
 def _body(pdf: FPDF, text: str, size: int = 9.5) -> None:
     pdf.set_font("Helvetica", "", size)
     pdf.set_text_color(30, 35, 40)
-    pdf.multi_cell(0, 4.7, text)
+    pdf.multi_cell(0, 4.7, text, align="L")
     pdf.ln(1.5)
 
 
@@ -410,7 +416,7 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
     pdf.multi_cell(
         0,
         7.5,
-        "Mzigo Chakula: Food Price Inflation and Household Affordability Intelligence for Kenya",
+        "Mzigo Chakula: Food Price Inflation and Household Affordability in Kenya",
     )
     pdf.ln(1.5)
     pdf.set_font("Helvetica", "", 9.2)
@@ -436,14 +442,13 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
         pdf,
         "Public inflation reports in Kenya summarize food costs as one national percentage, which hides sharp regional "
         "differences across counties. A household in Turkana or Mandera buys staple maize, beans, and livestock under "
-        "very different supply conditions and seasonal shocks than a household in Nairobi or Mombasa. Over the past two "
-        "decades, drought cycles, transport costs, and exchange-rate pressure have pushed retail food prices higher "
-        "across urban centres and arid regions at different rates.",
+        "different supply conditions and seasonal shocks than a household in Nairobi or Mombasa. Over the past two "
+        "decades, retail food prices rose at different rates across urban centers and arid regions.",
     )
     _body(
         pdf,
-        "This project develops a Power BI decision tool covering Kenyan market food prices from January 2007 to October "
-        "2026. The solution shows which counties, commodities, and calendar windows carry the heaviest price burden so "
+        "This project builds a Power BI report covering Kenyan market food prices from January 2007 to October "
+        "2026. The report shows which counties, commodities, and calendar windows carry the heaviest price burden so "
         "county planners and food-security teams can prioritize interventions.",
     )
 
@@ -481,7 +486,7 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
     questions = [
         "1. Which Kenyan counties experienced the highest 12-month food price inflation over the last three years (2024 to 2026)?",
         "2. Which tracked commodity (maize, beans, or goats) drives the largest share of movements in the composite food price index?",
-        "3. Is monthly price volatility significantly higher in arid and semi-arid counties (Turkana, Marsabit, Mandera, Wajir, Garissa) than in agricultural or urban counties?",
+        "3. Is monthly price volatility higher in arid and semi-arid counties (Turkana, Marsabit, Mandera, Wajir, Garissa) than in agricultural or urban counties?",
         "4. What seasonal price cycles repeat across the year, and how do peak price months differ across regions?",
         "5. How uneven is market coverage across counties, and which counties rely on only one monitored market?",
     ]
@@ -561,9 +566,9 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
             ["price_date, year, month", "Date / Int", "0.00%", "Monthly time axis (dim_date)"],
             ["currency, components", "Text", "0.00%", "KES currency and commodity basket definition"],
             ["data_coverage, index_confidence_score", "Decimal", "0.00%", "Survey coverage (4.46%) and confidence (0.97)"],
-            ["beans, maize_fao, livestock_goat_s_fao", "Decimal", "94.5-96.7%", "Sparse raw survey prices (excluded from modelled facts)"],
-            ["o_*, h_*, l_*, c_* (3 commodities)", "Decimal", "0.00%", "Modelled monthly OHLC prices in KES (fact_prices)"],
-            ["o/h/l/c_food_price_index", "Decimal", "0.00%", "Market-month composite food index (fact_market_index)"],
+            ["beans, maize_fao, livestock_goat_s_fao", "Decimal", "94.5-96.7%", "Sparse raw survey prices (loaded as raw_spot_price)"],
+            ["o_*, h_*, l_*, c_* (3 commodities)", "Decimal", "0.00%", "Modeled monthly OHLC prices in KES (fact_prices)"],
+            ["o/h/l/c_food_price_index", "Decimal", "0.00%", "Market-month composite food index (c_food_price_index in fact_prices)"],
             ["inflation_* (4 series)", "Decimal", "5.04%", "YoY inflation % (blank only in 2007 baseline year)"],
             ["trust_* (4 series)", "Decimal", "0.00%", "Model trust scores (0 to 10 scale)"],
         ],
@@ -584,13 +589,13 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
         pdf,
         "1. Exclude aggregate rows: 238 rows are a national Market Average series (blank coordinates). Filtering these "
         f"leaves {profile['physical_market_rows']:,} physical market observations across {profile['physical_markets_count']} markets.\n"
-        "2. Normalize admin labels: adm1_name and adm2_name mix former provinces and counties across 35 pairs, splitting five "
-        "counties (Kwale, Kajiado, Tana River, Taita Taveta, Meru) and placing Kitengela (Kajiado) under Nairobi. Mapping all "
+        "2. Normalize admin labels: adm1_name and adm2_name mix former provinces and counties across 35 pairs. Five "
+        "counties (Kwale, Kajiado, Tana River, Taita Taveta, Meru) appear under both formats, and Kitengela (Kajiado) is listed under Nairobi. Mapping all "
         f"35 pairs yields {profile['clean_counties_count']} clean counties across {profile['clean_regions_count']} regions.\n"
-        "3. Use modelled close prices: Raw survey spot columns are missing on 94.53% to 96.72% of rows, while the modelled "
+        "3. Use modeled close prices: Raw survey spot columns are missing on 94.53% to 96.72% of rows, while the modeled "
         "close price series (c_beans, c_maize_fao, c_livestock_goat_s_fao, c_food_price_index) have 0.00% missingness.\n"
         "4. Handle 2007 inflation nulls and grain: YoY inflation columns are blank in 2007 (2,808 cells, 5.04%) due to the missing "
-        "2006 baseline. In modelling, c_food_price_index belongs to the market-month grain while commodity prices sit at the market-month-commodity grain.",
+        "2006 baseline. In modeling, c_food_price_index belongs to the market-month grain while commodity prices sit at the market-month-commodity grain.",
     )
 
     _heading(pdf, "8. Limitations and Ethical Considerations")
@@ -598,9 +603,9 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
         pdf,
         "Market prices reflect retail selling prices without household income or expenditure data, so affordability is "
         "inferred from regional price gaps and volatility. Coverage is uneven across counties: Turkana holds 57 markets, "
-        "Samburu holds 20, and Garissa holds 19, while five counties have only 1 market and Western Province has no markets in "
-        "this release (27 of 47 counties covered). All records are public aggregate market series under CC BY 4.0 with no "
-        "personal or sensitive individual data. Any AI assistance used for documentation or scripting will be disclosed in the "
+        "Garissa holds 21, Samburu holds 20, and Marsabit holds 19, while five counties have only 1 market and Western Province "
+        "has no markets in this release (27 of 47 counties covered). All records are public aggregate market series under CC BY 4.0 "
+        "with no personal or sensitive individual data. Any AI assistance used for documentation or scripting will be disclosed in the "
         "final report.",
     )
 
@@ -608,7 +613,7 @@ def render_proposal_pdf(profile: dict[str, Any], output_path: Path) -> Path:
     if INITIAL_IMPORT_SCREENSHOT.is_file():
         _body(
             pdf,
-            "Power Query Editor screenshot captured immediately upon importing data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv "
+            "Power Query Editor screenshot captured upon importing data/raw/KEN_RTFP_mkt_2007_2026-10-05.csv "
             "(46 columns, 999+ rows in the 1,000-row profiling preview, column quality and distribution histograms enabled, "
             "and default CSV import steps Source, Use First Row as Headers, and Change Type under Applied Steps):",
         )

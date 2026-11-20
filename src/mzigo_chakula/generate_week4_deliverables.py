@@ -1005,7 +1005,7 @@ def build_usability_and_insights_markdown(
         "",
         "| Category | Check Item | Verification Status |",
         "| --- | --- | --- |",
-        "| **Color Palette** | Colorblind-safe Orange (`#EA580C`) and Teal (`#0F766E`) distinguish ASAL and Agricultural/Urban groups, avoiding Red/Green pairs | Verified in Power BI Desktop |",
+        "| **Color Palette** | Colorblind-safe Orange (`#EA580C`) and Teal (`#0F766E`) distinguish ASAL and Agricultural/Urban groups without Red/Green pairs | Verified in Power BI Desktop |",
         "| **Honest Axes** | Price and index charts start at 0.0, while the Seasonal Index line chart (`v37_line_seasonality`) auto-scales from 0.90 to 1.10 around 1.000 and the Page 4 Maize CV% dispersion scatter (`v46_scatter_coverage_risk`) starts at 20% | Verified in Power BI Desktop |",
         "| **Non-Overlap & Bounds** | Automated unit tests verify all 46 PBIR visual containers fit inside `1280 x 720` with zero overlapping bounding boxes | Verified by pytest |",
         "| **Grain Integrity** | Composite `National Food Price Index` evaluates once per `(mkt_id, date_key)` via `SUMMARIZE`, and mixed-unit table totals are suppressed (`totals = false`) | Verified in Power BI Desktop |",
@@ -1030,8 +1030,8 @@ def build_usability_and_insights_markdown(
         ),
         (
             f"3. **Maize Deflated Recently While Beans and Goats Rose (Page 1 Matrix & Page 3 Trend):** Over the latest 12 months, Maize `[Commodity YoY Inflation %]` "
-            f"fell {abs(comms['maize_fao']['yoy_inflation_12m'] * 100):.2f}% (to 80.13 KES/kg), whereas Beans rose {comms['beans']['yoy_inflation_12m'] * 100:+.2f}% "
-            f"(150.42 KES/kg) and Goats rose {comms['livestock_goat_s_fao']['yoy_inflation_12m'] * 100:+.2f}% (5,438.29 KES/head)."
+            f"fell {abs(comms['maize_fao']['yoy_inflation_12m'] * 100):.2f}% (to 80.13 KES/kg), whereas Beans rose {comms['beans']['yoy_inflation_12m'] * 100:.2f}% "
+            f"(to 150.42 KES/kg) and Goats rose {comms['livestock_goat_s_fao']['yoy_inflation_12m'] * 100:.2f}% (to 5,438.29 KES/head)."
         ),
         (
             f"4. **Chronic Maize Cost Premium in ASAL Markets (Page 2 Gap Bar Chart):** ASAL markets average "
@@ -1040,12 +1040,12 @@ def build_usability_and_insights_markdown(
             f"{top2_gap[1]['county']} ({top2_gap[1]['gap_maize_kes']:+.2f} KES/kg) carry the largest county premiums, compared to Lamu (-17.51 KES/kg)."
         ),
         (
-            f"5. **Inverse Seasonal Timing Between Crops and Livestock (Page 3 Seasonal Cycle):** Dry staples peak before main harvests in Cool Dry / Harvest (Jun-Sep) "
+            f"5. **Inverse Seasonal Timing Between Crops and Livestock (Page 3 Seasonal Cycle):** Maize and beans peak before main harvests in Cool Dry / Harvest (Jun-Sep) "
             f"(Maize {sw['maize_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f}, Beans {sw['beans']['Cool Dry / Harvest (Jun-Sep)']:.3f}) and hit annual lows in "
             f"Hot Dry / Lean (Jan-Feb) (0.972 and 0.970), when Goat prices reach their seasonal peak ({sw['livestock_goat_s_fao']['Hot Dry / Lean (Jan-Feb)']:.3f})."
         ),
         (
-            f"6. **Heavy Survey Coverage Blind Spots in High-Volatility Counties (Page 4 Priority Matrix):** Raw field checks cover "
+            f"6. **Survey Coverage Blind Spots in High-Volatility Counties (Page 4 Priority Matrix):** Raw field checks cover "
             f"{overall['survey_coverage_rate_pct'] * 100:.2f}% of records across {etl_result.qa_metrics['dim_markets_rows']} physical markets. "
             "Samburu (20 markets, 0.00% survey coverage), Kisumu (0.00% coverage, +18.43% recent YoY), and Garissa (21 markets, 3.85% coverage) fall inside the Page 4 blind-spot quadrant (<5% survey coverage and >38% maize CV)."
         ),
