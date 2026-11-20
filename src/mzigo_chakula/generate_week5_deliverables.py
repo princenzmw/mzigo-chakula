@@ -159,23 +159,23 @@ def _findings_and_recommendations(
     findings = [
         (
             "Finding 1 (Q1): Regional YoY Food Price Resurgence",
-            f"While multi-year index averages reflect the steep decline from the 2023 livestock price spike (mean 3.465 vs. 1.744 in 2025), recent 12-month National Food Price Index inflation ({overall['recent_12m_start']} to {overall['recent_12m_end']}) rebounded to +{overall['yoy_inflation_recent_12m'] * 100:.2f}%. Tharaka Nithi (+25.13%), Marsabit (+19.85%), and Kisumu (+18.43%) posted the sharpest local increases (Page 1 Top 10 YoY Bar Chart, [YoY Inflation %]).",
+            f"While annual index averages show the decline from the 2023 livestock price peak (2023 mean 3.465 vs. 1.744 in 2025), 12-month National Food Price Index inflation ({overall['recent_12m_start']} to {overall['recent_12m_end']}) rose {overall['yoy_inflation_recent_12m'] * 100:.2f}%. Tharaka Nithi (+25.13%), Marsabit (+19.85%), and Kisumu (+18.43%) recorded the largest county increases (Page 1 Top 10 YoY Bar Chart, [YoY Inflation %]).",
         ),
         (
             "Finding 2 (Q2): Composite Index Co-Moves With Goats Over Staples",
-            f"Although the source components label assigns Goat (1 head) weight 0, live goat close prices explain {comms['livestock_goat_s_fao']['r2_with_food_index'] * 100:.2f}% of c_food_price_index variance across 55,454 physical market-months (r = {comms['livestock_goat_s_fao']['corr_with_food_index']:.5f}), versus {comms['beans']['r2_with_food_index'] * 100:.2f}% for Beans and {comms['maize_fao']['r2_with_food_index'] * 100:.2f}% for Maize. In the latest 12 months, Maize fell -10.51% (80.13 KES/kg) while Goats rose +7.77% (5,438.29 KES/head) (Page 1 Commodity Matrix, [Commodity YoY Inflation %]).",
+            f"Although the source components label assigns Goat (1 head) weight 0, monthly closing prices for Goat (1 head) explain {comms['livestock_goat_s_fao']['r2_with_food_index'] * 100:.2f}% of c_food_price_index variance across 55,454 physical market-months (r = {comms['livestock_goat_s_fao']['corr_with_food_index']:.5f}), versus {comms['beans']['r2_with_food_index'] * 100:.2f}% for Beans and {comms['maize_fao']['r2_with_food_index'] * 100:.2f}% for Maize. Over the latest 12 months, Maize fell {abs(comms['maize_fao']['yoy_inflation_12m'] * 100):.2f}% (to 80.13 KES/kg) while Goats rose {comms['livestock_goat_s_fao']['yoy_inflation_12m'] * 100:+.2f}% (to 5,438.29 KES/head) (Page 1 Commodity Matrix, [Commodity YoY Inflation %]).",
         ),
         (
             "Finding 3 (Q3): Structural ASAL Maize Price Premium and Dispersion",
-            f"ASAL markets (202 markets in 16 counties) exhibit higher Food Index CV ({groups['Arid & Semi-Arid (ASAL)']['food_index_cv'] * 100:.2f}% vs. {groups['Agricultural & Urban']['food_index_cv'] * 100:.2f}%), higher Maize CV (40.21% vs. 38.52%), higher Goat CV (85.64% vs. 78.82%), higher outlier rates (1.14% vs. 1.03%), and +{asal_maize_diff:.2f} KES/kg higher maize prices than Agricultural & Urban markets (31 markets). {top2_gap[0]['county']} (+{top2_gap[0]['gap_maize_kes']:.2f} KES/kg) and {top2_gap[1]['county']} (+{top2_gap[1]['gap_maize_kes']:.2f} KES/kg) carry the heaviest chronic maize premiums against {cheapest_gap['county']} ({cheapest_gap['gap_maize_kes']:.2f} KES/kg) (Page 2 Gap Bar Chart & Grouped Bars, [Affordability Gap (KES)]).",
+            f"ASAL markets (202 markets in 16 counties) show higher CV on the Food Index ({groups['Arid & Semi-Arid (ASAL)']['food_index_cv'] * 100:.2f}% vs. {groups['Agricultural & Urban']['food_index_cv'] * 100:.2f}%), Maize (40.21% vs. 38.52%), and Goats (85.64% vs. 78.82%), higher outlier rates (1.14% vs. 1.03%), and +{asal_maize_diff:.2f} KES/kg higher maize prices than Agricultural & Urban markets (31 markets), while Beans CV is slightly lower in ASAL (30.82% vs. 31.89%). Relative to the national mean (56.02 KES/kg), {top2_gap[0]['county']} (+{top2_gap[0]['gap_maize_kes']:.2f} KES/kg) and {top2_gap[1]['county']} (+{top2_gap[1]['gap_maize_kes']:.2f} KES/kg) carry the largest maize premiums, compared to {cheapest_gap['county']} ({cheapest_gap['gap_maize_kes']:.2f} KES/kg) (Page 2 Gap Bar Chart & Grouped Bars, [Affordability Gap (KES)]).",
         ),
         (
             "Finding 4 (Q4): Inverse Crop vs. Livestock Seasonal Price Cycles",
-            f"Dry grains and livestock follow opposite annual cycles across 238 months. Maize ({sw['maize_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f}) and Beans ({sw['beans']['Cool Dry / Harvest (Jun-Sep)']:.3f}) reach seasonal highs during Cool Dry / Harvest (Jun-Sep) pre-harvest depletion and trough during Hot Dry / Lean (Jan-Feb) (0.972 and 0.970), when Goat prices peak at {sw['livestock_goat_s_fao']['Hot Dry / Lean (Jan-Feb)']:.3f} before troughing at {sw['livestock_goat_s_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f} (Page 3 Seasonal Cycle, [Seasonal Index]).",
+            f"Staple crops and livestock follow inverse annual cycles across 238 months. Maize ({sw['maize_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f}) and Beans ({sw['beans']['Cool Dry / Harvest (Jun-Sep)']:.3f}) reach seasonal highs during Cool Dry / Harvest (Jun-Sep) as prior-season stocks tighten before main harvests and hit annual lows during Hot Dry / Lean (Jan-Feb) (0.972 and 0.970), when Goat prices peak at {sw['livestock_goat_s_fao']['Hot Dry / Lean (Jan-Feb)']:.3f} before falling to {sw['livestock_goat_s_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f} in Jun-Sep (Page 3 Seasonal Cycle, [Seasonal Index]).",
         ),
         (
             "Finding 5 (Q5): Uneven County Coverage and High-Risk Field Survey Gaps",
-            f"Modelled OHLC series populate 100.00% of the 233 x 238 x 3 grid ({etl_result.qa_metrics['fact_prices_rows']:,} rows), yet actual field surveys cover only {overall['survey_coverage_rate_pct'] * 100:.2f}% of records and omit Western Province completely (27 of 47 counties covered). Five counties rely on one market, while Samburu (20 markets, 0.00% survey coverage), Kisumu (0.00% coverage, +18.43% YoY), and Garissa (21 markets, 3.85% coverage) occupy the monitoring blind-spot quadrant (Page 4 Priority Matrix, [Survey Coverage Rate %]).",
+            f"Modeled OHLC series populate 100.00% of the 233 x 238 x 3 grid ({etl_result.qa_metrics['fact_prices_rows']:,} rows), yet raw field surveys cover {overall['survey_coverage_rate_pct'] * 100:.2f}% of records and omit Western Province (27 of 47 counties covered). Five counties rely on one market, while Samburu (20 markets, 0.00% survey coverage), Kisumu (0.00% coverage, +18.43% YoY on Page 1), and Garissa (21 markets, 3.85% all-commodity coverage on the sub-5% bar chart) fall in the blind-spot quadrant (Page 4 Priority Quadrant & Low-Survey Bar Chart, [Survey Coverage Rate %]).",
         ),
     ]
 
@@ -185,20 +185,20 @@ def _findings_and_recommendations(
             "County food-security dashboards should alert on commodity-specific [Commodity YoY Inflation %] and [Avg Price (KES)] for Maize (1 kg) and Beans (1 kg) alongside [National Food Price Index], because raw index shifts reflect 99.99% co-movement with Goat (1 head) prices.",
         ),
         (
-            "Recommendation 2: Deploy Emergency Price Audits to Zero-Survey High-Risk Counties",
-            "Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY surge), and large northern ASAL clusters (Turkana at 1.96%, Marsabit at 3.00%, and Garissa at 3.85% coverage) to raise [Survey Coverage Rate %] above 10% across blind-spot corridors.",
+            "Recommendation 2: Deploy Field Price Audits to Zero-Survey High-Risk Counties",
+            "Assign county agricultural enumerators first to Samburu (20 markets, 0.00% raw survey coverage), Kisumu (0.00% coverage, +18.43% YoY), and large northern ASAL clusters (Turkana at 1.96%, Marsabit at 3.00%, and Garissa at 3.85%) to raise [Survey Coverage Rate %] above the 5% blind-spot threshold.",
         ),
         (
             "Recommendation 3: Pre-Position Grain Buffers Ahead of June-to-September Peaks",
             "Trigger county maize and bean strategic reserve releases in May before the Cool Dry / Harvest (Jun-Sep) seasonal price peak (1.023 maize index, 1.013 beans index), and schedule livestock offtake or pastoral support for Jan-Feb (1.060 goat peak).",
         ),
         (
-            "Recommendation 4: Target ASAL Transport Subsidies Using Affordability Gaps",
-            "Direct staple grain logistics support toward chronic net-deficit markets with the largest positive [Affordability Gap (KES)], specifically Turkana (+15.26 KES/kg), Mandera (+10.65 KES/kg), and Kisumu (+9.89 KES/kg), paired with market linkages from surplus hubs like Lamu (-17.51 KES/kg) and Kitui (-15.59 KES/kg).",
+            "Recommendation 4: Target Staple Grain Logistics Using Affordability Gaps",
+            "Direct maize transport and price-stabilization support toward chronic high-price counties with the largest positive [Affordability Gap (KES)], including Turkana (+15.26 KES/kg), Mandera (+10.65 KES/kg), and Kisumu (+9.89 KES/kg), and build trade links with nearby lower-price agricultural markets such as Kitui (-15.59 KES/kg).",
         ),
         (
-            "Recommendation 5: Expand Market Instrumentation Into Western Kenya Counties",
-            "Partner with KNBS and county trade offices to onboard physical market monitoring sites across Western Province and single-market counties (Embu, Lamu, Machakos, Nyeri, Uasin Gishu) so future RTFP releases reflect all 47 Kenyan counties.",
+            "Recommendation 5: Expand Market Coverage to Unmonitored Counties",
+            "Partner with the Kenya National Bureau of Statistics (KNBS) and county trade offices to add physical monitoring sites across the 20 unrepresented counties (including Western Province) and single-market counties (Embu, Lamu, Machakos, Nyeri, Uasin Gishu) so future World Bank RTFP releases cover all 47 Kenyan counties.",
         ),
     ]
 
@@ -457,22 +457,24 @@ def build_final_report_markdown(etl_result: ETLResult, summary: dict[str, Any]) 
     findings, recommendations = _findings_and_recommendations(etl_result, summary)
 
     lines: list[str] = [
-        "# Mzigo Chakula: Kenya Food Price Inflation and Household Affordability Intelligence (2007 to 2026)",
+        "# Mzigo Chakula: Kenya Food Price Inflation and Household Affordability (2007 to 2026)",
         "",
         "**Course:** DSA 3050A | Business Intelligence and Data Visualization (Group Project B)",
         "**Authors:** Prince Nzamuwe, Yizere Denis Derick",
         "**Date:** 17 November 2026",
+        "**Full Report:** [docs/report.pdf](docs/report.pdf) (12-page technical report)",
         "",
         "## Executive Summary",
         "",
         (
-            f"This report documents an end-to-end Microsoft Power BI and Python analytics solution analyzing "
+            f"This report summarizes a Microsoft Power BI and Python analysis of "
             f"{qa['raw_rows']:,} raw monthly market rows ({qa['physical_market_rows']:,} physical market-months expanded "
             f"to {qa['fact_prices_rows']:,} commodity observations) across {qa['dim_markets_rows']} Kenyan markets, 27 counties, "
-            f"and 238 consecutive months (`2007-01-01` to `2026-10-01`). Over the most recent 12 months "
-            f"(`{overall['recent_12m_start']}` to `{overall['recent_12m_end']}`), Kenya's grain-safe National Food Price Index "
-            f"rose +{overall['yoy_inflation_recent_12m'] * 100:.2f}% year over year (reaching {overall['national_food_index_recent_12m']:.2f} "
-            f"against a 19-year baseline of {overall['national_food_index_full']:.2f}), led by Tharaka Nithi (+25.13%), Marsabit (+19.85%), and Kisumu (+18.43%)."
+            f"and 238 consecutive months (`2007-01-01` to `2026-10-01`). Over the latest 12 months "
+            f"(`{overall['recent_12m_start']}` to `{overall['recent_12m_end']}`), the National Food Price Index "
+            f"(deduplicated at the market-month grain) rose {overall['yoy_inflation_recent_12m'] * 100:.2f}% year over year "
+            f"to {overall['national_food_index_recent_12m']:.2f} against a 238-month mean of {overall['national_food_index_full']:.2f}, "
+            "led by Tharaka Nithi (+25.13%), Marsabit (+19.85%), and Kisumu (+18.43%)."
         ),
         "",
         "## Five Evidence-Backed Findings",
@@ -490,15 +492,16 @@ def build_final_report_markdown(etl_result: ETLResult, summary: dict[str, Any]) 
             "",
             "## Summary Commodity Benchmarks",
             "",
-            "| Commodity | Full Mean (KES) | 12m Mean (KES) | 12m YoY % | CV % | Correlation `r` vs. Index |",
-            "| --- | ---: | ---: | ---: | ---: | ---: |",
+            "| Commodity | Full Mean (KES) | 12m Mean (KES) | 12m YoY % | CV % | Correlation `r` vs. Index | R^2 vs. Index |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
     for spec in COMMODITY_SPECS:
         c = comms[spec.commodity_id]
         lines.append(
             f"| {c['commodity_name']} | {c['avg_price_kes']:,.2f} | {c['recent_12m_avg_kes']:,.2f} | "
-            f"{c['yoy_inflation_12m'] * 100:+.2f}% | {c['volatility_cv'] * 100:.2f}% | {c['corr_with_food_index']:.5f} |"
+            f"{c['yoy_inflation_12m'] * 100:+.2f}% | {c['volatility_cv'] * 100:.2f}% | "
+            f"{c['corr_with_food_index']:.5f} | {c['r2_with_food_index'] * 100:.2f}% |"
         )
 
     lines.extend(
@@ -509,20 +512,20 @@ def build_final_report_markdown(etl_result: ETLResult, summary: dict[str, Any]) 
             "| Stage | Visual Evidence | Scope Captured |",
             "| --- | --- | --- |",
             "| Week 1: Raw Import & Profiling | `screenshots/week1-initial-import.png` | Power Query raw 46-column CSV preview prior to transformations |",
-            "| Week 2: Data Cleaning & QA | `screenshots/week2-powerquery-cleaning.png` | 10 Power Query M steps (`T1` to `T10`), zero orphan check, and `1,866` outlier audit |",
-            "| Week 3: Star Schema Diagram | `docs/model-diagram.png` | 4-table single-direction `1:*` schema and grain-safe architecture |",
-            "| Week 3: Power BI Desktop Model View | `screenshots/week3-powerbi-model-view.png` | Live Power BI Desktop Model View showing all 4 joined tables |",
-            "| Week 3: DAX Verification Audit | `screenshots/week3-dax-validation.png` | 15 DAX measures with gap-safe `EDATE`/`TREATAS` and commodity benchmarks |",
-            "| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1..4.png` | Live Power BI Desktop captures of all 4 pages (46 PBIR visuals, custom theme, native `pageNavigator`) |",
+            "| Week 2: Data Cleaning & QA | `screenshots/week2-powerquery-cleaning.png` | 10 Power Query M steps (`T1` to `T10`), zero orphan foreign keys, and 1,866 flagged outlier rows |",
+            "| Week 3: Star Schema Diagram | `docs/model-diagram.png` | 4-table single-direction `1:*` schema with market-month index deduplication |",
+            "| Week 3: Power BI Desktop Model View | `screenshots/week3-powerbi-model-view.png` | Live Power BI Desktop Model View with all 4 joined tables |",
+            "| Week 3: DAX Verification Audit | `screenshots/week3-dax-validation.png` | 15 DAX measures using `EDATE` and `TREATAS` to handle missing months, plus commodity benchmarks |",
+            "| Week 4: Dashboard Pages 1 to 4 | `screenshots/page1-executive-pulse.png`, `screenshots/page2-county-commodity.png`, `screenshots/page3-trends-diagnostics.png`, `screenshots/page4-decisions-action.png` | Power BI Desktop captures of all 4 report pages (46 visuals, custom theme, and top header page navigator) |",
             "",
             "## AI Assistance Disclosure and Data Authenticity Statement",
             "",
             (
                 "All 55,692 raw records, market coordinates, and commodity price observations come directly from the World Bank "
                 "Real Time Food Prices (RTFP) Kenya release (CC BY 4.0) without synthetic observations. AI coding and documentation "
-                "tooling assisted with Python validation scripting, Power Query M code drafting, TMDL semantic model packaging, "
-                "report formatting, and slide generation, with every computed metric verified deterministically against the raw CSV "
-                "through an automated pytest suite."
+                "tools assisted with Python validation scripting, Power Query M drafting, Tabular Model Definition Language (TMDL) packaging, "
+                "report formatting, and slide generation. An automated pytest suite verifies ETL invariants, PBIR/TMDL bindings, "
+                "and Python reference benchmarks against the raw CSV."
             ),
             "",
         ]
@@ -561,7 +564,7 @@ def render_final_report_pdf(
     pdf.multi_cell(
         180,
         8,
-        "Mzigo Chakula: Kenya Food Price Inflation and Household Affordability Intelligence (2007 to 2026)",
+        "Mzigo Chakula: Kenya Food Price Inflation and Household Affordability (2007 to 2026)",
     )
     pdf.set_xy(15, 34)
     pdf.set_font("Helvetica", "", 10)
@@ -580,11 +583,11 @@ def render_final_report_pdf(
     _pdf_heading(pdf, "1. Executive Summary")
     _pdf_body(
         pdf,
-        f"National food inflation statistics in Kenya often report a single aggregate rate, hiding sharp regional disparities between northern arid counties, highland production zones, and urban wholesale centres. Mzigo Chakula delivers an end-to-end Microsoft Power BI decision tool spanning {qa['dim_markets_rows']} physical Kenyan markets across 27 counties and {qa['dim_date_rows']} continuous months from January 2007 to October 2026 ({qa['fact_prices_rows']:,} cleaned market-month-commodity records).",
+        f"National food inflation statistics in Kenya often report a single aggregate rate, hiding sharp regional disparities between northern arid counties, highland production zones, and urban wholesale centres. Mzigo Chakula delivers a Microsoft Power BI decision tool spanning {qa['dim_markets_rows']} physical Kenyan markets across 27 counties and {qa['dim_date_rows']} continuous months from January 2007 to October 2026 ({qa['fact_prices_rows']:,} cleaned market-month-commodity records).",
     )
     _pdf_body(
         pdf,
-        f"Across the latest 12 months ({overall['recent_12m_start']} to {overall['recent_12m_end']}), the grain-safe National Food Price Index increased by +{overall['yoy_inflation_recent_12m'] * 100:.2f}% year over year to {overall['national_food_index_recent_12m']:.2f} (19-year mean: {overall['national_food_index_full']:.2f}), driven sharply by Tharaka Nithi (+25.13%), Marsabit (+19.85%), Kisumu (+18.43%), and Nakuru (+17.52%). Meanwhile, individual staple prices diverged: Maize fell -10.51% YoY to 80.13 KES/kg while Beans edged up +0.55% (150.42 KES/kg) and Goats climbed +7.77% (5,438.29 KES/head). Furthermore, ASAL counties face an average +9.75 KES/kg maize price premium above Agricultural & Urban counties alongside acute raw survey coverage blind spots.",
+        f"Across the latest 12 months ({overall['recent_12m_start']} to {overall['recent_12m_end']}), the National Food Price Index (deduplicated at the market-month grain) rose {overall['yoy_inflation_recent_12m'] * 100:.2f}% year over year to {overall['national_food_index_recent_12m']:.2f} (238-month mean: {overall['national_food_index_full']:.2f}), led by Tharaka Nithi (+25.13%), Marsabit (+19.85%), Kisumu (+18.43%), and Nakuru (+17.52%). Individual commodity prices diverged: Maize fell 10.51% YoY to 80.13 KES/kg while Beans rose 0.55% (150.42 KES/kg) and Goats climbed 7.77% (5,438.29 KES/head). ASAL counties also carry an average +9.75 KES/kg maize price premium above Agricultural & Urban counties alongside survey blind spots.",
     )
 
     _pdf_heading(pdf, "2. Problem Context & Project Scope")
@@ -599,8 +602,8 @@ def render_final_report_pdf(
             ["Week 1: Framing & Profiling", "55,692 raw rows & 46 columns audited; 3-page proposal + raw Power BI screenshot", "docs/proposal.pdf, docs/dataset-dictionary.csv"],
             ["Week 2: Power Query & QA", "10 M steps (T1 to T10); 166,362 fact rows; 0 duplicate PKs & 0 orphan FKs", "powerquery/*.pq, docs/transformation-log.md"],
             ["Week 3: Star Schema & DAX", "4 tables (233 mkts, 238 dates, 3 items); 3 single-dir 1:* joins; 15 DAX measures", "pbip/mzigo-chakula.pbip, docs/dax-catalogue.md"],
-            ["Week 4: Dashboard & Insights", "4 report pages, 46 styled PBIR visuals, native pageNavigator, real 300 DPI PNGs", "pbip/mzigo-chakula.Report/, screenshots/page1..4.png"],
-            ["Week 5: Final Report & Defence", "12-page PDF report with step screenshots, 12-slide PPTX, README", "docs/report.pdf, slides/presentation.pptx"],
+            ["Week 4: Dashboard & Insights", "4 report pages, 46 styled PBIR visuals, native pageNavigator, 300 DPI PNGs", "pbip/mzigo-chakula.Report/, screenshots/page{1..4}-*.png"],
+            ["Week 5: Final Report & Defence", "12-page PDF report with workflow & Desktop screenshots, 12-slide PPTX, README", "docs/report.pdf, slides/presentation.pptx"],
         ],
         [45, 78, 57],
         font_size=7.9,
@@ -800,7 +803,7 @@ def render_final_report_pdf(
     _pdf_heading(pdf, "10. Interactive Dashboard Design: Pages 1 and 2")
     _pdf_body(
         pdf,
-        "Page 1 (Executive Pulse) delivers rapid situational awareness with top header page navigation, 5 dropdown slicers, 5 KPI cards (1.88 recent index, +7.56% YoY, 1.92 YTD, 100.00% completeness, 4.49% survey coverage), the 238-month National Food Price Index trend, Top 10 Counties by Recent 12m YoY Inflation, the Recent 12m Commodity Matrix, and Top 10 County Watchlist.",
+        "Page 1 (Executive Pulse) delivers rapid situational awareness with top header page navigation (Ctrl + Click in Power BI Desktop; single-click in Power BI Service), 5 dropdown slicers, 5 KPI cards (1.88 recent index, 7.56% YoY, 1.92 YTD mean, 100.00% completeness, 4.49% survey coverage), the 238-month National Food Price Index trend, all 10 Top Counties by Recent 12m YoY Inflation, the full-width Commodity Matrix, and the full 10-row County Watchlist.",
         size=8.8,
     )
     p1 = SCREENSHOTS_DIR / "page1-executive-pulse.png"
@@ -809,7 +812,7 @@ def render_final_report_pdf(
         pdf.set_y(pdf.get_y() + 89)
     _pdf_body(
         pdf,
-        "Page 2 (County & Commodity) reveals spatial affordability premiums via Top 5 Deficit vs. Bottom 5 Surplus maize gap bars (+15.26 KES/kg in Turkana vs. -15.59 KES/kg in Kitui), 233-market Lon/Lat coordinate scatter map, ASAL vs. Agricultural/Urban CV% comparison, and a unit-safe County Maize Affordability table.",
+        "Page 2 (County & Commodity) reveals spatial affordability premiums via Top 5 Deficit vs. Bottom 5 Surplus maize gap bars (+15.26 KES/kg in Turkana vs. -17.51 KES/kg in Lamu and -15.59 KES/kg in Kitui), 233-market Lon/Lat coordinate scatter map, ASAL vs. Agricultural/Urban CV% comparison, and a full-width County Maize Affordability table.",
         size=8.8,
     )
     p2 = SCREENSHOTS_DIR / "page2-county-commodity.png"
@@ -821,7 +824,7 @@ def render_final_report_pdf(
     _pdf_heading(pdf, "11. Interactive Dashboard Design: Pages 3 and 4")
     _pdf_body(
         pdf,
-        "Page 3 (Trends & Diagnostics) tracks Beans and Maize monthly prices from 2007 to 2026 (with 12m Rolling Avg, MoM %, and StdDev hover tooltips), plots the repeating Jan-to-Dec Seasonal Index cycle curves, ranks the Top 10 counties by Maize CV %, and summarizes Cropping Window seasonal index bars.",
+        "Page 3 (Trends & Diagnostics) tracks Beans and Maize monthly prices from 2007 to 2026 (with 12m Rolling Avg, MoM %, and StdDev hover tooltips), plots the repeating Jan-to-Dec Seasonal Index cycle curves, ranks all 10 Top counties by Maize CV %, and summarizes Cropping Window seasonal index bars.",
         size=8.8,
     )
     p3 = SCREENSHOTS_DIR / "page3-trends-diagnostics.png"
@@ -830,7 +833,7 @@ def render_final_report_pdf(
         pdf.set_y(pdf.get_y() + 89)
     _pdf_body(
         pdf,
-        "Page 4 (Decisions & Action) maps all 27 counties onto a Monitoring Priority Quadrant (Survey % vs. Maize CV %, plotting un-surveyed hubs at 0.00%), orders the County Priority Action Matrix, isolates 10 low-survey counties below 5% for enumerator deployment, and compares Average Maize Price (KES/kg) across 7 regions.",
+        "Page 4 (Decisions & Action) maps all 27 counties onto a Monitoring Priority Quadrant (Maize Survey % vs. Maize CV %, where Maize zero-survey hubs plot at 0.00%), orders the full-width Maize Priority Action Matrix, isolates 10 low-survey counties below 5% across all commodities, and compares Average Maize Price (KES/kg) across 7 regions.",
         size=8.8,
     )
     p4 = SCREENSHOTS_DIR / "page4-decisions-action.png"
@@ -906,15 +909,15 @@ def render_final_report_pdf(
     _pdf_heading(pdf, "15. AI Assistance Disclosure (Brief Section 10 Compliance)")
     _pdf_body(
         pdf,
-        "All 55,692 raw observations, coordinates, and price values come exclusively from the World Bank Real Time Food Prices (RTFP) dataset. No synthetic or AI-generated market observations were created. AI assistant tooling supported Python profiling, test authoring, Power Query M script generation, TMDL semantic model packaging, PDF/slide assembly, and prose copy editing under human verification, with all computed KPIs verified by automated pytest tests.",
+        "All 55,692 raw observations, coordinates, and price values come directly from the World Bank Real Time Food Prices (RTFP) dataset with zero synthetic observations. AI assistant tooling supported Python profiling, test authoring, Power Query M drafting, Tabular Model Definition Language (TMDL) packaging, PDF/slide assembly, and prose copy editing under human review. An automated pytest suite verifies ETL invariants, PBIR/TMDL bindings, and Python reference benchmarks against the raw CSV.",
     )
     _pdf_heading(pdf, "16. Group Contributors & References")
     _pdf_table(
         pdf,
         ["Contributor", "Role", "Verified Responsibilities"],
         [
-            ["Prince Nzamuwe", "Lead Analyst & Architect", "Dataset acquisition, Power Query M ETL, star schema model, DAX validation, dashboard design, report & defence"],
-            ["Yizere Denis Derick", "Group Contributor", "Problem framing, stakeholder scoping, requirement alignment (lecturer notified of medical accommodation)"],
+            ["Prince Nzamuwe", "Lead Analyst & BI Architect", "Dataset acquisition, Power Query M ETL, star schema model, DAX validation, dashboard design, report & defence"],
+            ["Yizere Denis Derick", "Group Contributor", "Problem framing, stakeholder scoping, requirement alignment (lecturer notified of medical situation)"],
         ],
         [40, 42, 98],
         font_size=8.0,
@@ -1045,7 +1048,7 @@ def render_presentation_pptx(
     p.font.bold = True
     p.font.color.rgb = RGBColor(0x38, 0xBD, 0xF8)
     p2 = tf1.add_paragraph()
-    p2.text = "Food Price Inflation and Household Affordability Intelligence in Kenya (2007 to 2026)"
+    p2.text = "Food Price Inflation and Household Affordability in Kenya (2007 to 2026)"
     p2.font.size = Pt(28)
     p2.font.bold = True
     p2.font.color.rgb = PPTX_WHITE
@@ -1154,7 +1157,7 @@ def render_presentation_pptx(
             "Orphan foreign keys across 166,362 rows: 0 / 0 / 0.",
             "Null coordinates after cleaning: 0 (down from 238 Market Average pairs).",
             "Non-positive modelled close prices (<= 0 KES): 0 across all commodities.",
-            "Verified continuously by 36+ automated pytest unit tests.",
+            "Verified continuously by 44 automated pytest unit tests.",
         ],
         accent=PPTX_TEAL,
         font_pt=13,
@@ -1225,7 +1228,7 @@ def render_presentation_pptx(
 
     # Slides 7-10: Full Visual Showcase of the 4 Report Pages
     page_slides = [
-        (7, "Page 1: Executive Pulse", "Top pageNavigator, recent 12m KPI cards, 238-month index trend, Top 10 YoY counties, and matrices", SCREENSHOTS_DIR / "page1-executive-pulse.png", "Highlight the 2023 index spike and recent +7.56% recovery led by Tharaka Nithi (+25.13%), Marsabit, and Kisumu."),
+        (7, "Page 1: Executive Pulse", "Top pageNavigator, recent 12m KPI cards, 238-month index trend, Top 10 YoY counties, and matrices", SCREENSHOTS_DIR / "page1-executive-pulse.png", "Remind assessors to use Ctrl + Click on the top header navigation pills in Power BI Desktop (single-click in Service), and highlight the 2023 index spike and recent +7.56% recovery led by Tharaka Nithi (+25.13%), Marsabit, and Kisumu."),
         (8, "Page 2: County and Commodity Disparities", "Top 5 Deficit vs. Bottom 5 Surplus maize gap bars, 233-market scatter, ASAL CV%, and county table", SCREENSHOTS_DIR / "page2-county-commodity.png", "Highlight the +9.75 KES/kg chronic maize price gap in ASAL markets like Turkana (+15.26 KES/kg) versus surplus zones like Kitui (-15.59 KES/kg) and Lamu (-17.51 KES/kg)."),
         (9, "Page 3: Trends, Seasonality, and Diagnostics", "2007 to 2026 Beans/Maize curves, Jan-Dec seasonality, Top 10 Maize CV%, and cropping window columns", SCREENSHOTS_DIR / "page3-trends-diagnostics.png", "Point out the inverse seasonal timing between Jun-Sep crop highs (1.023 maize) and Jan-Feb goat peaks (1.060)."),
         (10, "Page 4: Decisions and Action Playbook", "Survey % vs. Maize CV% blind-spot quadrant, priority matrix, sub-5% survey bars, and regional maize prices", SCREENSHOTS_DIR / "page4-decisions-action.png", "Walk assessors through the blind-spot quadrant: Samburu (20 markets, 0.00% raw survey coverage) and Kisumu (+18.43% YoY, 0.00% survey)."),
@@ -1248,8 +1251,8 @@ def render_presentation_pptx(
         5.4,
         "Key Verified Findings (Q1 to Q5)",
         [
-            "F1: Recent 12m index inflation hit +7.56% (Tharaka Nithi +25.13%, Marsabit +19.85%).",
-            "F2: Composite index moves 99.99% with Goat prices; Maize fell -10.51% while Beans held +0.55%.",
+            "F1: Recent 12m index inflation rose 7.56% (Tharaka Nithi +25.13%, Marsabit +19.85%).",
+            "F2: Composite index moves 99.99% with Goat prices; Maize fell 10.51% while Beans held +0.55%.",
             "F3: ASAL markets face +9.75 KES/kg higher maize cost and higher volatility on Index/Maize/Goat.",
             "F4: Maize & Beans peak Jun-Sep (1.023 / 1.013); Goats peak Jan-Feb (1.060).",
             "F5: Raw field surveys cover 4.49%; Western Province absent; Samburu at 0.00% across 20 markets.",
@@ -1265,11 +1268,11 @@ def render_presentation_pptx(
         5.4,
         "Stakeholder Recommendations",
         [
-            "R1: Track Maize & Beans YoY measures separately instead of relying only on raw composite index.",
-            "R2: Deploy field enumerators immediately to Samburu, Kisumu, Turkana, and Garissa.",
+            "R1: Track Maize & Beans YoY measures separately from the Goat-heavy composite index.",
+            "R2: Deploy field enumerators to Samburu, Kisumu, Turkana, and Garissa.",
             "R3: Release grain reserves in May ahead of Jun-Sep peaks; time pastoral aid for Jan-Feb.",
-            "R4: Target grain transport buffers to Turkana (+15.3 KES) & Mandera (+10.7 KES) linked to Lamu/Kitui.",
-            "R5: Expand market coverage to Western Kenya counties and single-market hubs.",
+            "R4: Target grain support to Turkana (+15.3 KES) & Mandera (+10.7 KES) linked to nearby markets like Kitui (-15.59 KES/kg).",
+            "R5: Expand market coverage to 20 unrepresented counties (incl. Western Kenya) and single-market hubs.",
         ],
         accent=PPTX_TEAL,
         font_pt=13,
@@ -1303,9 +1306,9 @@ def render_presentation_pptx(
         5.4,
         "AI Disclosure & Reproducibility",
         [
-            "All 55,692 source rows are authentic World Bank RTFP records (zero synthetic observations).",
+            "All 55,692 source rows come directly from World Bank RTFP records (zero synthetic observations).",
             "AI tooling assisted code scaffolding, TMDL export, documentation, and testing.",
-            "All Power Query, DAX, and data claims pass deterministic pytest verification on raw CSV.",
+            "Automated pytest checks verify ETL invariants, PBIR/TMDL bindings, and Python benchmarks.",
             "Thank you. Ready for live model inspection and questions.",
         ],
         accent=PPTX_NAVY,
@@ -1322,26 +1325,26 @@ def build_contribution_matrix_markdown() -> str:
     lines: list[str] = [
         "# Group Project Contribution Matrix (DSA 3050A)",
         "",
-        "**Project:** Mzigo Chakula (Kenya Food Price Inflation and Household Affordability Intelligence, 2007 to 2026)",
+        "**Project:** Mzigo Chakula (Kenya Food Price Inflation and Household Affordability, 2007 to 2026)",
         "**Repository:** `princenzmw/mzigo-chakula`",
-        "**Group Composition Note:** Two-member group (`Prince Nzamuwe` and `Yizere Denis Derick`). Denis informed the course lecturer of a medical situation during execution; his framing and review contributions are recorded transparently below.",
+        "**Group Composition Note:** Two-member group (`Prince Nzamuwe` and `Yizere Denis Derick`). Yizere Denis Derick notified the course lecturer of a medical situation during execution; his framing and review contributions are recorded below.",
         "",
         "## Individual Contribution Register",
         "",
         "| Group Member | Assigned Role | Tasks Completed | Evidence in Repository (Files, Branches & PRs) |",
         "| --- | --- | --- | --- |",
-        "| Prince Nzamuwe | Lead Analyst & BI Architect | Dataset sourcing & audit, 46-column profiling, 10 Power Query M scripts, star schema model & 15 DAX measures, Python QA/DAX validation suite (38+ tests), 4-page 46-visual PBIR dashboard with native pageNavigator, 12-page PDF report, 12-slide presentation, PR workflow management | `src/mzigo_chakula/*.py`, `tests/*.py`, `powerquery/*.pq`, `pbip/`, `docs/proposal.pdf`, `docs/transformation-log.md`, `docs/dax-catalogue.md`, `docs/report.pdf`, `slides/presentation.pptx`, PRs #1 to #9 |",
-        "| Yizere Denis Derick | Group Contributor | Theme 10 problem framing alignment, stakeholder & operational decision specification, analytical question review, academic deliverable checklist verification | `README.md` (Problem framing, Stakeholders, Decisions, Questions, Contributors) |",
+        "| Prince Nzamuwe | Lead Analyst & BI Architect | Dataset sourcing and audit, 46-column profiling, 4 Power Query M scripts (10 transformations T1 to T10), star schema model and 15 DAX measures, Python QA/DAX validation suite (44 automated tests), 4-page 46-visual Power BI report with native page navigation, 12-page PDF report, 12-slide presentation, PR workflow management | `src/mzigo_chakula/*.py`, `tests/*.py`, `powerquery/*.pq`, `pbip/`, `README.md`, `docs/proposal.pdf`, `docs/dataset-dictionary.csv`, `docs/data-quality-profile.md`, `docs/transformation-log.md`, `docs/model-diagram.png`, `docs/dax-catalogue.md`, `docs/usability-and-insights.md`, `docs/report.md`, `docs/report.pdf`, `slides/presentation.pptx`, `screenshots/`, `output/`, `contribution/contribution-matrix.md`, PRs #1 to #10 |",
+        "| Yizere Denis Derick | Group Contributor | Problem framing alignment, stakeholder and operational decision specification, analytical question review, deliverable checklist verification | `README.md` (Problem statement, Business decisions supported, Analytical questions, Contributors) |",
         "",
         "## Weekly Submission Traceability",
         "",
         "| Checkpoint | Primary Deliverable | Repository Evidence |",
         "| --- | --- | --- |",
-        "| Week 1 | Proposal, 46-column dictionary, profile, initial Power BI import screenshot | PR #2, PR #4 (`docs/proposal.pdf`, `docs/dataset-dictionary.csv`, `screenshots/week1-initial-import.png`) |",
-        "| Week 2 | 10 Power Query M transforms, dimension CSVs, transformation QA log, cleaning visual | PR #3, PR #4 (`powerquery/*.pq`, `data/processed/*.csv`, `docs/transformation-log.md`, `screenshots/week2-powerquery-cleaning.png`) |",
-        "| Week 3 | 4-table star schema TMDL/PBIP, 15 DAX measures, model view, DAX validation & diagram | PR #5, PR #8, PR #9 (`pbip/`, `docs/model-diagram.png`, `screenshots/week3-powerbi-model-view.png`, `screenshots/week3-dax-validation.png`, `docs/dax-catalogue.md`) |",
-        "| Week 4 | 4-page PBIR report layout (46 visuals, native pageNavigator, custom theme), real 300 DPI PNGs, usability insights | PR #6, PR #8, PR #9 (`pbip/mzigo-chakula.Report/`, `screenshots/page1..4.png`, `output/page1..4.png`, `docs/usability-and-insights.md`) |",
-        "| Week 5 | 12-page final PDF report with live step/dashboard screenshots, 12-slide presentation, README, contribution log | PR #7, PR #8, PR #9 (`docs/report.pdf`, `slides/presentation.pptx`, `README.md`, `contribution/contribution-matrix.md`) |",
+        "| Week 1 | Proposal, 46-column dictionary, data quality profile, initial Power BI import screenshot | PR #2, PR #4 (`docs/proposal.pdf`, `docs/dataset-dictionary.csv`, `docs/data-quality-profile.md`, `screenshots/week1-initial-import.png`) |",
+        "| Week 2 | 10 Power Query M transforms, dimension CSVs (`dim_markets.csv`, `dim_date.csv`, `dim_commodity.csv`), transformation QA log, Python cleaning card | PR #3, PR #4 (`powerquery/*.pq`, `data/processed/dim_*.csv`, `docs/transformation-log.md`, `screenshots/week2-powerquery-cleaning.png`) |",
+        "| Week 3 | 4-table star schema packaged in Tabular Model Definition Language (TMDL) and Power BI Project (PBIP), 15 DAX measures, Model View screenshot, DAX validation card and schema diagram | PR #5, PR #8, PR #9 (`pbip/`, `docs/model-diagram.png`, `screenshots/week3-powerbi-model-view.png`, `screenshots/week3-dax-validation.png`, `docs/dax-catalogue.md`) |",
+        "| Week 4 | 4-page Power BI Enhanced Report Format (PBIR) layout (46 visuals, native page navigation, custom theme, full-width tables), 300 DPI PNG screenshots, usability insights | PR #6, PR #8, PR #9, PR #10 (`pbip/mzigo-chakula.Report/`, `screenshots/page1-executive-pulse.png`, `screenshots/page2-county-commodity.png`, `screenshots/page3-trends-diagnostics.png`, `screenshots/page4-decisions-action.png`, `output/page1-executive-pulse.png`, `output/page2-county-commodity.png`, `output/page3-trends-diagnostics.png`, `output/page4-decisions-action.png`, `docs/usability-and-insights.md`) |",
+        "| Week 5 | 12-page final PDF report with workflow visuals and Power BI Desktop captures, 12-slide presentation, README, contribution matrix | PR #7, PR #8, PR #9, PR #10 (`docs/report.pdf`, `docs/report.md`, `slides/presentation.pptx`, `README.md`, `contribution/contribution-matrix.md`) |",
         "",
     ]
     return "\n".join(lines)
@@ -1392,11 +1395,11 @@ def update_readme_final_sections(
     )
     new_repro = (
         "3. Open the Power BI Project (`pbip/mzigo-chakula.pbip`) in Microsoft Power BI Desktop:\n"
-        "```bash\n"
+        "```powershell\n"
         "start pbip/mzigo-chakula.pbip\n"
         "```\n"
         "* The semantic model loads all Power Query M partitions, star-schema relationships, and 15 DAX measures from `pbip/mzigo-chakula.SemanticModel/`.\n"
-        "* Optionally run full Python validation and regenerate documentation via `uv sync` and `uv run pytest -v`."
+        "* Optionally run validation tests with `uv sync` and `uv run pytest -v`, or regenerate docs via `uv run python -m mzigo_chakula.generate_week5_deliverables`."
     )
     if old_repro in updated:
         updated = updated.replace(old_repro, new_repro)

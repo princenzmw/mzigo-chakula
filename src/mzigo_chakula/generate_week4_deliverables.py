@@ -979,25 +979,25 @@ def build_usability_and_insights_markdown(
         "",
         "---",
         "",
-        "## 1. Four-Page Report Architecture (46 PBIR Visuals Across 4 Pages)",
+        "## 1. Four-Page Report Architecture (46 Visuals Across 4 Power BI Report Pages)",
         "",
-        "All four report pages are defined in `pbip/mzigo-chakula.Report/definition/pages/` (`1280 x 720`, 16:9, custom theme `MzigoChakulaTheme.json`) and captured directly from Power BI Desktop at `2400 x 1350` (`300 DPI`) under `screenshots/` and `output/`:",
+        "All four report pages are defined using Power BI Enhanced Report Format (PBIR) under `pbip/mzigo-chakula.Report/definition/pages/` (1280 x 720 canvas, 16:9 ratio, custom theme `MzigoChakulaTheme.json`) and captured from Power BI Desktop at 2400 x 1350 (300 DPI) under `screenshots/` and `output/`:",
         "",
         "| Page | Purpose | Key Visuals Included (Live PBIR) | Analytical Question(s) |",
         "| --- | --- | --- | --- |",
-        "| `1. Executive Pulse` (`screenshots/page1-executive-pulse.png`) | Rapid situational overview (`16` visuals) | Top banner + native `pageNavigator`, 5 dropdown slicers, 5 KPI cards (`1.88`, `+7.56%`, `1.92 YTD`, `100.00%`, `4.49%`), 238-month National Food Price Index line chart, Top 10 Counties by Recent 12m YoY Inflation bar chart, Recent 12m Commodity Matrix, Top 10 County Watchlist table | Q1, Q2 |",
-        "| `2. County & Commodity` (`screenshots/page2-county-commodity.png`) | Geographic and commodity comparison (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Top 5 Deficit vs. Bottom 5 Surplus Maize Affordability Gap diverging bar chart, 233-market Lon/Lat scatter plot, ASAL vs. Agri/Urban CV% grouped columns, County Maize Affordability & Survey table | Q1, Q3, Q5 |",
-        "| `3. Trends & Diagnostics` (`screenshots/page3-trends-diagnostics.png`) | Seasonality, smoothing, and volatility audit (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Beans & Maize 238-month prices (with `12m Rolling Avg`, `MoM %`, and `StdDev` hover tooltips), Jan-to-Dec Seasonal Index curves, Top 10 Counties by Maize CV% bars, Seasonal Index by Cropping Window columns | Q2, Q4 |",
-        "| `4. Decisions & Action` (`screenshots/page4-decisions-action.png`) | Stakeholder triage and monitoring matrix (`10` visuals) | Top banner + native `pageNavigator`, 4 slicers, Survey % vs. Maize CV% Monitoring Priority scatter (plotting zero-survey counties at `0.00%`), County Priority Action Matrix, 10 Low-Survey Counties Under 5% bar chart, Regional Maize Price (KES/kg) grouped columns | All (Q1 to Q5) |",
+        "| `1. Executive Pulse` (`screenshots/page1-executive-pulse.png`) | National and county overview (16 visuals) | Top banner with native page navigator, 5 dropdown slicers, 5 Key Performance Indicator (KPI) cards (1.88 index, 7.56% Year-over-Year [YoY], 1.92 Year-to-Date [YTD], 100.00% data completeness, 4.49% survey coverage), 238-month National Food Price Index line chart, Top 10 Counties by Recent 12m YoY Inflation bar chart, Recent 12m Commodity Matrix, Top 10 County Watchlist table | Q1, Q2 |",
+        "| `2. County & Commodity` (`screenshots/page2-county-commodity.png`) | Geographic and commodity comparison (10 visuals) | Top banner with native page navigator, 4 slicers, Top 5 Deficit vs. Bottom 5 Surplus Maize Affordability Gap diverging bar chart (Turkana to Lamu), 233-market Longitude/Latitude scatter plot, Arid and Semi-Arid Lands (ASAL) vs. Agricultural and Urban Coefficient of Variation (CV%) grouped columns, County Maize Affordability & Survey table | Q3, Q5 |",
+        "| `3. Trends & Diagnostics` (`screenshots/page3-trends-diagnostics.png`) | Seasonality, smoothing, and volatility audit (10 visuals) | Top banner with native page navigator, 4 slicers, Beans and Maize 238-month prices (hover tooltips show 12m Rolling Avg, Month-over-Month [MoM] %, and Standard Deviation), Jan-to-Dec Seasonal Index curves, Top 10 Counties by Maize CV% bars, Seasonal Index by Cropping Window columns | Q3, Q4 |",
+        "| `4. Decisions & Action` (`screenshots/page4-decisions-action.png`) | Stakeholder triage and monitoring matrix (10 visuals) | Top banner with native page navigator, 4 slicers, Survey % vs. Maize CV% Monitoring Priority scatter (where Maize zero-survey counties plot at 0.00%), Maize-filtered County Priority Action Matrix, 10 Low-Survey Counties Under 5% (All Commodities) bar chart, Regional Maize Price (KES/kg) grouped columns | All (Q1 to Q5) |",
         "",
         "---",
         "",
         "## 2. Interactive Controls Built in Power BI Desktop",
         "",
-        "- **Global Slicer Dropdowns:** Every page provides dropdown slicers across `dim_date[year]`, `dim_markets[adm1_name]`, `dim_markets[county_group]`, `dim_commodity[commodity_name]`, and `dim_date[season]` over single-direction `1:*` joins.",
-        "- **Cross-Filtering:** Clicking any county bar, scatter marker, or table row filters time trajectories and comparison metrics without bidirectional ambiguity.",
-        "- **Hover Tooltips:** Line, bar, scatter, and column charts include rich hover tooltips for `12-Month Rolling Avg (KES)`, gap-safe `MoM Change %`, `Price Volatility (KES)`, and `County Inflation Rank`.",
-        "- **Top Header Page Navigator:** Native PBIR `pageNavigator` button strip (`v00_page_nav`) integrated inside the `#0F2942` top banner on all four pages with `#0284C7` active page highlighting.",
+        "- **Global Slicer Dropdowns:** Standardized left-to-right dropdown slicers filter across single-direction `1:*` joins: Page 1 provides 5 slicers (`Commodity` via `dim_commodity[commodity_name]`, `County Group` via `dim_markets[county_group]`, `Region` via `dim_markets[adm1_name]`, `Cropping Season` via `dim_date[season]`, and `Year` via `dim_date[year]`); Pages 2 and 4 include `Commodity`, `County Group`, `Region`, and `Year`; Page 3 includes `Commodity`, `County Group`, `Region`, and `Cropping Season`.",
+        "- **Cross-Filtering:** Clicking any county bar, scatter marker, or table row filters time series and comparison metrics through single-direction dimension-to-fact joins. On Page 4, `Monitoring Priority Quadrant` (`v46_scatter_coverage_risk`) and `County Priority Action Matrix` (`v47_table_priority_action`) filter to `Maize (1 kg)`, so counties with zero Maize raw surveys (including Nairobi) plot at 0.00%. In contrast, `10 Low-Survey Counties Under 5% (All Commodities)` (`v48_bar_coverage_gap`) evaluates all three tracked commodities across 10 non-zero sub-5% counties (excluding 7 counties that have 0.00% raw survey coverage across all commodities).",
+        "- **Hover Tooltips:** Line, bar, scatter, and column charts include hover tooltips for `12-Month Rolling Avg (KES)`, `MoM Change %`, `Price Volatility (KES)`, and `County Inflation Rank`.",
+        "- **Top Header Page Navigator:** Native PBIR page navigator strip (`v00_page_nav`) placed in the `#0F2942` top banner on all four pages with `#0284C7` active page highlighting. In Power BI Desktop authoring view, hold `Ctrl + Click` on any navigation button to switch pages; in Power BI Service Reading View, page switching works on single-click (or use the bottom sheet tabs in Desktop).",
         "",
         "---",
         "",
@@ -1005,49 +1005,49 @@ def build_usability_and_insights_markdown(
         "",
         "| Category | Check Item | Verification Status |",
         "| --- | --- | --- |",
-        "| **Color Palette** | Colorblind-safe Orange (`#EA580C`) vs. Teal (`#0F766E`) distinguishes ASAL vs. Agricultural/Urban groups instead of Red/Green pairs | Verified live |",
-        "| **Honest Axes** | Price and index charts start cleanly at zero (`0.0`) except the focused Seasonal Index parity plot (`0.90` to `1.10` around `1.000`) | Verified live |",
-        "| **Non-Overlap & Bounds** | Automated unit tests verify all 46 PBIR visual containers fit inside `1280 x 720` with zero overlapping bounding boxes | Verified |",
-        "| **Grain Integrity** | Composite `National Food Price Index` evaluates once per `(mkt_id, date_key)` via `SUMMARIZE` and mixed-unit table totals are suppressed (`totals = false`) | Verified live |",
-        "| **Zero-Survey Visibility** | `Survey Coverage Rate %` adds `+ 0` to `COUNT(raw_spot_price)` so un-surveyed counties plot at `0.00%` instead of vanishing as blanks | Verified live |",
-        "| **Decision Framing** | Page 4 isolates blind-spot priority quadrants, regional maize disparities, and sub-5% survey targets for direct enumerator deployment | Verified live |",
+        "| **Color Palette** | Colorblind-safe Orange (`#EA580C`) and Teal (`#0F766E`) distinguish ASAL and Agricultural/Urban groups, avoiding Red/Green pairs | Verified in Power BI Desktop |",
+        "| **Honest Axes** | Price and index charts start at 0.0, while the Seasonal Index line chart (`v37_line_seasonality`) auto-scales from 0.90 to 1.10 around 1.000 and the Page 4 Maize CV% dispersion scatter (`v46_scatter_coverage_risk`) starts at 20% | Verified in Power BI Desktop |",
+        "| **Non-Overlap & Bounds** | Automated unit tests verify all 46 PBIR visual containers fit inside `1280 x 720` with zero overlapping bounding boxes | Verified by pytest |",
+        "| **Grain Integrity** | Composite `National Food Price Index` evaluates once per `(mkt_id, date_key)` via `SUMMARIZE`, and mixed-unit table totals are suppressed (`totals = false`) | Verified in Power BI Desktop |",
+        "| **Zero-Survey Visibility** | `Survey Coverage Rate %` adds `+ 0` to `COUNT(raw_spot_price)` so un-surveyed counties plot at 0.00% instead of appearing blank | Verified in Power BI Desktop |",
+        "| **Decision Framing** | Page 4 displays the blind-spot quadrant (<5% survey coverage and >38% maize CV), sub-5% survey target counties, and regional maize price averages | Verified in Power BI Desktop |",
         "",
         "---",
         "",
         "## 4. Six Preliminary Evidence-Backed Insights",
         "",
         (
-            f"1. **Recent Inflation Resurgence Across Diverse Counties (Page 1 Top 10 Bar Chart):** Although 36-month index comparisons sit below 2023 highs (`3.465`), "
-            f"national food index inflation over the latest 12 months (`{overall['recent_12m_start']}` to `{overall['recent_12m_end']}`) returned to "
-            f"`+{overall['yoy_inflation_recent_12m'] * 100:.2f}%`, led by {top3_12m[0]['county']} (`{top3_12m[0]['yoy_12m'] * 100:+.2f}%`), "
-            f"{top3_12m[1]['county']} (`{top3_12m[1]['yoy_12m'] * 100:+.2f}%`), and {top3_12m[2]['county']} (`{top3_12m[2]['yoy_12m'] * 100:+.2f}%`)."
+            f"1. **Recent Inflation Resurgence Across ASAL and Agricultural Counties (Page 1 Top 10 Bar Chart):** Although 36-month index comparisons sit below the 2023 annual mean (3.465), "
+            f"national food index inflation over the latest 12 months ({overall['recent_12m_start']} to {overall['recent_12m_end']}) rose "
+            f"{overall['yoy_inflation_recent_12m'] * 100:.2f}%, led by {top3_12m[0]['county']} ({top3_12m[0]['yoy_12m'] * 100:+.2f}%), "
+            f"{top3_12m[1]['county']} ({top3_12m[1]['yoy_12m'] * 100:+.2f}%), and {top3_12m[2]['county']} ({top3_12m[2]['yoy_12m'] * 100:+.2f}%)."
         ),
         (
-            f"2. **Composite Index Tracks Livestock Goat Prices (Page 1 Matrix & Q2):** Across all 55,454 physical market-months, "
-            f"`Goat (1 head)` explains `{comms['livestock_goat_s_fao']['r2_with_food_index'] * 100:.2f}%` of `c_food_price_index` variance "
-            f"(`r = {comms['livestock_goat_s_fao']['corr_with_food_index']:.5f}`), compared to `{comms['beans']['r2_with_food_index'] * 100:.2f}%` for Beans "
-            f"and `{comms['maize_fao']['r2_with_food_index'] * 100:.2f}%` for Maize. Unweighted KES basket sums allow a single 3,456 KES livestock unit to mask cereal swings."
+            f"2. **Composite Index Tracks Livestock Goat Prices (Page 1 Matrix & Q2 Validation in docs/dax-catalogue.md):** Across all 55,454 physical market-months, "
+            f"Goat (1 head) explains {comms['livestock_goat_s_fao']['r2_with_food_index'] * 100:.2f}% of `c_food_price_index` variance "
+            f"(r = {comms['livestock_goat_s_fao']['corr_with_food_index']:.5f}), compared to {comms['beans']['r2_with_food_index'] * 100:.2f}% for Beans "
+            f"and {comms['maize_fao']['r2_with_food_index'] * 100:.2f}% for Maize. Because a goat averages 3,456 KES per head compared to 56 KES/kg for maize and 106 KES/kg for beans, unscaled KES index calculations let livestock prices dominate cereal price shifts."
         ),
         (
             f"3. **Maize Deflated Recently While Beans and Goats Rose (Page 1 Matrix & Page 3 Trend):** Over the latest 12 months, Maize `[Commodity YoY Inflation %]` "
-            f"eased to `{comms['maize_fao']['yoy_inflation_12m'] * 100:+.2f}%` (`80.13 KES/kg`), whereas Beans rose `{comms['beans']['yoy_inflation_12m'] * 100:+.2f}%` "
-            f"(`150.42 KES/kg`) and Goats rose `{comms['livestock_goat_s_fao']['yoy_inflation_12m'] * 100:+.2f}%` (`5,438.29 KES/head`)."
+            f"fell {abs(comms['maize_fao']['yoy_inflation_12m'] * 100):.2f}% (to 80.13 KES/kg), whereas Beans rose {comms['beans']['yoy_inflation_12m'] * 100:+.2f}% "
+            f"(150.42 KES/kg) and Goats rose {comms['livestock_goat_s_fao']['yoy_inflation_12m'] * 100:+.2f}% (5,438.29 KES/head)."
         ),
         (
-            f"4. **Chronic Maize Cost Premium in Northern Arid Markets (Page 2 Gap Bar Chart):** ASAL markets average "
-            f"`+{(groups['Arid & Semi-Arid (ASAL)']['commodities']['maize_fao']['avg_price'] - groups['Agricultural & Urban']['commodities']['maize_fao']['avg_price']):.2f} KES/kg` "
-            f"more for maize than Agricultural/Urban markets, led by {top2_gap[0]['county']} (`{top2_gap[0]['gap_maize_kes']:+.2f} KES/kg`) and "
-            f"{top2_gap[1]['county']} (`{top2_gap[1]['gap_maize_kes']:+.2f} KES/kg`) versus Lamu (`-17.51 KES/kg`)."
+            f"4. **Chronic Maize Cost Premium in ASAL Markets (Page 2 Gap Bar Chart):** ASAL markets average "
+            f"+{(groups['Arid & Semi-Arid (ASAL)']['commodities']['maize_fao']['avg_price'] - groups['Agricultural & Urban']['commodities']['maize_fao']['avg_price']):.2f} KES/kg "
+            f"more for maize than Agricultural and Urban markets. Relative to the national mean (56.02 KES/kg), {top2_gap[0]['county']} ({top2_gap[0]['gap_maize_kes']:+.2f} KES/kg) and "
+            f"{top2_gap[1]['county']} ({top2_gap[1]['gap_maize_kes']:+.2f} KES/kg) carry the largest county premiums, compared to Lamu (-17.51 KES/kg)."
         ),
         (
-            f"5. **Inverse Seasonal Timing Between Crops and Livestock (Page 3 Seasonal Cycle):** Dry staples peak before main harvests in `Cool Dry / Harvest (Jun-Sep)` "
-            f"(Maize `{sw['maize_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f}`, Beans `{sw['beans']['Cool Dry / Harvest (Jun-Sep)']:.3f}`) and hit annual lows in "
-            f"`Hot Dry / Lean (Jan-Feb)` (`0.972` and `0.970`), when Goat prices reach their seasonal peak (`{sw['livestock_goat_s_fao']['Hot Dry / Lean (Jan-Feb)']:.3f}`)."
+            f"5. **Inverse Seasonal Timing Between Crops and Livestock (Page 3 Seasonal Cycle):** Dry staples peak before main harvests in Cool Dry / Harvest (Jun-Sep) "
+            f"(Maize {sw['maize_fao']['Cool Dry / Harvest (Jun-Sep)']:.3f}, Beans {sw['beans']['Cool Dry / Harvest (Jun-Sep)']:.3f}) and hit annual lows in "
+            f"Hot Dry / Lean (Jan-Feb) (0.972 and 0.970), when Goat prices reach their seasonal peak ({sw['livestock_goat_s_fao']['Hot Dry / Lean (Jan-Feb)']:.3f})."
         ),
         (
-            f"6. **Heavy Survey Coverage Blind Spots in High-Volatility Counties (Page 4 Priority Matrix):** Raw field checks cover just "
-            f"`{overall['survey_coverage_rate_pct'] * 100:.2f}%` of records overall (`{etl_result.qa_metrics['dim_markets_rows']}` physical markets). "
-            "Samburu (`20` markets, `0.00%` survey coverage), Kisumu (`0.00%`, `+18.43%` recent YoY), and Garissa (`21` markets, `3.85%` coverage) sit in the urgent blind-spot zone."
+            f"6. **Heavy Survey Coverage Blind Spots in High-Volatility Counties (Page 4 Priority Matrix):** Raw field checks cover "
+            f"{overall['survey_coverage_rate_pct'] * 100:.2f}% of records across {etl_result.qa_metrics['dim_markets_rows']} physical markets. "
+            "Samburu (20 markets, 0.00% survey coverage), Kisumu (0.00% coverage, +18.43% recent YoY), and Garissa (21 markets, 3.85% coverage) fall inside the Page 4 blind-spot quadrant (<5% survey coverage and >38% maize CV)."
         ),
         "",
     ]
