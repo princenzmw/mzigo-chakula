@@ -3,10 +3,10 @@
   "name": "v11_line_fpi_trend",
   "position": {
     "x": 16,
-    "y": 204,
+    "y": 206,
     "z": 12,
     "width": 744,
-    "height": 274,
+    "height": 334,
     "tabOrder": 12
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Grain-safe composite index across 238 months | 19-year baseline: 1.20'"
+                  "Value": "'Composite food price index across 238 months | 19-year mean: 1.20'"
                 }
               }
             },

@@ -3,10 +3,10 @@
   "name": "v26_scatter_county_risk",
   "position": {
     "x": 646,
-    "y": 124,
+    "y": 118,
     "z": 7,
     "width": 618,
-    "height": 298,
+    "height": 312,
     "tabOrder": 7
   },
   "visual": {

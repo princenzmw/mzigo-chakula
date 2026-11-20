@@ -1,12 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
-  "name": "v03_slicer_commodity",
+  "name": "v43_slicer_region",
   "position": {
-    "x": 518,
+    "x": 646,
     "y": 64,
     "z": 4,
-    "width": 246,
-    "height": 54,
+    "width": 303,
+    "height": 48,
     "tabOrder": 4
   },
   "visual": {
@@ -139,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Commodity'"
+                  "Value": "'Region'"
                 }
               }
             },
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'3 tracked staples'"
+                  "Value": "'7 Kenya regions'"
                 }
               }
             },
@@ -323,14 +323,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_commodity"
+                      "Entity": "dim_markets"
                     }
                   },
-                  "Property": "commodity_name"
+                  "Property": "adm1_name"
                 }
               },
-              "queryRef": "dim_commodity.commodity_name",
-              "nativeQueryRef": "commodity_name",
+              "queryRef": "dim_markets.adm1_name",
+              "nativeQueryRef": "adm1_name",
               "active": true
             }
           ]

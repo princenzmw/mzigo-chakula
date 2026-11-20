@@ -49,7 +49,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -74,7 +74,7 @@
             "width": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
+                  "Value": "0D"
                 }
               }
             }
@@ -177,7 +177,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Page 1: Executive Pulse | Recent 12m Inflation & Staple Burden'"
+                  "Value": "'Page 1: Executive Pulse | Recent 12m Inflation and Staple Burden'"
                 }
               }
             },

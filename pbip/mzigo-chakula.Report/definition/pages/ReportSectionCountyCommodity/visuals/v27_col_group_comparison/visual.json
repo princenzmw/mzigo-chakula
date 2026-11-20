@@ -3,10 +3,10 @@
   "name": "v27_col_group_comparison",
   "position": {
     "x": 16,
-    "y": 430,
+    "y": 438,
     "z": 8,
-    "width": 516,
-    "height": 280,
+    "width": 534,
+    "height": 276,
     "tabOrder": 8
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Coefficient of variation across Beans, Goat, and Maize'"
+                  "Value": "'2007 to 2026 coefficient of variation (CV %) across Beans, Goat, and Maize'"
                 }
               }
             },

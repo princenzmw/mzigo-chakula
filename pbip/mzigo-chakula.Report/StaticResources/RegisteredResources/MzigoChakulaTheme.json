@@ -30,7 +30,7 @@
   "visitedHyperlink": "#0F766E",
   "textClasses": {
     "callout": {
-      "fontSize": 18,
+      "fontSize": 17,
       "fontFace": "Segoe UI Bold",
       "color": "#0F2942"
     },
@@ -71,7 +71,8 @@
               }
             },
             "bold": true,
-            "fontSize": 8
+            "fontSize": 8,
+            "wordWrap": false
           }
         ],
         "values": [
@@ -96,7 +97,8 @@
                 "color": "#0F172A"
               }
             },
-            "fontSize": 8
+            "fontSize": 8,
+            "wordWrap": false
           }
         ]
       }
