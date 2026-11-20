@@ -208,7 +208,7 @@ DAX_MEASURES: tuple[DAXMeasureSpec, ...] = (
             "RETURN\n"
             "    DIVIDE(ObservedRows, ExpectedRows)"
         ),
-        description="Share of expected market-month-commodity cells populated with non-null modelled closing prices.",
+        description="Share of expected market-month-commodity cells populated with non-null modeled closing prices.",
     ),
     DAXMeasureSpec(
         measure_number=12,

@@ -345,9 +345,9 @@ def render_model_diagram(output_path: Path) -> Path:
     )
     notes = [
         "1. Filter Direction: Strictly single-direction (1:*) from all three dimensions into fact_prices. Zero bidirectional filters or ambiguous paths.",
-        "2. Calendar Table: dim_date[full_date] is marked as the official Date Table for SAMEPERIODLASTYEAR, DATEADD, TOTALYTD, and DATESINPERIOD; month_name sorts by month.",
+        "2. Calendar Table: dim_date[full_date] is marked as the official Date Table for EDATE and TREATAS time intelligence; month_name sorts by month.",
         "3. Composite Index Grain Rule: food_price_index lives at (mkt_id, date_key) grain. National Food Price Index uses SUMMARIZE(mkt_id, date_key) to avoid 3x counting.",
-        "4. Integrity Verified: 0 duplicate PKs, 0 orphan FKs across all 166,362 fact rows, 100.00% modelled completeness, 4.49% raw spot survey coverage.",
+        "4. Integrity Verified: 0 duplicate PKs, 0 orphan FKs across all 166,362 fact rows, 100.00% modeled completeness, 4.49% raw spot survey coverage.",
     ]
     ny = footer_y + 68
     for line in notes:
@@ -394,13 +394,13 @@ def build_dax_catalogue_markdown(
         ),
         "",
         (
-            f"- `dim_markets` ({qa['dim_markets_rows']:,} rows, PK `mkt_id`): Physical Kenyan markets mapped deterministically to "
+            f"- `dim_markets` ({qa['dim_markets_rows']:,} rows, PK `mkt_id`): Physical Kenyan markets mapped to "
             f"27 counties, 7 regions, and `Arid & Semi-Arid (ASAL)` (16 counties, 202 markets) versus `Agricultural & Urban` "
             "(11 counties, 31 markets). Geographic categories (`County`, `StateOrProvince`, `Latitude`, `Longitude`) are enabled for Power BI maps."
         ),
         (
-            f"- `dim_date` ({qa['dim_date_rows']:,} rows, PK `date_key`): Continuous monthly calendar from {overall['recent_12m_end'][:4]} "
-            "back to 2007 (`2007-01-01` to `2026-10-01`). `dim_date[full_date]` is marked as the official Date Table and `month_name` is sorted "
+            f"- `dim_date` ({qa['dim_date_rows']:,} rows, PK `date_key`): Continuous monthly calendar from 2007 "
+            f"to {overall['recent_12m_end'][:4]} (`2007-01-01` to `2026-10-01`). `dim_date[full_date]` is marked as the official Date Table and `month_name` is sorted "
             "by `month` (`1` to `12`)."
         ),
         (
@@ -517,12 +517,12 @@ def build_dax_catalogue_markdown(
             "### Q1. Which counties experienced the highest 12-month food price inflation over the last three years (2024 to 2026)?",
             "",
             (
-                "In this World Bank Kenya release, livestock goat prices and the composite `c_food_price_index` hit an extraordinary peak "
-                "in 2023 (annual mean `3.465`, goat `10,106 KES`), declined through 2024 (`3.031`) and 2025 (`1.744`), and rose again in 2026 (`1.919`). "
+                "In this World Bank Kenya release, livestock goat prices and the composite `c_food_price_index` hit a peak "
+                "in 2023 (annual mean 3.465, goat 10,106 KES), declined through 2024 (3.031) and 2025 (1.744), and rose again in 2026 (1.919). "
                 "Because the 36-month window (`2023-11` to `2026-10` vs. `2022-11` to `2025-10`) spans the descent from that 2023 peak, "
                 "every county shows a negative 3-year index average, with coastal and eastern counties holding the highest relative rank "
-                "(smallest drop from 2023). Over the most recent 12 months (`2025-11` to `2026-10` vs. prior 12 months), overall national index inflation returned to "
-                f"**+{overall['yoy_inflation_recent_12m'] * 100:.2f}%**, led by the counties below:"
+                "(smallest drop from 2023). Over the most recent 12 months (`2025-11` to `2026-10` vs. prior 12 months), overall national index inflation "
+                f"rose {overall['yoy_inflation_recent_12m'] * 100:.2f}%, led by the counties below:"
             ),
             "",
             "| Rank (Recent 12m) | County | Group | Markets | Recent 12m `YoY Inflation %` | Last 36m Mean `YoY Inflation %` | Rank (Last 36m) |",
@@ -553,27 +553,27 @@ def build_dax_catalogue_markdown(
                 f"`Beans (1 kg)` shows `r = {commodities['beans']['corr_with_food_index']:.4f}` (`R^2 = {commodities['beans']['r2_with_food_index'] * 100:.2f}%`), "
                 f"and `Maize (1 kg)` shows `r = {commodities['maize_fao']['corr_with_food_index']:.4f}` (`R^2 = {commodities['maize_fao']['r2_with_food_index'] * 100:.2f}%`). "
                 "Because one live goat trades around 3,456 KES per head compared to 56 KES/kg for maize and 106 KES/kg for beans, "
-                "goat price levels account for virtually all movement in the unscaled index series. Dashboard visuals therefore evaluate individual staple commodities "
+                "goat price levels account for 99.99% of variance in the unscaled index series. Dashboard visuals evaluate individual staple commodities "
                 "via `[Avg Price (KES)]` and `[Commodity YoY Inflation %]` alongside the composite index."
             ),
             "",
             "### Q3. Is price volatility higher in ASAL counties than in agricultural and urban counties?",
             "",
             (
-                f"Across the composite Food Price Index (CV `{groups['Arid & Semi-Arid (ASAL)']['food_index_cv'] * 100:.2f}%` vs. "
-                f"`{groups['Agricultural & Urban']['food_index_cv'] * 100:.2f}%`), Maize (`{groups['Arid & Semi-Arid (ASAL)']['commodities']['maize_fao']['volatility_cv'] * 100:.2f}%` "
-                f"vs. `{groups['Agricultural & Urban']['commodities']['maize_fao']['volatility_cv'] * 100:.2f}%`), and Goats "
-                f"(`{groups['Arid & Semi-Arid (ASAL)']['commodities']['livestock_goat_s_fao']['volatility_cv'] * 100:.2f}%` vs. "
-                f"`{groups['Agricultural & Urban']['commodities']['livestock_goat_s_fao']['volatility_cv'] * 100:.2f}%`), "
-                f"ASAL counties (`16` counties, `202` markets) exhibit higher price dispersion and outlier rates "
-                f"(`{groups['Arid & Semi-Arid (ASAL)']['outlier_rate'] * 100:.2f}%` vs. `{groups['Agricultural & Urban']['outlier_rate'] * 100:.2f}%`) "
-                f"than Agricultural & Urban counties (`11` counties, `31` markets), whereas dry Beans CV is slightly higher in Agricultural & Urban "
-                f"markets (`{groups['Agricultural & Urban']['commodities']['beans']['volatility_cv'] * 100:.2f}%` vs. "
-                f"`{groups['Arid & Semi-Arid (ASAL)']['commodities']['beans']['volatility_cv'] * 100:.2f}%`). Mean maize prices are "
-                f"`+{(groups['Arid & Semi-Arid (ASAL)']['commodities']['maize_fao']['avg_price'] - groups['Agricultural & Urban']['commodities']['maize_fao']['avg_price']):.2f} KES/kg` higher in ASAL markets."
+                f"Across the composite Food Price Index (CV {groups['Arid & Semi-Arid (ASAL)']['food_index_cv'] * 100:.2f}% vs. "
+                f"{groups['Agricultural & Urban']['food_index_cv'] * 100:.2f}%), Maize ({groups['Arid & Semi-Arid (ASAL)']['commodities']['maize_fao']['volatility_cv'] * 100:.2f}% "
+                f"vs. {groups['Agricultural & Urban']['commodities']['maize_fao']['volatility_cv'] * 100:.2f}%), and Goats "
+                f"({groups['Arid & Semi-Arid (ASAL)']['commodities']['livestock_goat_s_fao']['volatility_cv'] * 100:.2f}% vs. "
+                f"{groups['Agricultural & Urban']['commodities']['livestock_goat_s_fao']['volatility_cv'] * 100:.2f}%), "
+                f"ASAL counties (16 counties, 202 markets) exhibit higher price dispersion and outlier rates "
+                f"({groups['Arid & Semi-Arid (ASAL)']['outlier_rate'] * 100:.2f}% vs. {groups['Agricultural & Urban']['outlier_rate'] * 100:.2f}%) "
+                f"than Agricultural & Urban counties (11 counties, 31 markets), whereas dry Beans CV is slightly higher in Agricultural & Urban "
+                f"markets ({groups['Agricultural & Urban']['commodities']['beans']['volatility_cv'] * 100:.2f}% vs. "
+                f"{groups['Arid & Semi-Arid (ASAL)']['commodities']['beans']['volatility_cv'] * 100:.2f}%). Mean maize prices are "
+                f"+{(groups['Arid & Semi-Arid (ASAL)']['commodities']['maize_fao']['avg_price'] - groups['Agricultural & Urban']['commodities']['maize_fao']['avg_price']):.2f} KES/kg higher in ASAL markets."
             ),
             "",
-            "Maize `Affordability Gap (KES)` extremes (County average vs. `56.02 KES/kg` national physical-market mean):",
+            "Maize `Affordability Gap (KES)` extremes (County average vs. 56.02 KES/kg national physical-market mean):",
             "- Highest cost burden: " + ", ".join(f"{c['county']} (+{c['gap_maize_kes']:.2f} KES/kg)" for c in maize_expensive) + ".",
             "- Lowest cost burden: " + ", ".join(f"{c['county']} ({c['gap_maize_kes']:.2f} KES/kg)" for c in maize_cheapest) + ".",
             "",
@@ -607,17 +607,17 @@ def build_dax_catalogue_markdown(
         [
             "",
             (
-                f"Staple maize peaks during `{maize_peak[0]}` (`{maize_peak[1]:.3f}`) and dips during `{maize_low[0]}` (`{maize_low[1]:.3f}`), "
-                f"while dry beans peak in `{beans_peak[0]}` (`{beans_peak[1]:.3f}`) and reach their low in `{beans_low[0]}` (`{beans_low[1]:.3f}`). "
-                f"Live goats stay firmest during `{goat_peak[0]}` (`{goat_peak[1]:.3f}`) and lowest in `{goat_low[0]}` (`{goat_low[1]:.3f}`)."
+                f"Staple maize peaks during `{maize_peak[0]}` ({maize_peak[1]:.3f}) and dips during `{maize_low[0]}` ({maize_low[1]:.3f}), "
+                f"while dry beans peak in `{beans_peak[0]}` ({beans_peak[1]:.3f}) and reach their low in `{beans_low[0]}` ({beans_low[1]:.3f}). "
+                f"Live goats stay firmest during `{goat_peak[0]}` ({goat_peak[1]:.3f}) and lowest in `{goat_low[0]}` ({goat_low[1]:.3f})."
             ),
             "",
             "### Q5. How uneven is market coverage across counties and where are survey gaps largest?",
             "",
             (
-                "While modelled closing prices fill 100.00% of the `233 x 238 x 3` grid, raw field observations cover only `4.49%` of cells "
-                "overall and differ dramatically by county and market count. Five counties (`Embu`, `Lamu`, `Machakos`, `Nyeri`, `Uasin Gishu`) rely on "
-                "just one monitored market, whereas `Turkana` alone accounts for `57` markets (`24.5%` of all markets)."
+                "While modeled closing prices fill 100.00% of the `233 x 238 x 3` grid, raw field observations cover 4.49% of cells "
+                "overall and vary widely by county and market count. Five counties (Embu, Lamu, Machakos, Nyeri, Uasin Gishu) rely on "
+                "one monitored market, whereas Turkana accounts for 57 markets (24.5% of all markets)."
             ),
             "",
             "| Group | Counties | Lowest vs. Highest `Survey Coverage Rate %` |",
