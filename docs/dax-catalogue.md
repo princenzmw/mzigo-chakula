@@ -12,7 +12,7 @@
 The semantic model organizes 166,362 market-month-commodity observations into a four-table star schema with single-direction filtering from dimension tables into `fact_prices`:
 
 - `dim_markets` (233 rows, PK `mkt_id`): Physical Kenyan markets mapped deterministically to 27 counties, 7 regions, and `Arid & Semi-Arid (ASAL)` (16 counties, 202 markets) versus `Agricultural & Urban` (11 counties, 31 markets). Geographic categories (`County`, `StateOrProvince`, `Latitude`, `Longitude`) are enabled for Power BI maps.
-- `dim_date` (238 rows, PK `date_key`): Continuous monthly calendar from 2026 back to 2007 (`2007-01-01` to `2026-10-01`). `dim_date[full_date]` is marked as the official Date Table and `month_name` is sorted by `month` (`1` to `12`).
+- `dim_date` (238 rows, PK `date_key`): Continuous monthly calendar from 2007 to 2026 (`2007-01-01` to `2026-10-01`). `dim_date[full_date]` is marked as the official Date Table and `month_name` is sorted by `month` (`1` to `12`).
 - `dim_commodity` (3 rows, PK `commodity_id`): Lookup dimension mapping `beans` (`Beans (1 kg)`), `maize_fao` (`Maize (1 kg)`), and `livestock_goat_s_fao` (`Goat (1 head)`) with explicit food categories and physical units (`KG`, `Head`).
 - `fact_prices` (166,362 rows, PK `price_id`): One row per `(mkt_id, date_key, commodity_id)`. Foreign keys (`mkt_id`, `date_key`, `commodity_id`) are hidden from Report View so slicers always filter through dimension tables.
 
@@ -300,7 +300,7 @@ RETURN
 
 ### Q1. Which counties experienced the highest 12-month food price inflation over the last three years (2024 to 2026)?
 
-In this World Bank Kenya release, livestock goat prices and the composite `c_food_price_index` hit an extraordinary peak in 2023 (annual mean `3.465`, goat `10,106 KES`), declined through 2024 (`3.031`) and 2025 (`1.744`), and rose again in 2026 (`1.919`). Because the 36-month window (`2023-11` to `2026-10` vs. `2022-11` to `2025-10`) spans the descent from that 2023 peak, every county shows a negative 3-year index average, with coastal and eastern counties holding the highest relative rank (smallest drop from 2023). Over the most recent 12 months (`2025-11` to `2026-10` vs. prior 12 months), overall national index inflation returned to **+7.56%**, led by the counties below:
+In this World Bank Kenya release, livestock goat prices and the composite `c_food_price_index` hit a peak in 2023 (annual mean 3.465, goat 10,106 KES), declined through 2024 (3.031) and 2025 (1.744), and rose again in 2026 (1.919). Because the 36-month window (`2023-11` to `2026-10` vs. `2022-11` to `2025-10`) spans the descent from that 2023 peak, every county shows a negative 3-year index average, with coastal and eastern counties holding the highest relative rank (smallest drop from 2023). Over the most recent 12 months (`2025-11` to `2026-10` vs. prior 12 months), overall national index inflation rose 7.56%, led by the counties below:
 
 | Rank (Recent 12m) | County | Group | Markets | Recent 12m `YoY Inflation %` | Last 36m Mean `YoY Inflation %` | Rank (Last 36m) |
 | ---: | --- | --- | ---: | ---: | ---: | ---: |
@@ -314,13 +314,13 @@ Highest-ranking counties across the full 36-month window (`2023-11` to `2026-10`
 
 ### Q2. Which tracked commodity drives the largest share of movements in the composite food price index?
 
-Although the CSV `components` text column lists `livestock_goat_s_fao (1 unit, Index Weight = 0)`, empirical correlation across all 55,454 physical market-months shows that `Goat (1 head)` tracks `c_food_price_index` with `r = 0.99996` (`R^2 = 99.99%` for price levels and `r = 0.99979` for YoY index rates). `Beans (1 kg)` shows `r = 0.6916` (`R^2 = 47.83%`), and `Maize (1 kg)` shows `r = 0.4398` (`R^2 = 19.34%`). Because one live goat trades around 3,456 KES per head compared to 56 KES/kg for maize and 106 KES/kg for beans, goat price levels account for virtually all movement in the unscaled index series. Dashboard visuals therefore evaluate individual staple commodities via `[Avg Price (KES)]` and `[Commodity YoY Inflation %]` alongside the composite index.
+Although the CSV `components` text column lists `livestock_goat_s_fao (1 unit, Index Weight = 0)`, empirical correlation across all 55,454 physical market-months shows that `Goat (1 head)` tracks `c_food_price_index` with `r = 0.99996` (`R^2 = 99.99%` for price levels and `r = 0.99979` for YoY index rates). `Beans (1 kg)` shows `r = 0.6916` (`R^2 = 47.83%`), and `Maize (1 kg)` shows `r = 0.4398` (`R^2 = 19.34%`). Because one live goat trades around 3,456 KES per head compared to 56 KES/kg for maize and 106 KES/kg for beans, goat price levels account for 99.99% of variance in the unscaled index series. Dashboard visuals evaluate individual staple commodities via `[Avg Price (KES)]` and `[Commodity YoY Inflation %]` alongside the composite index.
 
 ### Q3. Is price volatility higher in ASAL counties than in agricultural and urban counties?
 
-Across the composite Food Price Index (CV `83.70%` vs. `77.28%`), Maize (`40.21%` vs. `38.52%`), and Goats (`85.64%` vs. `78.82%`), ASAL counties (`16` counties, `202` markets) exhibit higher price dispersion and outlier rates (`1.14%` vs. `1.03%`) than Agricultural & Urban counties (`11` counties, `31` markets), whereas dry Beans CV is slightly higher in Agricultural & Urban markets (`31.89%` vs. `30.82%`). Mean maize prices are `+9.75 KES/kg` higher in ASAL markets.
+Across the composite Food Price Index (CV 83.70% vs. 77.28%), Maize (40.21% vs. 38.52%), and Goats (85.64% vs. 78.82%), ASAL counties (16 counties, 202 markets) exhibit higher price dispersion and outlier rates (1.14% vs. 1.03%) than Agricultural & Urban counties (11 counties, 31 markets), whereas dry Beans CV is slightly higher in Agricultural & Urban markets (31.89% vs. 30.82%). Mean maize prices are +9.75 KES/kg higher in ASAL markets.
 
-Maize `Affordability Gap (KES)` extremes (County average vs. `56.02 KES/kg` national physical-market mean):
+Maize `Affordability Gap (KES)` extremes (County average vs. 56.02 KES/kg national physical-market mean):
 - Highest cost burden: Turkana (+15.26 KES/kg), Mandera (+10.65 KES/kg), Kisumu (+9.89 KES/kg), Wajir (+3.94 KES/kg), West Pokot (+2.44 KES/kg).
 - Lowest cost burden: Lamu (-17.51 KES/kg), Kitui (-15.59 KES/kg), Embu (-13.88 KES/kg), Tharaka Nithi (-13.73 KES/kg), Meru (-12.99 KES/kg).
 
@@ -333,11 +333,11 @@ Maize `Affordability Gap (KES)` extremes (County average vs. `56.02 KES/kg` nati
 | Cool Dry / Harvest (Jun-Sep) | 1.013 | 1.023 | 0.968 |
 | Short Rains (Oct-Dec) | 1.009 | 1.007 | 1.030 |
 
-Staple maize peaks during `Cool Dry / Harvest (Jun-Sep)` (`1.023`) and dips during `Hot Dry / Lean (Jan-Feb)` (`0.972`), while dry beans peak in `Cool Dry / Harvest (Jun-Sep)` (`1.013`) and reach their low in `Hot Dry / Lean (Jan-Feb)` (`0.970`). Live goats stay firmest during `Hot Dry / Lean (Jan-Feb)` (`1.060`) and lowest in `Cool Dry / Harvest (Jun-Sep)` (`0.968`).
+Staple maize peaks during `Cool Dry / Harvest (Jun-Sep)` (1.023) and dips during `Hot Dry / Lean (Jan-Feb)` (0.972), while dry beans peak in `Cool Dry / Harvest (Jun-Sep)` (1.013) and reach their low in `Hot Dry / Lean (Jan-Feb)` (0.970). Live goats stay firmest during `Hot Dry / Lean (Jan-Feb)` (1.060) and lowest in `Cool Dry / Harvest (Jun-Sep)` (0.968).
 
 ### Q5. How uneven is market coverage across counties and where are survey gaps largest?
 
-While modelled closing prices fill 100.00% of the `233 x 238 x 3` grid, raw field observations cover only `4.49%` of cells overall and differ dramatically by county and market count. Five counties (`Embu`, `Lamu`, `Machakos`, `Nyeri`, `Uasin Gishu`) rely on just one monitored market, whereas `Turkana` alone accounts for `57` markets (`24.5%` of all markets).
+While modeled closing prices fill 100.00% of the `233 x 238 x 3` grid, raw field observations cover 4.49% of cells overall and vary widely by county and market count. Five counties (Embu, Lamu, Machakos, Nyeri, Uasin Gishu) rely on one monitored market, whereas Turkana accounts for 57 markets (24.5% of all markets).
 
 | Group | Counties | Lowest vs. Highest `Survey Coverage Rate %` |
 | --- | --- | --- |

@@ -357,8 +357,8 @@ def build_transformation_log_markdown(
         "",
         (
             "**Grain Design Note:** Each physical market-month appears once in `c_food_price_index`, so after "
-            "unpivoting 3 commodities that index value repeats across 3 commodity rows in `fact_prices`. Week 3 "
-            "DAX measures will aggregate `food_price_index` safely across market-month keys (or average per market-month) "
+            "unpivoting 3 commodities that index value repeats across 3 commodity rows in `fact_prices`. DAX "
+            "measures aggregate `food_price_index` across distinct `(mkt_id, date_key)` pairs via `SUMMARIZE` "
             "so composite index figures are never triple-counted."
         ),
         "",
@@ -404,7 +404,7 @@ def build_transformation_log_markdown(
         (
             "| T6 | Standardize commodity display labels | `dim_commodity`, `fact_prices` | "
             "Typed `#table` lookup (`Beans (1 kg)`, `Maize (1 kg)`, `Goat (1 head)`) | "
-            "Replaces machine codes like `c_maize_fao` and `c_livestock_goat_s_fao` with reader-friendly report labels | "
+            "Replaces machine codes like `c_maize_fao` and `c_livestock_goat_s_fao` with plain report labels | "
             "Raw column prefixes (`c_beans`, `c_maize_fao`, `c_livestock_goat_s_fao`) | Clean names paired with immutable `commodity_id` keys |"
         ),
         (
@@ -431,7 +431,7 @@ def build_transformation_log_markdown(
             "| T10 | Add 12-month and 36-month recency filter flags | `dim_date` | "
             "`Date.AddMonths(List.Max([full_date]), -11)` and `-35` comparisons | "
             "Simplifies slicer defaults for the 12-month Executive Pulse and 3-year YoY Analytical Question #1 | "
-            "Full 19-year date range only | "
+            "Full 238-month date range only | "
             f"`is_recent` marks {qa['recent_12m_dates']} months ({qa['recent_12m_start']} to {qa['recent_12m_end']}); `is_last_36m` marks {qa['last_36m_dates']} months |"
         ),
         "",

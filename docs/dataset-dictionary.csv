@@ -21,27 +21,27 @@ col_index,column_name,data_type,table_target,unit,non_null_count,null_count,pct_
 20,beans,decimal,fact_prices (raw),KES / 1 kg,1824,53868,96.72,601,23,215,80,Raw observed retail price for dry beans (96.72% missing).
 21,livestock_goat_s_fao,decimal,fact_prices (raw),KES / 1 head,2601,53091,95.33,1486,785,8028,1625,Raw observed market price for a live goat (95.33% missing).
 22,maize_fao,decimal,fact_prices (raw),KES / 1 kg,3045,52647,94.53,237,6,132,34,Raw observed retail price for maize (94.53% missing).
-23,o_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,13824,34.4,245.89,43.61,Modelled monthly opening price for beans.
-24,h_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,14062,35.95,259.44,45.44,Modelled monthly high price for beans.
-25,l_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,13416,32.85,232.34,42.29,Modelled monthly low price for beans.
-26,c_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,13620,34,241.19,43.89,Modelled monthly closing price for beans.
+23,o_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,13824,34.4,245.89,43.61,Modeled monthly opening price for beans.
+24,h_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,14062,35.95,259.44,45.44,Modeled monthly high price for beans.
+25,l_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,13416,32.85,232.34,42.29,Modeled monthly low price for beans.
+26,c_beans,decimal,fact_prices,KES / 1 kg,55692,0,0.0,13620,34,241.19,43.89,Modeled monthly closing price for beans.
 27,inflation_beans,decimal,fact_prices,%,52884,2808,5.04,10929,-58.52,185.95,45.2,Year-over-year percentage inflation for beans; blank in 2007.
 28,trust_beans,decimal,fact_prices,0-10,55692,0,0.0,5,9.6,10,9.6,Model trust score for beans price estimates.
-29,o_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,52115,458.45,31008.48,1452.08,Modelled monthly opening price for a goat.
-30,h_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,52216,519.75,33752.4,1519.57,Modelled monthly high price for a goat.
-31,l_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,52017,375.22,23976.62,1377.73,Modelled monthly low price for a goat.
-32,c_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,51230,480.69,28380.59,1451.51,Modelled monthly closing price for a goat.
+29,o_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,52115,458.45,31008.48,1452.08,Modeled monthly opening price for a goat.
+30,h_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,52216,519.75,33752.4,1519.57,Modeled monthly high price for a goat.
+31,l_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,52017,375.22,23976.62,1377.73,Modeled monthly low price for a goat.
+32,c_livestock_goat_s_fao,decimal,fact_prices,KES / 1 head,55692,0,0.0,51230,480.69,28380.59,1451.51,Modeled monthly closing price for a goat.
 33,inflation_livestock_goat_s_fao,decimal,fact_prices,%,52884,2808,5.04,14980,-88.13,1567.02,-6.83,Year-over-year percentage inflation for goats; blank in 2007.
 34,trust_livestock_goat_s_fao,decimal,fact_prices,0-10,55692,0,0.0,14,8.7,10,8.7,Model trust score for goat price estimates.
-35,o_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,10069,8.54,139.2,21.94,Modelled monthly opening price for maize.
-36,h_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,10392,9.65,147.04,22.92,Modelled monthly high price for maize.
-37,l_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,9797,7.68,128.9,21.27,Modelled monthly low price for maize.
-38,c_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,9999,9,136.98,22.09,Modelled monthly closing price for maize.
+35,o_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,10069,8.54,139.2,21.94,Modeled monthly opening price for maize.
+36,h_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,10392,9.65,147.04,22.92,Modeled monthly high price for maize.
+37,l_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,9797,7.68,128.9,21.27,Modeled monthly low price for maize.
+38,c_maize_fao,decimal,fact_prices,KES / 1 kg,55692,0,0.0,9999,9,136.98,22.09,Modeled monthly closing price for maize.
 39,inflation_maize_fao,decimal,fact_prices,%,52884,2808,5.04,12119,-68.14,409.09,3.59,Year-over-year percentage inflation for maize; blank in 2007.
 40,trust_maize_fao,decimal,fact_prices,0-10,55692,0,0.0,4,9.7,10,9.7,Model trust score for maize price estimates.
-41,o_food_price_index,decimal,fact_market_index,index,55692,0,0.0,846,0.19,10.5,0.5,Modelled monthly opening composite food price index.
-42,h_food_price_index,decimal,fact_market_index,index,55692,0,0.0,939,0.21,11.59,0.53,Modelled monthly high composite food price index.
-43,l_food_price_index,decimal,fact_market_index,index,55692,0,0.0,749,0.16,8.14,0.48,Modelled monthly low composite food price index.
-44,c_food_price_index,decimal,fact_market_index,index,55692,0,0.0,832,0.19,9.63,0.5,Modelled monthly closing composite food price index.
-45,inflation_food_price_index,decimal,fact_market_index,%,52884,2808,5.04,14569,-87.7,1457.04,-5.3,Year-over-year change in composite food price index; blank in 2007.
-46,trust_food_price_index,decimal,fact_market_index,0-10,55692,0,0.0,10,8.8,10,8.8,Model trust score for the composite food price index.
+41,o_food_price_index,decimal,raw source (unused),index,55692,0,0.0,846,0.19,10.5,0.5,Modeled monthly opening composite food price index.
+42,h_food_price_index,decimal,raw source (unused),index,55692,0,0.0,939,0.21,11.59,0.53,Modeled monthly high composite food price index.
+43,l_food_price_index,decimal,raw source (unused),index,55692,0,0.0,749,0.16,8.14,0.48,Modeled monthly low composite food price index.
+44,c_food_price_index,decimal,fact_prices (market-month grain),index,55692,0,0.0,832,0.19,9.63,0.5,Modeled monthly closing composite food price index.
+45,inflation_food_price_index,decimal,fact_prices (market-month grain),%,52884,2808,5.04,14569,-87.7,1457.04,-5.3,Year-over-year change in composite food price index; blank in 2007.
+46,trust_food_price_index,decimal,raw source (unused),0-10,55692,0,0.0,10,8.8,10,8.8,Model trust score for the composite food price index.

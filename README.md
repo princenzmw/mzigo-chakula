@@ -9,7 +9,7 @@ DSA 3050A | Business intelligence and data visualization | Group project B
 
 ## Problem statement
 
-Food prices in Kenya have risen over the past two decades, with sharp price differences across regions. National inflation reports usually summarize food costs as a single headline rate, which hides sharp regional differences across counties. A household in Turkana faces a different price path than one in Nairobi or Mombasa because staple availability, seasonal timing, and local market volatility differ by region.
+Food prices in Kenya have risen over the past two decades, with wide price gaps across regions. National inflation reports summarize food costs as one headline rate and hide those county-level gaps. A household in Turkana faces a different price path than one in Nairobi or Mombasa because staple availability, seasonal timing, and local market volatility differ by region.
 
 This project builds a Power BI report that answers:
 
@@ -179,7 +179,7 @@ Interactions: Dropdown slicers filter across single-direction `1:*` relationship
 ## Findings
 
 1. **Finding 1 (Q1): Regional YoY Food Price Resurgence:** While annual index averages show the decline from the 2023 livestock price peak (2023 mean 3.465 vs. 1.744 in 2025), 12-month National Food Price Index inflation (2025-11-01 to 2026-10-01) rose 7.56%. Tharaka Nithi (+25.13%), Marsabit (+19.85%), and Kisumu (+18.43%) recorded the largest county increases (Page 1 Top 10 YoY Bar Chart, [YoY Inflation %]).
-2. **Finding 2 (Q2): Composite Index Co-Moves With Goats Over Staples:** Although the source components label assigns Goat (1 head) weight 0, monthly closing prices for Goat (1 head) explain 99.99% of c_food_price_index variance across 55,454 physical market-months (r = 0.99996), versus 47.83% for Beans and 19.34% for Maize. Over the latest 12 months, Maize fell 10.51% (to 80.13 KES/kg) while Goats rose +7.77% (to 5,438.29 KES/head) (Page 1 Commodity Matrix, [Commodity YoY Inflation %]).
+2. **Finding 2 (Q2): Composite Index Co-Moves With Goats Over Staples:** Although the source components label assigns Goat (1 head) weight 0, monthly closing prices for Goat (1 head) explain 99.99% of c_food_price_index variance across 55,454 physical market-months (r = 0.99996), versus 47.83% for Beans and 19.34% for Maize. Over the latest 12 months, Maize fell 10.51% (to 80.13 KES/kg) while Goats rose 7.77% (to 5,438.29 KES/head) (Page 1 Commodity Matrix, [Commodity YoY Inflation %]).
 3. **Finding 3 (Q3): Structural ASAL Maize Price Premium and Dispersion:** ASAL markets (202 markets in 16 counties) show higher CV on the Food Index (83.70% vs. 77.28%), Maize (40.21% vs. 38.52%), and Goats (85.64% vs. 78.82%), higher outlier rates (1.14% vs. 1.03%), and +9.75 KES/kg higher maize prices than Agricultural & Urban markets (31 markets), while Beans CV is slightly lower in ASAL (30.82% vs. 31.89%). Relative to the national mean (56.02 KES/kg), Turkana (+15.26 KES/kg) and Mandera (+10.65 KES/kg) carry the largest maize premiums, compared to Lamu (-17.51 KES/kg) (Page 2 Gap Bar Chart & Grouped Bars, [Affordability Gap (KES)]).
 4. **Finding 4 (Q4): Inverse Crop vs. Livestock Seasonal Price Cycles:** Staple crops and livestock follow inverse annual cycles across 238 months. Maize (1.023) and Beans (1.013) reach seasonal highs during Cool Dry / Harvest (Jun-Sep) as prior-season stocks tighten before main harvests and hit annual lows during Hot Dry / Lean (Jan-Feb) (0.972 and 0.970), when Goat prices peak at 1.060 before falling to 0.968 in Jun-Sep (Page 3 Seasonal Cycle, [Seasonal Index]).
 5. **Finding 5 (Q5): Uneven County Coverage and High-Risk Field Survey Gaps:** Modeled OHLC series populate 100.00% of the 233 x 238 x 3 grid (166,362 rows), yet raw field surveys cover 4.49% of records and omit Western Province (27 of 47 counties covered). Five counties rely on one market, while Samburu (20 markets, 0.00% survey coverage), Kisumu (0.00% coverage, +18.43% YoY on Page 1), and Garissa (21 markets, 3.85% all-commodity coverage on the sub-5% bar chart) fall in the blind-spot quadrant (Page 4 Priority Quadrant & Low-Survey Bar Chart, [Survey Coverage Rate %]).
@@ -207,7 +207,7 @@ All four report pages (300 DPI) and the star schema diagram are saved in the rep
 * Data consists of market-level retail prices without household income or expenditure surveys; affordability gaps measure cross-county price differences rather than income-to-cost ratios.
 * The 233 physical markets cover 27 of Kenya's 47 counties unevenly. Turkana has 57 monitored markets, Garissa has 21, Samburu has 20, and Marsabit has 19, while five counties have 1 market each and Western Province has no markets in this release.
 * The dataset ends in October 2026; analyses covering later months require refreshing the source CSV.
-* The food price index is a composite measure that moves closely with goat prices (`r = 0.99996`), masking individual staple crop trends unless filtered by commodity.
+* The food price index moves closely with goat prices (`r = 0.99996`) and hides individual staple crop trends unless filtered by commodity.
 
 ## Reproduction
 
@@ -236,8 +236,8 @@ start pbip/mzigo-chakula.pbip
 
 4. Verify the model and visuals:
 * Open Model View to confirm all four tables and single-direction relationships.
-* Open Report View to confirm that pages and visuals render cleanly.
-* Hold `Ctrl + Click` on any top header navigation pill to switch pages inside Power BI Desktop (single-click works directly in Power BI Service, or click the bottom page tabs in Desktop).
+* Open Report View to confirm that pages and visuals render.
+* Hold `Ctrl + Click` on any top header navigation pill to switch pages inside Power BI Desktop (single-click works in Power BI Service, or click the bottom page tabs in Desktop).
 
 5. Check DAX measures:
 * Open Report View or DAX Query View to confirm that measure outputs match `docs/dax-catalogue.md`.
