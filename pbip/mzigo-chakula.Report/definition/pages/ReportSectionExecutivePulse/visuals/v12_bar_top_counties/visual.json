@@ -3,10 +3,10 @@
   "name": "v12_bar_top_counties",
   "position": {
     "x": 772,
-    "y": 204,
+    "y": 206,
     "z": 13,
     "width": 492,
-    "height": 274,
+    "height": 286,
     "tabOrder": 13
   },
   "visual": {
@@ -168,7 +168,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9.5D"
                 }
               }
             },
@@ -189,7 +189,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Nov 2025 to Oct 2026 | Teal: Agri/Urban, Orange: ASAL'"
+                  "Value": "'Nov 2025 to Oct 2026 | Teal: Agri/Urban, Orange: Arid/Semi-Arid (ASAL)'"
                 }
               }
             },
@@ -227,7 +227,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "7.5D"
                 }
               }
             },
@@ -241,7 +241,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -254,7 +254,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -285,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
@@ -457,6 +457,20 @@
                   "Value": "8D"
                 }
               }
+            },
+            "preferredCategoryWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            },
+            "innerPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
             }
           }
         }
@@ -464,6 +478,13 @@
       "valueAxis": [
         {
           "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
             "showAxisTitle": {
               "expr": {
                 "Literal": {

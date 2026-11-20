@@ -3,10 +3,10 @@
   "name": "v13_table_commodities",
   "position": {
     "x": 16,
-    "y": 486,
+    "y": 546,
     "z": 14,
     "width": 744,
-    "height": 224,
+    "height": 170,
     "tabOrder": 14
   },
   "visual": {
@@ -139,7 +139,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Commodity Price, Recent 12m YoY & Volatility Matrix'"
+                  "Value": "'Commodity Price, Recent 12m YoY and Volatility Matrix'"
                 }
               }
             },
@@ -168,7 +168,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9.5D"
                 }
               }
             },
@@ -189,7 +189,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Latest 12m (Nov 2025 to Oct 2026): Maize eased -10.51% while Goats rose +7.77%'"
+                  "Value": "'Nov 2025 to Oct 2026: Maize fell -10.51% while Goats rose +7.77% (CV = volatility)'"
                 }
               }
             },
@@ -227,7 +227,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "7.5D"
                 }
               }
             },
@@ -241,7 +241,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -254,7 +254,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -285,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
@@ -432,7 +432,140 @@
             "rowPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
+                  "Value": "3D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8.5D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8.5D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "selector": {
+            "metadata": "dim_commodity.commodity_name"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "dim_commodity.unit"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "72D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Avg Price (KES)"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "134D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Prior Year Price (KES)"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "134D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Commodity YoY Inflation %"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "116D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Price Volatility CV %"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "116D"
                 }
               }
             }

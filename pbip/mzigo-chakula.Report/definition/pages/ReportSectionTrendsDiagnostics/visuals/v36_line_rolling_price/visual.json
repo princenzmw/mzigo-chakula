@@ -3,10 +3,10 @@
   "name": "v36_line_rolling_price",
   "position": {
     "x": 16,
-    "y": 124,
+    "y": 118,
     "z": 6,
     "width": 732,
-    "height": 292,
+    "height": 276,
     "tabOrder": 6
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filtered to 1 kg staples | Hover for 12m Rolling Avg, MoM % & StdDev'"
+                  "Value": "'2007 to 2026 1 kg staples | Hover for 12m Rolling Avg, MoM % and StdDev'"
                 }
               }
             },

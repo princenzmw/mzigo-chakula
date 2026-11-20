@@ -3,10 +3,10 @@
   "name": "v07_card_yoy",
   "position": {
     "x": 268,
-    "y": 124,
+    "y": 118,
     "z": 8,
     "width": 240,
-    "height": 74,
+    "height": 82,
     "tabOrder": 8
   },
   "visual": {
@@ -168,7 +168,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "9D"
                 }
               }
             },
@@ -189,7 +189,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -227,7 +227,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "7.5D"
                 }
               }
             },
@@ -241,7 +241,7 @@
             "titleWrap": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
@@ -254,7 +254,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -285,14 +285,14 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "5D"
+                  "Value": "2D"
                 }
               }
             },
@@ -343,7 +343,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "17D"
                 }
               }
             },

@@ -3,10 +3,10 @@
   "name": "v37_line_seasonality",
   "position": {
     "x": 760,
-    "y": 124,
+    "y": 118,
     "z": 7,
     "width": 504,
-    "height": 292,
+    "height": 276,
     "tabOrder": 7
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Crop staples peak Jun-Sep; live goats peak Dec-Feb'"
+                  "Value": "'2007 to 2026 average | Crop staples peak Jun-Sep; live goats peak Dec-Feb'"
                 }
               }
             },

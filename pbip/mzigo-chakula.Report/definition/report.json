@@ -40,6 +40,11 @@
           "name": "MzigoChakulaTheme.json",
           "path": "MzigoChakulaTheme.json",
           "type": "CustomTheme"
+        },
+        {
+          "name": "header_canvas_bg.png",
+          "path": "header_canvas_bg.png",
+          "type": "Image"
         }
       ]
     }

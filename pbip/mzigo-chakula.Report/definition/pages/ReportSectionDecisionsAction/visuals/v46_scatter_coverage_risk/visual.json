@@ -3,10 +3,10 @@
   "name": "v46_scatter_coverage_risk",
   "position": {
     "x": 16,
-    "y": 124,
+    "y": 118,
     "z": 6,
     "width": 574,
-    "height": 292,
+    "height": 270,
     "tabOrder": 6
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filtered to Maize (1 kg) | Top-left flags urgent enumerator blind spots'"
+                  "Value": "'2007 to 2026 Maize (1 kg) | Top-left flags urgent enumerator blind spots'"
                 }
               }
             },

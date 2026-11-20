@@ -11,6 +11,10 @@ import pytest
 from PIL import Image
 
 from mzigo_chakula.data import PROJECT_ROOT
+from mzigo_chakula.generate_pbir_visuals import (
+    build_visual_specs,
+    spec_to_visual_payload,
+)
 from mzigo_chakula.generate_week4_deliverables import generate_week4_outputs
 
 EXPECTED_PAGES = (
@@ -184,3 +188,169 @@ def test_generate_week4_outputs_and_no_ai_dashes(raw_csv_path: Path, tmp_path: P
     tracked_text = tracked_doc.read_text(encoding="utf-8")
     assert "\u2014" not in tracked_text
     assert "\u2013" not in tracked_text
+    assert "Ctrl + Click" in doc_text
+    assert "Ctrl + Click" in tracked_text
+
+    readme_text = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+    assert "Ctrl + Click" in readme_text
+    assert "\u2014" not in readme_text
+    assert "\u2013" not in readme_text
+
+
+def _lit_val(node: dict[str, Any]) -> str:
+    """Extract raw PBIR Literal Value string from a property node."""
+    return str(node["expr"]["Literal"]["Value"])
+
+
+def _load_visual(page_id: str, visual_id: str) -> dict[str, Any]:
+    """Load one generated visual.json dictionary."""
+    vpath = (
+        PROJECT_ROOT
+        / "pbip"
+        / "mzigo-chakula.Report"
+        / "definition"
+        / "pages"
+        / page_id
+        / "visuals"
+        / visual_id
+        / "visual.json"
+    )
+    assert vpath.is_file(), f"Missing visual.json: {vpath}"
+    return json.loads(vpath.read_text(encoding="utf-8"))
+
+
+def test_kpi_cards_have_compact_chrome_and_clearance() -> None:
+    """Verify Page 1 KPI cards use compact non-wrapping chrome and >= 80px height."""
+    kpi_ids = (
+        "v06_card_fpi",
+        "v07_card_yoy",
+        "v08_card_ytd",
+        "v09_card_completeness",
+        "v10_card_coverage",
+    )
+    for vid in kpi_ids:
+        payload = _load_visual("ReportSectionExecutivePulse", vid)
+        assert payload["position"]["height"] >= 80, f"{vid} height too small for callout clearance"
+        vco = payload["visual"]["visualContainerObjects"]
+        assert _lit_val(vco["divider"][0]["properties"]["show"]) == "false"
+        pad = vco["padding"][0]["properties"]
+        assert float(_lit_val(pad["top"]).rstrip("D")) <= 2.0
+        assert float(_lit_val(pad["bottom"]).rstrip("D")) <= 2.0
+        assert _lit_val(vco["title"][0]["properties"]["titleWrap"]) == "false"
+        assert _lit_val(vco["subTitle"][0]["properties"]["titleWrap"]) == "false"
+
+
+def test_tables_full_width_and_no_wrap() -> None:
+    """Verify all 4 tableEx visuals disable auto-size/wrap and fill usable inner width."""
+    tables = (
+        ("ReportSectionExecutivePulse", "v13_table_commodities", 20),
+        ("ReportSectionExecutivePulse", "v14_table_county_alerts", 20),
+        ("ReportSectionCountyCommodity", "v28_table_county_drill", 38),
+        ("ReportSectionDecisionsAction", "v47_table_priority_action", 38),
+    )
+    for page_id, vid, reserve in tables:
+        payload = _load_visual(page_id, vid)
+        visual = payload["visual"]
+        objs = visual["objects"]
+        assert _lit_val(objs["columnHeaders"][0]["properties"]["autoSizeColumnWidth"]) == "false"
+        assert _lit_val(objs["columnHeaders"][0]["properties"]["wordWrap"]) == "false"
+        assert _lit_val(objs["values"][0]["properties"]["wordWrap"]) == "false"
+
+        proj_refs = [p["queryRef"] for p in visual["query"]["queryState"]["Values"]["projections"]]
+        cw_entries = objs["columnWidth"]
+        assert [e["selector"]["metadata"] for e in cw_entries] == proj_refs
+
+        widths = [float(_lit_val(e["properties"]["value"]).rstrip("D")) for e in cw_entries]
+        usable = payload["position"]["width"] - reserve
+        assert int(usable * 0.90) <= sum(widths) <= usable, (
+            f"{vid}: sum(widths)={sum(widths)} outside [{int(usable * 0.90)}, {usable}]"
+        )
+
+
+def test_top10_bar_charts_fit_ten_bars() -> None:
+    """Verify all 4 Top 10 horizontal bar charts configure >=20px pitch and height floors."""
+    bars = (
+        ("ReportSectionExecutivePulse", "v12_bar_top_counties", 284),
+        ("ReportSectionCountyCommodity", "v25_bar_affordability_gap", 310),
+        ("ReportSectionTrendsDiagnostics", "v38_bar_volatility", 310),
+        ("ReportSectionDecisionsAction", "v48_bar_coverage_gap", 310),
+    )
+    for page_id, vid, min_height in bars:
+        payload = _load_visual(page_id, vid)
+        assert payload["position"]["height"] >= min_height, (
+            f"{vid}: height {payload['position']['height']} < {min_height}"
+        )
+        cat_props = payload["visual"]["objects"]["categoryAxis"][0]["properties"]
+        pref_w = float(_lit_val(cat_props["preferredCategoryWidth"]).rstrip("D"))
+        assert pref_w >= 20.0
+        assert "innerPadding" in cat_props
+
+
+def test_header_seam_fix_and_registered_backdrop() -> None:
+    """Verify continuous registered navy backdrop image and borderless disjoint header boxes."""
+    report_root = PROJECT_ROOT / "pbip" / "mzigo-chakula.Report"
+    bg_path = report_root / "StaticResources" / "RegisteredResources" / "header_canvas_bg.png"
+    assert bg_path.is_file(), f"Missing header backdrop image: {bg_path}"
+    with Image.open(bg_path) as bg_img:
+        assert bg_img.size == (1280, 720)
+
+    report_json = json.loads((report_root / "definition" / "report.json").read_text(encoding="utf-8"))
+    reg_items = {
+        item["name"]: item["type"]
+        for pkg in report_json["resourcePackages"]
+        if pkg["name"] == "RegisteredResources"
+        for item in pkg["items"]
+    }
+    assert reg_items.get("header_canvas_bg.png") == "Image"
+
+    pages_root = report_root / "definition" / "pages"
+    pages_meta = json.loads((pages_root / "pages.json").read_text(encoding="utf-8"))
+    for page_id in pages_meta["pageOrder"]:
+        page_json = json.loads((pages_root / page_id / "page.json").read_text(encoding="utf-8"))
+        bg_props = page_json["objects"]["background"][0]["properties"]
+        assert bg_props["image"]["image"]["url"]["expr"]["ResourcePackageItem"]["ItemName"] == (
+            "header_canvas_bg.png"
+        )
+
+        banner = _load_visual(page_id, "v00_header_banner")
+        nav = _load_visual(page_id, "v00_page_nav")
+        assert banner["position"]["x"] == 16
+        assert banner["position"]["y"] == 8
+        assert banner["position"]["width"] == 624
+        assert banner["position"]["height"] == 52
+        assert nav["position"]["x"] == 640
+        assert nav["position"]["y"] == 8
+        assert nav["position"]["width"] == 624
+        assert nav["position"]["height"] == 52
+        assert _lit_val(banner["visual"]["visualContainerObjects"]["border"][0]["properties"]["show"]) == "false"
+        assert _lit_val(nav["visual"]["visualContainerObjects"]["border"][0]["properties"]["show"]) == "false"
+
+
+def test_pbir_visuals_match_generator_output() -> None:
+    """Confirm every committed visual.json matches generate_pbir_visuals.spec_to_visual_payload."""
+    pages_root = PROJECT_ROOT / "pbip" / "mzigo-chakula.Report" / "definition" / "pages"
+    specs = build_visual_specs()
+    assert len(specs) == 46
+    for spec in specs:
+        disk_payload = json.loads(
+            (pages_root / spec.page_name / "visuals" / spec.visual_id / "visual.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        assert disk_payload == spec_to_visual_payload(spec), (
+            f"PBIR drift detected on {spec.page_name}/{spec.visual_id}"
+        )
+
+
+def test_screenshot_header_seam_continuous_navy() -> None:
+    """Verify exported 2400x1350 screenshots show dark navy pixels across the x=1200 join."""
+    for folder in ("screenshots", "output"):
+        for filename in EXPECTED_PAGES:
+            with Image.open(PROJECT_ROOT / folder / filename) as img:
+                rgb = img.convert("RGB")
+                for x in range(1195, 1206):
+                    for y in range(24, 97):
+                        r, g, b = rgb.getpixel((x, y))
+                        assert r <= 40 and g <= 65 and b <= 95 and b > r, (
+                            f"{folder}/{filename} seam pixel at ({x},{y})={(r, g, b)}"
+                        )

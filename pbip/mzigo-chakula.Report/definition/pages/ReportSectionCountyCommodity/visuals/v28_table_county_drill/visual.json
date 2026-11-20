@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v28_table_county_drill",
   "position": {
-    "x": 544,
-    "y": 430,
+    "x": 562,
+    "y": 438,
     "z": 9,
-    "width": 720,
-    "height": 280,
+    "width": 702,
+    "height": 276,
     "tabOrder": 9
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filtered to Maize (1 kg) | Sorted by Affordability Gap descending'"
+                  "Value": "'2007 to 2026 Maize (1 kg) | Sorted by Affordability Gap descending'"
                 }
               }
             },
@@ -451,6 +451,125 @@
               "expr": {
                 "Literal": {
                   "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "selector": {
+            "metadata": "dim_markets.adm2_name"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "112D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "dim_markets.county_group"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "184D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Avg Price (KES)"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Affordability Gap (KES)"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Price Volatility CV %"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "84D"
+                }
+              }
+            }
+          }
+        },
+        {
+          "selector": {
+            "metadata": "fact_prices.Survey Coverage Rate %"
+          },
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86D"
                 }
               }
             }

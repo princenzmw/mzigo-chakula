@@ -3,10 +3,10 @@
   "name": "v39_col_season_window",
   "position": {
     "x": 646,
-    "y": 424,
+    "y": 402,
     "z": 9,
     "width": 618,
-    "height": 286,
+    "height": 312,
     "tabOrder": 9
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Includes gap-safe EDATE MoM % and Avg Price tooltips'"
+                  "Value": "'2007 to 2026 mean | Hover for MoM % change and Avg Price (KES)'"
                 }
               }
             },

@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
-  "name": "v05_slicer_region",
+  "name": "v03_slicer_region",
   "position": {
-    "x": 1030,
+    "x": 520,
     "y": 64,
-    "z": 6,
-    "width": 234,
-    "height": 54,
-    "tabOrder": 6
+    "z": 4,
+    "width": 240,
+    "height": 48,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "slicer",

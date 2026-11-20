@@ -3,10 +3,10 @@
   "name": "v49_col_basket_by_region",
   "position": {
     "x": 602,
-    "y": 424,
+    "y": 396,
     "z": 9,
     "width": 662,
-    "height": 286,
+    "height": 318,
     "tabOrder": 9
   },
   "visual": {
@@ -209,7 +209,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filtered to Maize (1 kg) | Unit-safe comparison across 7 regions'"
+                  "Value": "'2007 to 2026 Maize (1 kg) retail mean across 7 Kenyan regions'"
                 }
               }
             },

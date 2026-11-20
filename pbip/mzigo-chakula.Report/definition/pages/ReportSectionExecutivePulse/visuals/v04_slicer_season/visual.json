@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "v04_slicer_season",
   "position": {
-    "x": 774,
+    "x": 772,
     "y": 64,
     "z": 5,
-    "width": 246,
-    "height": 54,
+    "width": 240,
+    "height": 48,
     "tabOrder": 5
   },
   "visual": {
